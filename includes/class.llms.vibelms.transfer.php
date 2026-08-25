@@ -20,6 +20,14 @@ class LLMS_VibeLMS_Transfer {
 	const FORMAT_VERSION = 1;
 	const CAPABILITY = 'manage_options';
 	const TRANSIENT_PREFIX = 'vibelms_transfer_result_';
+	const REPORT_PREFIX = 'vibelms_transfer_report_';
+	const STAGED_PREFIX = 'vibelms_transfer_staged_';
+	const JOB_PREFIX = 'vibelms_transfer_job_';
+	const ACTIVE_JOB_PREFIX = 'vibelms_transfer_active_';
+	const JOB_TTL = 2 * HOUR_IN_SECONDS;
+	const BATCH_SIZE = 20;
+	const SOURCE_SITE_META = '_vibelms_transfer_source_site';
+	const SOURCE_ID_META = '_vibelms_transfer_source_id';
 
 	/**
 	 * VibeLMS options which may safely move between sites.
@@ -44,13 +52,31 @@ class LLMS_VibeLMS_Transfer {
 	private $featured_media = array();
 
 	/**
+	 * Current import source site.
+	 *
+	 * @var string
+	 */
+	private $source_site = '';
+
+	/**
+	 * Current duplicate handling mode.
+	 *
+	 * @var string
+	 */
+	private $duplicate_mode = 'create';
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'register_admin_page' ), 110 );
 			add_action( 'admin_post_vibelms_export_bundle', array( $this, 'export_bundle' ) );
-			add_action( 'admin_post_vibelms_import_bundle', array( $this, 'import_bundle' ) );
+			add_action( 'admin_post_vibelms_prepare_import', array( $this, 'prepare_import_bundle' ) );
+			add_action( 'admin_post_vibelms_start_import', array( $this, 'start_import_bundle' ) );
+			add_action( 'admin_post_vibelms_cancel_import', array( $this, 'cancel_import_bundle' ) );
+			add_action( 'admin_post_vibelms_download_report', array( $this, 'download_import_report' ) );
+			add_action( 'wp_ajax_vibelms_transfer_progress', array( $this, 'ajax_transfer_progress' ) );
 		}
 	}
 
@@ -80,9 +106,16 @@ class LLMS_VibeLMS_Transfer {
 			wp_die( esc_html__( 'У вас нет доступа к переносу данных.', 'lifterlms' ) );
 		}
 
-		$result = get_transient( self::TRANSIENT_PREFIX . get_current_user_id() );
+		$user_id = get_current_user_id();
+		$result  = get_transient( self::TRANSIENT_PREFIX . $user_id );
 		if ( $result ) {
-			delete_transient( self::TRANSIENT_PREFIX . get_current_user_id() );
+			delete_transient( self::TRANSIENT_PREFIX . $user_id );
+		}
+		$staged  = get_transient( self::STAGED_PREFIX . $user_id );
+		$job_id  = get_transient( self::ACTIVE_JOB_PREFIX . $user_id );
+		$job     = $job_id ? get_transient( self::JOB_PREFIX . $job_id ) : false;
+		if ( ! is_array( $job ) ) {
+			$job_id = '';
 		}
 		?>
 		<div class="wrap">
@@ -97,6 +130,9 @@ class LLMS_VibeLMS_Transfer {
 					<?php endif; ?>
 					<?php if ( ! empty( $result['errors'] ) ) : ?>
 						<ul><?php foreach ( $result['errors'] as $error ) : ?><li><?php echo esc_html( $error ); ?></li><?php endforeach; ?></ul>
+					<?php endif; ?>
+					<?php if ( ! empty( $result['report_token'] ) ) : ?>
+						<p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=vibelms_download_report&token=' . rawurlencode( $result['report_token'] ) ), 'vibelms_download_report_' . $result['report_token'] ) ); ?>"><?php esc_html_e( 'Скачать подробный JSON-отчёт', 'lifterlms' ); ?></a></p>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
@@ -113,16 +149,120 @@ class LLMS_VibeLMS_Transfer {
 
 			<div class="card" style="max-width:900px;padding:20px;">
 				<h2><?php esc_html_e( 'Импорт', 'lifterlms' ); ?></h2>
-				<p><strong><?php esc_html_e( 'Импорт добавляет данные и не удаляет существующие курсы, пользователей или тесты.', 'lifterlms' ); ?></strong></p>
-				<p><?php esc_html_e( 'Пользователи сопоставляются по email. Пароли не переносятся: для новых пользователей создаётся случайный пароль, который администратор должен сбросить или отправить пользователю.', 'lifterlms' ); ?></p>
-				<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-					<input type="hidden" name="action" value="vibelms_import_bundle">
-					<?php wp_nonce_field( 'vibelms_import_bundle' ); ?>
-					<p><input type="file" name="vibelms_bundle" accept=".zip,application/zip" required></p>
-					<?php submit_button( __( 'Импортировать ZIP', 'lifterlms' ), 'secondary', 'submit', false ); ?>
-				</form>
+				<p><strong><?php esc_html_e( 'Сначала VibeLMS проверит архив. Импорт начнётся только после подтверждения.', 'lifterlms' ); ?></strong></p>
+				<p><?php esc_html_e( 'Импорт добавляет данные и не удаляет существующие курсы, пользователей или тесты. Пароли пользователей не переносятся.', 'lifterlms' ); ?></p>
+
+				<?php if ( $job_id ) : ?>
+					<?php $this->render_job_progress( $job_id, $job ); ?>
+				<?php elseif ( is_array( $staged ) ) : ?>
+					<?php $this->render_import_preview( $staged ); ?>
+				<?php else : ?>
+					<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+						<input type="hidden" name="action" value="vibelms_prepare_import">
+						<?php wp_nonce_field( 'vibelms_prepare_import' ); ?>
+						<p><input type="file" name="vibelms_bundle" accept=".zip,application/zip" required></p>
+						<?php submit_button( __( 'Проверить ZIP', 'lifterlms' ), 'secondary', 'submit', false ); ?>
+					</form>
+				<?php endif; ?>
 			</div>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Render a preflight report and confirmation controls.
+	 *
+	 * @param array $staged Staged archive data.
+	 * @return void
+	 */
+	private function render_import_preview( $staged ) {
+		$preview = isset( $staged['preview'] ) && is_array( $staged['preview'] ) ? $staged['preview'] : array();
+		$counts  = isset( $preview['counts'] ) && is_array( $preview['counts'] ) ? $preview['counts'] : array();
+		?>
+		<div class="notice notice-info inline">
+			<p><strong><?php esc_html_e( 'Проверка завершена. Перед импортом проверьте сводку.', 'lifterlms' ); ?></strong></p>
+			<p><?php echo esc_html( sprintf( __( 'Источник: %1$s. Архив создан: %2$s.', 'lifterlms' ), isset( $preview['source_site'] ) ? $preview['source_site'] : '—', isset( $preview['created_at'] ) ? $preview['created_at'] : '—' ) ); ?></p>
+		</div>
+		<table class="widefat striped" style="max-width:700px;margin:16px 0;">
+			<tbody>
+				<?php foreach ( array( 'courses' => 'Курсы', 'memberships' => 'Группы доступа', 'certificates' => 'Сертификаты', 'users' => 'Пользователи', 'media' => 'Медиафайлы', 'quiz_attempts' => 'Попытки тестов' ) as $key => $label ) : ?>
+					<tr><td><?php echo esc_html( $label ); ?></td><td><strong><?php echo esc_html( absint( isset( $counts[ $key ] ) ? $counts[ $key ] : 0 ) ); ?></strong></td></tr>
+				<?php endforeach; ?>
+				<tr><td><?php esc_html_e( 'Пользователи будут переиспользованы', 'lifterlms' ); ?></td><td><strong><?php echo esc_html( absint( isset( $preview['users_reused'] ) ? $preview['users_reused'] : 0 ) ); ?></strong></td></tr>
+				<tr><td><?php esc_html_e( 'Новые пользователи', 'lifterlms' ); ?></td><td><strong><?php echo esc_html( absint( isset( $preview['users_new'] ) ? $preview['users_new'] : 0 ) ); ?></strong></td></tr>
+				<tr><td><?php esc_html_e( 'Ранее импортированные записи', 'lifterlms' ); ?></td><td><strong><?php echo esc_html( absint( isset( $preview['previous_records'] ) ? $preview['previous_records'] : 0 ) ); ?></strong></td></tr>
+				<tr><td><?php esc_html_e( 'Размер архива', 'lifterlms' ); ?></td><td><strong><?php echo esc_html( size_format( isset( $preview['archive_size'] ) ? $preview['archive_size'] : 0 ) ); ?></strong></td></tr>
+			</tbody>
+		</table>
+		<?php if ( ! empty( $preview['warnings'] ) ) : ?>
+			<div class="notice notice-warning inline"><ul><?php foreach ( $preview['warnings'] as $warning ) : ?><li><?php echo esc_html( $warning ); ?></li><?php endforeach; ?></ul></div>
+		<?php endif; ?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:flex;align-items:end;gap:12px;flex-wrap:wrap;">
+			<input type="hidden" name="action" value="vibelms_start_import">
+			<input type="hidden" name="vibelms_transfer_token" value="<?php echo esc_attr( isset( $staged['token'] ) ? $staged['token'] : '' ); ?>">
+			<?php wp_nonce_field( 'vibelms_start_import' ); ?>
+			<label><span style="display:block;margin-bottom:4px;"><?php esc_html_e( 'Поведение для ранее перенесённых записей', 'lifterlms' ); ?></span>
+				<select name="duplicate_mode">
+					<option value="create"><?php esc_html_e( 'Создавать копии', 'lifterlms' ); ?></option>
+					<option value="skip"><?php esc_html_e( 'Пропустить ранее перенесённые', 'lifterlms' ); ?></option>
+				</select>
+			</label>
+			<?php submit_button( __( 'Подтвердить и начать импорт', 'lifterlms' ), 'primary', 'submit', false ); ?>
+		</form>
+		<p><small><?php esc_html_e( 'Режим «Пропустить» работает по служебной отметке источника и не затрагивает данные, созданные вручную на целевом сайте.', 'lifterlms' ); ?></small></p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="vibelms_cancel_import">
+			<?php wp_nonce_field( 'vibelms_cancel_import' ); ?>
+			<?php submit_button( __( 'Отменить проверку', 'lifterlms' ), 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render the live import progress panel.
+	 *
+	 * @param string $job_id Job ID.
+	 * @param array  $job    Job state.
+	 * @return void
+	 */
+	private function render_job_progress( $job_id, $job ) {
+		$progress = $this->job_progress( is_array( $job ) ? $job : array() );
+		wp_enqueue_script( 'jquery' );
+		?>
+		<div id="vibelms-transfer-progress" data-job-id="<?php echo esc_attr( $job_id ); ?>">
+			<p><strong><?php esc_html_e( 'Импорт выполняется. Не закрывайте эту страницу.', 'lifterlms' ); ?></strong></p>
+			<progress id="vibelms-transfer-progress-bar" max="100" value="<?php echo esc_attr( $progress['percent'] ); ?>" style="width:100%;height:24px;"></progress>
+			<p id="vibelms-transfer-progress-text" aria-live="polite"><?php echo esc_html( $progress['message'] ); ?></p>
+			<p id="vibelms-transfer-progress-stats"><?php echo esc_html( $this->format_stats( isset( $job['stats'] ) ? $job['stats'] : array() ) ); ?></p>
+		</div>
+		<script>
+		(function($) {
+			var panel = $('#vibelms-transfer-progress');
+			var endpoint = <?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+			var nonce = <?php echo wp_json_encode( wp_create_nonce( 'vibelms_transfer_progress' ) ); ?>;
+			function poll() {
+				$.post(endpoint, { action: 'vibelms_transfer_progress', nonce: nonce, job_id: panel.data('job-id') })
+					.done(function(response) {
+						if (!response || !response.success) {
+							$('#vibelms-transfer-progress-text').text('<?php echo esc_js( __( 'Не удалось получить состояние импорта. Обновите страницу.', 'lifterlms' ) ); ?>');
+							return;
+						}
+						var data = response.data || {};
+						var progress = data.progress || {};
+						$('#vibelms-transfer-progress-bar').val(parseInt(progress.percent || 0, 10));
+						$('#vibelms-transfer-progress-text').text(progress.message || '');
+						$('#vibelms-transfer-progress-stats').text(data.stats_text || '');
+						if (data.finished) {
+							window.location.reload();
+							return;
+						}
+						window.setTimeout(poll, 700);
+					})
+					.fail(function() { window.setTimeout(poll, 1500); });
+			}
+			poll();
+		})(jQuery);
+		</script>
 		<?php
 	}
 
@@ -168,13 +308,12 @@ class LLMS_VibeLMS_Transfer {
 	}
 
 	/**
-	 * Import a complete export archive.
+	 * Stage an uploaded archive and run the preflight check.
 	 *
 	 * @return void
 	 */
-	public function import_bundle() {
-		$this->authorize_request( 'vibelms_import_bundle' );
-
+	public function prepare_import_bundle() {
+		$this->authorize_request( 'vibelms_prepare_import' );
 		if ( ! class_exists( 'ZipArchive' ) ) {
 			$this->redirect_with_result( __( 'Импорт невозможен: на сервере не включено расширение PHP ZipArchive.', 'lifterlms' ), array(), array() );
 		}
@@ -184,56 +323,575 @@ class LLMS_VibeLMS_Transfer {
 			$this->redirect_with_result( __( 'ZIP-файл не был загружен.', 'lifterlms' ), array(), array( __( 'Проверьте размер и формат файла.', 'lifterlms' ) ) );
 		}
 
+		$this->clear_staged_archive( get_current_user_id() );
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		$path = wp_tempnam( 'vibelms-import' );
+		if ( ! $path || ! copy( $file['tmp_name'], $path ) ) {
+			$this->redirect_with_result( __( 'Не удалось сохранить ZIP во временное хранилище.', 'lifterlms' ), array(), array() );
+		}
+
 		$zip = new ZipArchive();
-		if ( true !== $zip->open( $file['tmp_name'] ) ) {
+		if ( true !== $zip->open( $path ) ) {
+			@unlink( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$this->redirect_with_result( __( 'Не удалось открыть ZIP-файл.', 'lifterlms' ), array(), array() );
 		}
+		$bundle = $this->read_bundle( $zip );
+		$zip->close();
+		if ( is_wp_error( $bundle ) ) {
+			@unlink( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$this->redirect_with_result( $bundle->get_error_message(), array(), array() );
+		}
 
-		$manifest = $this->read_archive_json( $zip, 'manifest.json' );
-		if ( is_wp_error( $manifest ) || empty( $manifest['format'] ) || self::FORMAT !== $manifest['format'] ) {
+		set_transient(
+			self::STAGED_PREFIX . get_current_user_id(),
+			array(
+				'token'     => wp_generate_password( 32, false, false ),
+				'path'      => $path,
+				'preview'   => $this->inspect_bundle( $bundle, filesize( $path ) ),
+				'staged_at' => time(),
+			),
+			HOUR_IN_SECONDS
+		);
+		$this->redirect_with_result( __( 'Архив проверен. Проверьте сводку и подтвердите импорт.', 'lifterlms' ), array(), array() );
+	}
+
+	/**
+	 * Start a staged import job.
+	 *
+	 * @return void
+	 */
+	public function start_import_bundle() {
+		$this->authorize_request( 'vibelms_start_import' );
+		$staged = get_transient( self::STAGED_PREFIX . get_current_user_id() );
+		$token  = isset( $_POST['vibelms_transfer_token'] ) ? sanitize_text_field( wp_unslash( $_POST['vibelms_transfer_token'] ) ) : '';
+		if ( ! is_array( $staged ) || empty( $staged['path'] ) || empty( $staged['token'] ) || ! hash_equals( $staged['token'], $token ) ) {
+			$this->redirect_with_result( __( 'Проверенный архив устарел. Загрузите его ещё раз.', 'lifterlms' ), array(), array() );
+		}
+
+		$mode = isset( $_POST['duplicate_mode'] ) ? sanitize_key( wp_unslash( $_POST['duplicate_mode'] ) ) : 'create';
+		$mode = in_array( $mode, array( 'create', 'skip' ), true ) ? $mode : 'create';
+		$zip = new ZipArchive();
+		if ( true !== $zip->open( $staged['path'] ) ) {
+			$this->clear_staged_archive( get_current_user_id() );
+			$this->redirect_with_result( __( 'Не удалось открыть проверенный архив.', 'lifterlms' ), array(), array() );
+		}
+		$bundle = $this->read_bundle( $zip );
+		$zip->close();
+		if ( is_wp_error( $bundle ) ) {
+			$this->clear_staged_archive( get_current_user_id() );
+			$this->redirect_with_result( $bundle->get_error_message(), array(), array() );
+		}
+
+		$source_site = esc_url_raw( isset( $bundle['manifest']['source_site'] ) ? $bundle['manifest']['source_site'] : '' );
+		$maps = array( 'users' => array(), 'posts' => array(), 'attempts' => array(), 'media' => array() );
+		if ( 'skip' === $mode ) {
+			$this->hydrate_existing_maps( $bundle['data'], $source_site, $maps );
+		}
+		$job_id = wp_generate_uuid4();
+		$job = array(
+			'id'              => $job_id,
+			'path'            => $staged['path'],
+			'source_site'     => $source_site,
+			'duplicate_mode'  => $mode,
+			'manifest'        => $bundle['manifest'],
+			'counts'          => isset( $staged['preview']['counts'] ) ? $staged['preview']['counts'] : array(),
+			'stage'           => 'users',
+			'offset'          => 0,
+			'maps'            => $maps,
+			'stats'           => array(),
+			'errors'          => array(),
+			'created_at'      => time(),
+		);
+		set_transient( self::JOB_PREFIX . $job_id, $job, self::JOB_TTL );
+		set_transient( self::ACTIVE_JOB_PREFIX . get_current_user_id(), $job_id, self::JOB_TTL );
+		delete_transient( self::STAGED_PREFIX . get_current_user_id() );
+		$this->redirect_with_result( __( 'Импорт запущен. Статус будет обновляться автоматически.', 'lifterlms' ), array(), array() );
+	}
+
+	/**
+	 * Cancel a staged archive.
+	 *
+	 * @return void
+	 */
+	public function cancel_import_bundle() {
+		$this->authorize_request( 'vibelms_cancel_import' );
+		$this->clear_staged_archive( get_current_user_id() );
+		$this->redirect_with_result( __( 'Проверка импорта отменена.', 'lifterlms' ), array(), array() );
+	}
+
+	/**
+	 * Download a completed import report as JSON.
+	 *
+	 * @return void
+	 */
+	public function download_import_report() {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'У вас нет доступа к отчёту переноса.', 'lifterlms' ) );
+		}
+		$token = isset( $_GET['token'] ) ? sanitize_text_field( wp_unslash( $_GET['token'] ) ) : '';
+		check_admin_referer( 'vibelms_download_report_' . $token );
+		$report = $token ? get_transient( self::REPORT_PREFIX . get_current_user_id() . '_' . $token ) : false;
+		if ( ! is_array( $report ) ) {
+			wp_die( esc_html__( 'Отчёт устарел. Запустите перенос ещё раз.', 'lifterlms' ) );
+		}
+		delete_transient( self::REPORT_PREFIX . get_current_user_id() . '_' . $token );
+		nocache_headers();
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="vibelms-transfer-report-' . gmdate( 'Y-m-d-His' ) . '.json"' );
+		echo wp_json_encode( $report, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+		exit;
+	}
+
+	/**
+	 * Process one import batch through AJAX.
+	 *
+	 * @return void
+	 */
+	public function ajax_transfer_progress() {
+		if ( ! current_user_can( self::CAPABILITY ) || ! check_ajax_referer( 'vibelms_transfer_progress', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => __( 'Недостаточно прав или истёк срок проверки.', 'lifterlms' ) ), 403 );
+		}
+		$job_id = isset( $_POST['job_id'] ) ? sanitize_text_field( wp_unslash( $_POST['job_id'] ) ) : '';
+		$job = $job_id ? get_transient( self::JOB_PREFIX . $job_id ) : false;
+		if ( ! is_array( $job ) || get_transient( self::ACTIVE_JOB_PREFIX . get_current_user_id() ) !== $job_id ) {
+			wp_send_json_error( array( 'message' => __( 'Импорт не найден или уже завершён.', 'lifterlms' ) ), 404 );
+		}
+
+		$step = $this->process_import_job( $job );
+		if ( is_wp_error( $step ) ) {
+			$job['errors'][] = $step->get_error_message();
+			$job['stage'] = 'failed';
+			$this->finish_import_job( $job, __( 'Импорт остановлен с ошибкой.', 'lifterlms' ) );
+			wp_send_json_success( array( 'finished' => true, 'stats_text' => $this->format_stats( $job['stats'] ), 'progress' => $this->job_progress( $job ) ) );
+		}
+		if ( ! empty( $step['finished'] ) ) {
+			$this->finish_import_job( $job, empty( $job['errors'] ) ? __( 'Импорт VibeLMS завершён.', 'lifterlms' ) : __( 'Импорт завершён с предупреждениями.', 'lifterlms' ) );
+			wp_send_json_success( array( 'finished' => true, 'stats_text' => $this->format_stats( $job['stats'] ), 'progress' => $this->job_progress( $job ) ) );
+		}
+
+		set_transient( self::JOB_PREFIX . $job_id, $job, self::JOB_TTL );
+		wp_send_json_success( array( 'finished' => false, 'stats_text' => $this->format_stats( $job['stats'] ), 'progress' => $this->job_progress( $job ) ) );
+	}
+
+	/**
+	 * Process one bounded import batch.
+	 *
+	 * @param array $job Job state by reference.
+	 * @return array|WP_Error
+	 */
+	private function process_import_job( &$job ) {
+		if ( empty( $job['path'] ) || ! is_readable( $job['path'] ) ) {
+			return new WP_Error( 'vibelms_transfer_missing_staged_file', __( 'Временный файл импорта больше недоступен.', 'lifterlms' ) );
+		}
+		$zip = new ZipArchive();
+		if ( true !== $zip->open( $job['path'] ) ) {
+			return new WP_Error( 'vibelms_transfer_open_staged_file', __( 'Не удалось открыть временный архив импорта.', 'lifterlms' ) );
+		}
+		$bundle = $this->read_bundle( $zip );
+		if ( is_wp_error( $bundle ) ) {
 			$zip->close();
-			$this->redirect_with_result( __( 'Файл не является экспортом VibeLMS.', 'lifterlms' ), array(), array() );
+			return $bundle;
+		}
+
+		$this->source_site    = isset( $job['source_site'] ) ? $job['source_site'] : '';
+		$this->duplicate_mode = isset( $job['duplicate_mode'] ) ? $job['duplicate_mode'] : 'create';
+		$data = $bundle['data'];
+		$this->hydrate_media_records( $data['media'], $job['maps']['media'] );
+		$batch_size = self::BATCH_SIZE;
+		$offset     = absint( isset( $job['offset'] ) ? $job['offset'] : 0 );
+		$stage      = isset( $job['stage'] ) ? $job['stage'] : 'users';
+
+		switch ( $stage ) {
+			case 'users':
+				$batch = array_slice( $data['users'], $offset, $batch_size );
+				$this->import_users( $batch, $job['maps']['users'], $job['stats'], $job['errors'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['users'] ) ) {
+					$job['stage']  = 'media';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'media':
+				$this->import_media( $zip, $data['media'], $job['maps']['media'], $job['stats'], $job['errors'], $offset, $batch_size );
+				$job['offset'] += min( $batch_size, max( 0, count( $data['media'] ) - $offset ) );
+				if ( $job['offset'] >= count( $data['media'] ) ) {
+					$job['stage']  = 'courses';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'courses':
+				$this->featured_media = array();
+				$batch = array_slice( $data['courses'], $offset, 1 );
+				$course_data = $this->prepare_course_data_for_import( $batch, $data['media'] );
+				$this->import_courses( $course_data, $job['maps']['posts'], $job['stats'], $job['errors'] );
+				$this->apply_featured_images( $job['maps']['posts'] );
+				$this->mark_imported_records( $job['maps'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['courses'] ) ) {
+					$job['stage']  = 'memberships';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'memberships':
+				$this->featured_media = array();
+				$batch = array_slice( $data['memberships'], $offset, 1 );
+				$membership_data = $this->prepare_course_data_for_import( $batch, $data['media'] );
+				$this->import_memberships( $membership_data, $job['maps'], $job['stats'], $job['errors'] );
+				$this->apply_featured_images( $job['maps']['posts'] );
+				$this->mark_imported_records( $job['maps'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['memberships'] ) ) {
+					$job['stage']  = 'certificates';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'certificates':
+				$batch = array_slice( $data['certificates'], $offset, $batch_size );
+				$this->import_certificates( $batch, $job['maps'], $data['media'], $job['stats'], $job['errors'] );
+				$this->mark_imported_records( $job['maps'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['certificates'] ) ) {
+					$job['stage']  = 'settings';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'settings':
+				$this->import_settings( $data['settings'], $job['maps']['posts'], $job['stats'], $job['errors'] );
+				$job['stage']  = 'enrollments';
+				$job['offset'] = 0;
+				break;
+
+			case 'enrollments':
+				$batch = array_slice( $data['enrollments'], $offset, $batch_size * 5 );
+				$this->import_enrollments( $batch, $job['maps'], $job['stats'], $job['errors'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['enrollments'] ) ) {
+					$job['stage']  = 'quiz_attempts';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'quiz_attempts':
+				$batch = array_slice( $data['quiz_attempts'], $offset, $batch_size * 5 );
+				$this->import_quiz_attempts( $batch, $job['maps'], $job['stats'], $job['errors'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['quiz_attempts'] ) ) {
+					$job['stage']  = 'vibelms_attempts';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'vibelms_attempts':
+				$batch = array_slice( $data['vibelms_attempts'], $offset, $batch_size * 5 );
+				$this->import_vibelms_attempts( $batch, $job['maps'], $job['stats'], $job['errors'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['vibelms_attempts'] ) ) {
+					$job['stage']  = 'finalize';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'finalize':
+				$this->repair_media_parents( $data['media'], $job['maps']['media'], $job['maps']['posts'] );
+				$this->mark_imported_records( $job['maps'] );
+				$job['stage'] = 'done';
+				break;
+		}
+
+		$zip->close();
+		return array( 'finished' => 'done' === $job['stage'] );
+	}
+
+	/**
+	 * Read and validate the complete transfer payload.
+	 *
+	 * @param ZipArchive $zip Archive.
+	 * @return array|WP_Error
+	 */
+	private function read_bundle( $zip ) {
+		$manifest = $this->read_archive_json( $zip, 'manifest.json' );
+		if ( ! is_array( $manifest ) || empty( $manifest['format'] ) || self::FORMAT !== $manifest['format'] ) {
+			return new WP_Error( 'vibelms_transfer_invalid_manifest', __( 'Файл не является экспортом VibeLMS.', 'lifterlms' ) );
 		}
 		if ( empty( $manifest['format_version'] ) || self::FORMAT_VERSION !== absint( $manifest['format_version'] ) ) {
-			$zip->close();
-			$this->redirect_with_result( __( 'Версия формата архива не поддерживается этой версией VibeLMS.', 'lifterlms' ), array(), array() );
+			return new WP_Error( 'vibelms_transfer_unsupported_format', __( 'Версия формата архива не поддерживается этой версией VibeLMS.', 'lifterlms' ) );
 		}
-
 		$data = array();
 		foreach ( array( 'settings', 'users', 'courses', 'memberships', 'certificates', 'enrollments', 'quiz_attempts', 'vibelms_attempts', 'media' ) as $name ) {
 			$data[ $name ] = $this->read_archive_json( $zip, $name . '.json' );
 			if ( is_wp_error( $data[ $name ] ) ) {
-				$data[ $name ] = array();
+				return $data[ $name ];
+			}
+			if ( ! is_array( $data[ $name ] ) ) {
+				return new WP_Error( 'vibelms_transfer_invalid_data', sprintf( __( 'Файл %s имеет неверную структуру.', 'lifterlms' ), $name . '.json' ) );
 			}
 		}
+		return array( 'manifest' => $manifest, 'data' => $data );
+	}
 
-		$errors = array();
-		$stats  = array();
-		$maps   = array(
-			'users' => array(),
-			'posts' => array(),
-			'attempts' => array(),
-			'media' => array(),
+	/**
+	 * Build the human-readable preflight summary.
+	 *
+	 * @param array    $bundle       Transfer payload.
+	 * @param int|null $archive_size Archive size in bytes.
+	 * @return array
+	 */
+	private function inspect_bundle( $bundle, $archive_size = null ) {
+		$manifest = $bundle['manifest'];
+		$data = $bundle['data'];
+		$source_site = esc_url_raw( isset( $manifest['source_site'] ) ? $manifest['source_site'] : '' );
+		$counts = array(
+			'courses'          => count( $data['courses'] ),
+			'memberships'      => count( $data['memberships'] ),
+			'certificates'     => count( $data['certificates'] ),
+			'users'            => count( $data['users'] ),
+			'media'            => count( $data['media'] ),
+			'quiz_attempts'    => count( $data['quiz_attempts'] ),
+			'enrollments'      => count( $data['enrollments'] ),
+			'vibelms_attempts' => count( $data['vibelms_attempts'] ),
+			'settings'         => count( $data['settings'] ),
 		);
+		$users_reused = 0;
+		foreach ( $data['users'] as $user ) {
+			if ( ! empty( $user['user_email'] ) && get_user_by( 'email', sanitize_email( $user['user_email'] ) ) ) {
+				$users_reused++;
+			}
+		}
+		$warnings = array();
+		if ( $source_site && untrailingslashit( $source_site ) === untrailingslashit( home_url( '/' ) ) ) {
+			$warnings[] = __( 'Источник и целевой сайт совпадают. Для теста лучше использовать staging-копию.', 'lifterlms' );
+		}
+		if ( ! empty( $manifest['plugin_version'] ) && defined( 'VIBELMS_VERSION' ) && version_compare( $manifest['plugin_version'], VIBELMS_VERSION, '>' ) ) {
+			$warnings[] = __( 'Архив создан более новой версией VibeLMS. Сначала обновите целевой сайт.', 'lifterlms' );
+		}
+		if ( empty( $data['courses'] ) ) {
+			$warnings[] = __( 'В архиве нет курсов.', 'lifterlms' );
+		}
+		if ( $archive_size && function_exists( 'disk_free_space' ) ) {
+			$free_space = disk_free_space( get_temp_dir() );
+			if ( false !== $free_space && $archive_size > $free_space ) {
+				$warnings[] = __( 'Свободного места во временной папке меньше размера архива.', 'lifterlms' );
+			}
+		}
+		return array(
+			'source_site'       => $source_site,
+			'created_at'        => isset( $manifest['created_at'] ) ? $manifest['created_at'] : '',
+			'counts'            => $counts,
+			'users_reused'      => $users_reused,
+			'users_new'         => max( 0, $counts['users'] - $users_reused ),
+			'previous_records'  => $this->count_existing_transfer_records( $source_site ),
+			'archive_size'      => absint( $archive_size ),
+			'warnings'          => $warnings,
+		);
+	}
 
-		$this->import_users( $data['users'], $maps['users'], $stats, $errors );
-		$this->import_media( $zip, $data['media'], $maps['media'], $stats, $errors );
-		$course_data = $this->prepare_course_data_for_import( $data['courses'], $data['media'] );
-		$this->import_courses( $course_data, $maps['posts'], $stats, $errors );
-		$membership_data = $this->prepare_course_data_for_import( $data['memberships'], $data['media'] );
-		$this->import_memberships( $membership_data, $maps, $stats, $errors );
-		$this->import_certificates( $data['certificates'], $maps, $data['media'], $stats, $errors );
-		$this->apply_featured_images( $maps['posts'] );
-		$this->repair_media_parents( $data['media'], $maps['media'], $maps['posts'] );
-		$this->import_settings( $data['settings'], $maps['posts'], $stats, $errors );
-		$this->import_enrollments( $data['enrollments'], $maps, $stats, $errors );
-		$this->import_quiz_attempts( $data['quiz_attempts'], $maps, $stats, $errors );
-		$this->import_vibelms_attempts( $data['vibelms_attempts'], $maps, $stats, $errors );
-		$zip->close();
+	/**
+	 * Find records imported earlier from the same source.
+	 *
+	 * @param string $source_site Source site URL.
+	 * @return int
+	 */
+	private function count_existing_transfer_records( $source_site ) {
+		if ( ! $source_site ) {
+			return 0;
+		}
+		$ids = get_posts(
+			array(
+				'post_type'      => array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate', 'attachment' ),
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array( array( 'key' => self::SOURCE_SITE_META, 'value' => $source_site ) ),
+			)
+		);
+		return count( $ids );
+	}
 
-		$message = empty( $errors ) ? __( 'Импорт VibeLMS завершён.', 'lifterlms' ) : __( 'Импорт завершён с предупреждениями.', 'lifterlms' );
-		$this->log_transfer( 'VibeLMS transfer import completed', array( 'stats' => $stats, 'errors' => $errors ) );
-		$this->redirect_with_result( $message, $stats, $errors );
+	/**
+	 * Hydrate source-to-destination maps for skip mode.
+	 *
+	 * @param array  $data        Transfer data.
+	 * @param string $source_site Source site URL.
+	 * @param array  $maps        Maps by reference.
+	 * @return void
+	 */
+	private function hydrate_existing_maps( $data, $source_site, &$maps ) {
+		if ( ! $source_site ) {
+			return;
+		}
+		$post_ids = array();
+		foreach ( isset( $data['courses'] ) && is_array( $data['courses'] ) ? $data['courses'] : array() as $course ) {
+			$this->collect_course_ids( $course, $post_ids );
+		}
+		foreach ( isset( $data['memberships'] ) && is_array( $data['memberships'] ) ? $data['memberships'] : array() as $membership ) {
+			$this->collect_numeric_ids( isset( $membership['id'] ) ? $membership['id'] : 0, $post_ids );
+		}
+		foreach ( isset( $data['certificates'] ) && is_array( $data['certificates'] ) ? $data['certificates'] : array() as $certificate ) {
+			$this->collect_numeric_ids( isset( $certificate['id'] ) ? $certificate['id'] : 0, $post_ids );
+		}
+		$post_types = array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate' );
+		foreach ( array_unique( array_filter( array_map( 'absint', $post_ids ) ) ) as $source_id ) {
+			$found = get_posts(
+				array(
+					'post_type'      => $post_types,
+					'post_status'    => 'any',
+					'posts_per_page' => 1,
+					'fields'         => 'ids',
+					'meta_query'     => array(
+						array( 'key' => self::SOURCE_SITE_META, 'value' => $source_site ),
+						array( 'key' => self::SOURCE_ID_META, 'value' => $source_id ),
+					),
+				)
+			);
+			if ( ! empty( $found ) ) {
+				$maps['posts'][ $source_id ] = absint( $found[0] );
+			}
+		}
+		foreach ( isset( $data['media'] ) && is_array( $data['media'] ) ? $data['media'] : array() as $media ) {
+			$source_id = absint( isset( $media['source_id'] ) ? $media['source_id'] : 0 );
+			if ( ! $source_id ) {
+				continue;
+			}
+			$found = get_posts(
+				array(
+					'post_type'      => 'attachment',
+					'post_status'    => 'any',
+					'posts_per_page' => 1,
+					'fields'         => 'ids',
+					'meta_query'     => array(
+						array( 'key' => self::SOURCE_SITE_META, 'value' => $source_site ),
+						array( 'key' => self::SOURCE_ID_META, 'value' => $source_id ),
+					),
+				)
+			);
+			if ( ! empty( $found ) ) {
+				$maps['media'][ $source_id ] = absint( $found[0] );
+			}
+		}
+	}
+
+	/**
+	 * Add destination fields to media records from a persisted map.
+	 *
+	 * @param array[] $media Media records by reference.
+	 * @param array   $map   Media map.
+	 * @return void
+	 */
+	private function hydrate_media_records( &$media, $map ) {
+		foreach ( is_array( $media ) ? $media : array() as &$item ) {
+			$source_id = absint( isset( $item['source_id'] ) ? $item['source_id'] : 0 );
+			if ( $source_id && isset( $map[ $source_id ] ) ) {
+				$item['destination_id']  = absint( $map[ $source_id ] );
+				$item['destination_url'] = wp_get_attachment_url( $map[ $source_id ] );
+			}
+		}
+		unset( $item );
+	}
+
+	/**
+	 * Mark imported records so future preflight checks can identify them.
+	 *
+	 * @param array $maps Import maps.
+	 * @return void
+	 */
+	private function mark_imported_records( $maps ) {
+		if ( ! $this->source_site ) {
+			return;
+		}
+		foreach ( isset( $maps['posts'] ) && is_array( $maps['posts'] ) ? $maps['posts'] : array() as $source_id => $destination_id ) {
+			if ( $destination_id ) {
+				update_post_meta( $destination_id, self::SOURCE_SITE_META, $this->source_site );
+				update_post_meta( $destination_id, self::SOURCE_ID_META, absint( $source_id ) );
+			}
+		}
+		foreach ( isset( $maps['media'] ) && is_array( $maps['media'] ) ? $maps['media'] : array() as $source_id => $destination_id ) {
+			if ( $destination_id ) {
+				update_post_meta( $destination_id, self::SOURCE_SITE_META, $this->source_site );
+				update_post_meta( $destination_id, self::SOURCE_ID_META, absint( $source_id ) );
+			}
+		}
+	}
+
+	/**
+	 * Remove a staged temporary file.
+	 *
+	 * @param int $user_id Current user ID.
+	 * @return void
+	 */
+	private function clear_staged_archive( $user_id ) {
+		$staged = get_transient( self::STAGED_PREFIX . absint( $user_id ) );
+		if ( is_array( $staged ) && ! empty( $staged['path'] ) && is_file( $staged['path'] ) ) {
+			@unlink( $staged['path'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		}
+		delete_transient( self::STAGED_PREFIX . absint( $user_id ) );
+	}
+
+	/**
+	 * Complete a job and expose its report on the admin screen.
+	 *
+	 * @param array  $job     Job state.
+	 * @param string $message Completion message.
+	 * @return void
+	 */
+	private function finish_import_job( $job, $message ) {
+		$report_token = wp_generate_password( 24, false, false );
+		$report = array(
+			'format'       => self::FORMAT,
+			'format_version' => self::FORMAT_VERSION,
+			'created_at'   => current_time( 'mysql' ),
+			'source_site'  => isset( $job['source_site'] ) ? $job['source_site'] : '',
+			'duplicate_mode' => isset( $job['duplicate_mode'] ) ? $job['duplicate_mode'] : 'create',
+			'stats'        => $job['stats'],
+			'errors'       => $job['errors'],
+		);
+		set_transient( self::REPORT_PREFIX . get_current_user_id() . '_' . $report_token, $report, 600 );
+		set_transient( self::TRANSIENT_PREFIX . get_current_user_id(), array( 'message' => $message, 'stats' => $job['stats'], 'errors' => $job['errors'], 'report_token' => $report_token ), 600 );
+		$this->log_transfer( 'VibeLMS transfer import completed', array( 'stats' => $job['stats'], 'errors' => $job['errors'] ) );
+		if ( ! empty( $job['path'] ) && is_file( $job['path'] ) ) {
+			@unlink( $job['path'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		}
+		delete_transient( self::JOB_PREFIX . $job['id'] );
+		delete_transient( self::ACTIVE_JOB_PREFIX . get_current_user_id() );
+	}
+
+	/**
+	 * Calculate progress for the current import phase.
+	 *
+	 * @param array $job Job state.
+	 * @return array
+	 */
+	private function job_progress( $job ) {
+		$stages = array( 'users', 'media', 'courses', 'memberships', 'certificates', 'settings', 'enrollments', 'quiz_attempts', 'vibelms_attempts', 'finalize' );
+		$labels = array(
+			'users'            => __( 'Импорт пользователей', 'lifterlms' ),
+			'media'            => __( 'Импорт медиафайлов', 'lifterlms' ),
+			'courses'          => __( 'Импорт курсов, уроков и тестов', 'lifterlms' ),
+			'memberships'      => __( 'Импорт групп доступа', 'lifterlms' ),
+			'certificates'     => __( 'Импорт сертификатов', 'lifterlms' ),
+			'settings'         => __( 'Импорт настроек', 'lifterlms' ),
+			'enrollments'      => __( 'Импорт зачислений', 'lifterlms' ),
+			'quiz_attempts'    => __( 'Импорт попыток тестов', 'lifterlms' ),
+			'vibelms_attempts' => __( 'Импорт журнала VibeLMS', 'lifterlms' ),
+			'finalize'         => __( 'Завершение переноса', 'lifterlms' ),
+			'done'             => __( 'Импорт завершён', 'lifterlms' ),
+			'failed'           => __( 'Импорт остановлен', 'lifterlms' ),
+		);
+		$counts = isset( $job['counts'] ) && is_array( $job['counts'] ) ? $job['counts'] : array();
+		$stage = isset( $job['stage'] ) ? $job['stage'] : 'users';
+		$index = array_search( $stage, $stages, true );
+		if ( false === $index ) {
+			$index = 'done' === $stage ? count( $stages ) : 0;
+		}
+		$count = isset( $counts[ $stage ] ) ? absint( $counts[ $stage ] ) : 1;
+		$offset = absint( isset( $job['offset'] ) ? $job['offset'] : 0 );
+		$fraction = $count ? min( 1, $offset / $count ) : 1;
+		$percent = min( 100, (int) floor( ( ( $index + $fraction ) / count( $stages ) ) * 100 ) );
+		return array( 'percent' => $percent, 'message' => isset( $labels[ $stage ] ) ? $labels[ $stage ] : __( 'Подготовка импорта', 'lifterlms' ) );
 	}
 
 	/**
@@ -830,19 +1488,33 @@ class LLMS_VibeLMS_Transfer {
 	 * @param array       $maps  Media map by reference.
 	 * @param array       $stats Stats by reference.
 	 * @param array       $errors Errors by reference.
+	 * @param int         $offset Batch offset.
+	 * @param int         $limit  Batch size.
 	 * @return void
 	 */
-	private function import_media( $zip, &$media, &$maps, &$stats, &$errors ) {
+	private function import_media( $zip, &$media, &$maps, &$stats, &$errors, $offset = 0, $limit = 0 ) {
 		if ( empty( $media ) ) {
 			return;
 		}
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
-		foreach ( $media as &$raw ) {
+		$start = max( 0, absint( $offset ) );
+		$end   = count( $media );
+		if ( $limit > 0 ) {
+			$end = min( $end, $start + absint( $limit ) );
+		}
+		for ( $index = $start; $index < $end; $index++ ) {
+			$raw =& $media[ $index ];
 			$source_id = isset( $raw['source_id'] ) ? absint( $raw['source_id'] ) : 0;
 			$entry     = isset( $raw['entry'] ) ? sanitize_file_name( basename( $raw['entry'] ) ) : '';
 			if ( ! $source_id || ! $entry || false === strpos( $raw['entry'], 'media/' ) ) {
+				continue;
+			}
+			if ( 'skip' === $this->duplicate_mode && isset( $maps[ $source_id ] ) ) {
+				$raw['destination_id']  = absint( $maps[ $source_id ] );
+				$raw['destination_url'] = wp_get_attachment_url( $maps[ $source_id ] );
+				$stats['media_skipped'] = isset( $stats['media_skipped'] ) ? $stats['media_skipped'] + 1 : 1;
 				continue;
 			}
 			$stream = $zip->getStream( $raw['entry'] );
@@ -874,13 +1546,17 @@ class LLMS_VibeLMS_Transfer {
 			$maps[ $source_id ] = absint( $attachment_id );
 			$raw['destination_id']  = absint( $attachment_id );
 			$raw['destination_url'] = wp_get_attachment_url( $attachment_id );
+			if ( $this->source_site ) {
+				update_post_meta( $attachment_id, self::SOURCE_SITE_META, $this->source_site );
+				update_post_meta( $attachment_id, self::SOURCE_ID_META, $source_id );
+			}
 			$metadata = wp_generate_attachment_metadata( $attachment_id, $file['file'] );
 			if ( $metadata ) {
 				wp_update_attachment_metadata( $attachment_id, $metadata );
 			}
 			$stats['media'] = isset( $stats['media'] ) ? $stats['media'] + 1 : 1;
+			unset( $raw );
 		}
-		unset( $raw );
 	}
 
 	/**
@@ -966,7 +1642,16 @@ class LLMS_VibeLMS_Transfer {
 	 * @return void
 	 */
 	private function import_courses( $courses, &$posts, &$stats, &$errors ) {
-		if ( empty( $courses ) ) {
+		$import_courses = array();
+		foreach ( is_array( $courses ) ? $courses : array() as $course ) {
+			$source_id = absint( isset( $course['id'] ) ? $course['id'] : 0 );
+			if ( 'skip' === $this->duplicate_mode && $source_id && isset( $posts[ $source_id ] ) ) {
+				$stats['courses_skipped'] = isset( $stats['courses_skipped'] ) ? $stats['courses_skipped'] + 1 : 1;
+				continue;
+			}
+			$import_courses[] = $course;
+		}
+		if ( empty( $import_courses ) ) {
 			return;
 		}
 		$generator = new LLMS_Generator(
@@ -974,7 +1659,7 @@ class LLMS_VibeLMS_Transfer {
 				'_generator' => 'LifterLMS/BulkCourseGenerator',
 				'_source'    => '',
 				'_version'   => defined( 'VIBELMS_VERSION' ) ? VIBELMS_VERSION : '',
-				'courses'    => $courses,
+			'courses'    => $import_courses,
 			)
 		);
 		$generator->set_generator( 'LifterLMS/BulkCourseGenerator' );
@@ -990,10 +1675,10 @@ class LLMS_VibeLMS_Transfer {
 				$this->map_generated_ids( $ids, $posts );
 			}
 		}
-		$stats['courses'] = count( $generator->get_generated_courses() );
-		$stats['lessons'] = isset( $generator->get_generated_content()['lesson'] ) ? count( $generator->get_generated_content()['lesson'] ) : 0;
-		$stats['quizzes'] = isset( $generator->get_generated_content()['quiz'] ) ? count( $generator->get_generated_content()['quiz'] ) : 0;
-		$stats['questions'] = isset( $generator->get_generated_content()['question'] ) ? count( $generator->get_generated_content()['question'] ) : 0;
+		$stats['courses'] = ( isset( $stats['courses'] ) ? $stats['courses'] : 0 ) + count( $generator->get_generated_courses() );
+		$stats['lessons'] = ( isset( $stats['lessons'] ) ? $stats['lessons'] : 0 ) + ( isset( $generator->get_generated_content()['lesson'] ) ? count( $generator->get_generated_content()['lesson'] ) : 0 );
+		$stats['quizzes'] = ( isset( $stats['quizzes'] ) ? $stats['quizzes'] : 0 ) + ( isset( $generator->get_generated_content()['quiz'] ) ? count( $generator->get_generated_content()['quiz'] ) : 0 );
+		$stats['questions'] = ( isset( $stats['questions'] ) ? $stats['questions'] : 0 ) + ( isset( $generator->get_generated_content()['question'] ) ? count( $generator->get_generated_content()['question'] ) : 0 );
 	}
 
 	/**
@@ -1025,6 +1710,10 @@ class LLMS_VibeLMS_Transfer {
 		foreach ( is_array( $groups ) ? $groups : array() as $raw ) {
 			$source_id = absint( isset( $raw['id'] ) ? $raw['id'] : 0 );
 			if ( ! $source_id ) {
+				continue;
+			}
+			if ( 'skip' === $this->duplicate_mode && isset( $maps['posts'][ $source_id ] ) ) {
+				$stats['memberships_skipped'] = isset( $stats['memberships_skipped'] ) ? $stats['memberships_skipped'] + 1 : 1;
 				continue;
 			}
 			$post = $this->insert_model_post( $raw, 'llms_membership', $maps );
@@ -1068,6 +1757,10 @@ class LLMS_VibeLMS_Transfer {
 			$source_id = absint( isset( $raw['id'] ) ? $raw['id'] : 0 );
 			$post_data = isset( $raw['post'] ) && is_array( $raw['post'] ) ? $raw['post'] : array();
 			if ( ! $source_id || empty( $post_data ) ) {
+				continue;
+			}
+			if ( 'skip' === $this->duplicate_mode && isset( $maps['posts'][ $source_id ] ) ) {
+				$stats['certificates_skipped'] = isset( $stats['certificates_skipped'] ) ? $stats['certificates_skipped'] + 1 : 1;
 				continue;
 			}
 			$post_data['post_content'] = $this->replace_media_urls( isset( $post_data['post_content'] ) ? $post_data['post_content'] : '', $media );
@@ -1551,9 +2244,28 @@ class LLMS_VibeLMS_Transfer {
 	 * @return string
 	 */
 	private function format_stats( $stats ) {
+		$labels = array(
+			'courses'             => __( 'курсов', 'lifterlms' ),
+			'courses_skipped'     => __( 'курсов пропущено', 'lifterlms' ),
+			'lessons'             => __( 'уроков', 'lifterlms' ),
+			'quizzes'             => __( 'тестов', 'lifterlms' ),
+			'questions'           => __( 'вопросов', 'lifterlms' ),
+			'memberships'         => __( 'групп доступа', 'lifterlms' ),
+			'memberships_skipped' => __( 'групп пропущено', 'lifterlms' ),
+			'certificates'        => __( 'сертификатов', 'lifterlms' ),
+			'certificates_skipped' => __( 'сертификатов пропущено', 'lifterlms' ),
+			'users_created'       => __( 'пользователей создано', 'lifterlms' ),
+			'users_reused'        => __( 'пользователей переиспользовано', 'lifterlms' ),
+			'media'               => __( 'медиафайлов', 'lifterlms' ),
+			'media_skipped'       => __( 'медиафайлов пропущено', 'lifterlms' ),
+			'settings'            => __( 'настроек', 'lifterlms' ),
+			'enrollments'         => __( 'зачислений', 'lifterlms' ),
+			'quiz_attempts'       => __( 'попыток тестов', 'lifterlms' ),
+			'vibelms_attempts'    => __( 'записей журнала', 'lifterlms' ),
+		);
 		$parts = array();
 		foreach ( $stats as $key => $value ) {
-			$parts[] = $key . ': ' . absint( $value );
+			$parts[] = ( isset( $labels[ $key ] ) ? $labels[ $key ] : $key ) . ': ' . absint( $value );
 		}
 		return implode( ', ', $parts );
 	}

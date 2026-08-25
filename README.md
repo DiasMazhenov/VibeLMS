@@ -68,19 +68,21 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.15 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.16 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.15.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.16.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
 
 
 ### Перенос между сайтами
 
-На исходном сайте откройте **VibeLMS → Перенос данных** и нажмите **Скачать полный экспорт**. На целевом сайте в том же разделе загрузите ZIP-файл и нажмите **Импортировать ZIP**.
+На исходном сайте откройте **VibeLMS → Перенос данных** и нажмите **Скачать полный экспорт**. На целевом сайте выберите ZIP и нажмите **Проверить ZIP**. После предварительного отчёта выберите режим дубликатов и нажмите **Подтвердить и начать импорт**.
 
 Архив переносит настройки VibeLMS, курсы с уроками и тестами, вопросы, группы доступа, шаблоны сертификатов, LMS-пользователей, зачисления, попытки, журнал VibeLMS и связанные медиафайлы. Пользователи сопоставляются по email, а записи и ссылки получают новые ID на целевом сайте. Импорт добавляет данные и не удаляет существующий контент.
 
 Пароли и токены в архив не попадают. Для нового пользователя создаётся случайный пароль и устанавливается отметка `vibelms_transfer_needs_password_reset`; после импорта администратор должен задать пользователю новый пароль. Перед импортом сделайте резервную копию базы данных и `wp-content/uploads`.
+
+Импорт выполняется пакетами с живым индикатором этапа и автоматически восстанавливается после обновления страницы. После завершения экран показывает понятную статистику и список предупреждений, а подробный JSON-отчёт можно скачать; диагностические события также записываются в журнал VibeLMS.
 
 Подробные ограничения и состав архива описаны в [инструкции по переносу](./docs/vibelms-transfer.md).
 

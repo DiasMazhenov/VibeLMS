@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.15`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.16`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -38,6 +38,8 @@ General settings now expose the project-neutral assessment rule: target question
 
 VibeLMS now includes a complete administrator-only transfer screen at **VibeLMS → Перенос данных**. The ZIP archive contains VibeLMS settings, courses with nested lessons/quizzes/questions/access plans, access groups, certificate templates, LMS users, enrollments, quiz attempts, VibeLMS report rows and referenced local media. Import maps users by email and content by the generator's source-ID marker, replaces media URLs, preserves featured images, and adds data without deleting existing records. Passwords, tokens and sensitive user meta are excluded; only newly created users receive a `vibelms_transfer_needs_password_reset` marker. The archive format is versioned and import diagnostics are shown in the admin notice and VibeLMS log when debug mode is enabled.
 
+The transfer UX now stages an uploaded ZIP, validates every required JSON file and shows a preflight report with source site, archive size, object counts, reused/new users, previously imported records and warnings. After confirmation, import runs in bounded AJAX batches with a real progress bar and survives an admin-page refresh. The safe duplicate choices are creating copies or skipping records previously marked with the same source site and source ID; manually created target content is never overwritten. The completion report uses Russian labels for imported/skipped counts, shows bounded warnings and can be downloaded as a short-lived nonce-protected JSON report. A destructive or ambiguous content-update mode is intentionally not enabled yet.
+
 Elementor widget registration supports the modern `elementor/widgets/register` hook with backward compatibility for older Elementor releases. The visible category is `VibeLMS`; the internal category key remains `lifterlms` so saved Elementor documents continue to resolve. The old external Elementor upsell text was removed and replaced with a local VibeLMS note.
 
 Translated UI strings from the compatibility domains replace visible `LifterLMS`/`Lifterlms` product-name text with `VibeLMS`. Internal class names, hooks, post types, shortcodes, text domains and compatibility URLs are intentionally not mass-renamed.
@@ -64,7 +66,7 @@ The Advanced Questions buttons are native VibeLMS functionality. Their core defi
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint for the transfer module and main plugin, shell syntax, `git diff --check`, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.15.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.16.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 
