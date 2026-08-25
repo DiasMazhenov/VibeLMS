@@ -1,0 +1,299 @@
+# Copyright (C) 2018-2024 LifterLMS
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: LifterLMS Advanced Quizzes 3.3.0\n"
+"Report-Msgid-Bugs-To: https://lifterlms.com/my-account/my-tickets\n"
+"Last-Translator: Team LifterLMS <team@lifterlms.com>\n"
+"Language-Team: Team LifterLMS <team@lifterlms.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-29T17:45:23+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: llms/dev 0.0.4-alpha.0\n"
+"X-Domain: lifterlms-advanced-quizzes\n"
+
+#. Plugin Name of the plugin
+#: lifterlms-advanced-quizzes.php
+msgid "LifterLMS Advanced Quizzes"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: lifterlms-advanced-quizzes.php
+msgid "https://lifterlms.com/product/advanced-quizzes"
+msgstr ""
+
+#. Description of the plugin
+#: lifterlms-advanced-quizzes.php
+msgid "Add advanced question types like essays, uploads, and more to LifterLMS quizzes"
+msgstr ""
+
+#. Author of the plugin
+#: lifterlms-advanced-quizzes.php
+msgid "LifterLMS"
+msgstr ""
+
+#. Author URI of the plugin
+#: lifterlms-advanced-quizzes.php
+msgid "https://lifterlms.com/"
+msgstr ""
+
+#: includes/admin/class-llms-aq-reporting-tables.php:53
+msgid "Awaiting Review"
+msgstr ""
+
+#: includes/admin/views/question-blank.php:18
+#: includes/admin/views/question-scale.php:46
+msgid "Correct Answer"
+msgstr ""
+
+#: includes/admin/views/question-blank.php:24
+msgid "Separate multiple blanks with a pipe '|' character"
+msgstr ""
+
+#: includes/admin/views/question-blank.php:31
+msgid "Answers are case-sensitive"
+msgstr ""
+
+#: includes/admin/views/question-blank.php:33
+msgid "Answers are not case-sensitive"
+msgstr ""
+
+#: includes/admin/views/question-code.php:20
+msgid "Language / Syntax"
+msgstr ""
+
+#: includes/admin/views/question-long-answer.php:19
+msgid "Word Count (Minimum)"
+msgstr ""
+
+#: includes/admin/views/question-long-answer.php:35
+msgid "Word Count (Maximum)"
+msgstr ""
+
+#: includes/admin/views/question-match.php:14
+msgid "Text to Text"
+msgstr ""
+
+#: includes/admin/views/question-match.php:15
+msgid "Text to Image"
+msgstr ""
+
+#: includes/admin/views/question-match.php:16
+msgid "Image to Image"
+msgstr ""
+
+#: includes/admin/views/question-match.php:27
+msgid "Matching Type"
+msgstr ""
+
+#: includes/admin/views/question-scale.php:17
+msgid "Minimum Value"
+msgstr ""
+
+#: includes/admin/views/question-scale.php:24
+msgid "Minimum Label"
+msgstr ""
+
+#: includes/admin/views/question-scale.php:29
+msgid "Maximum Value"
+msgstr ""
+
+#: includes/admin/views/question-scale.php:36
+msgid "Maximum Label"
+msgstr ""
+
+#: includes/admin/views/question-upload.php:19
+msgid "Restrict File Types"
+msgstr ""
+
+#. Translators: %1$s = Question title/text; %2$s = The student's name.
+#: includes/class-llms-aq-ajax.php:76
+msgid "%1$s answer by %2$s"
+msgstr ""
+
+#. Translators: %s = Missing paramter name.
+#: includes/class-llms-aq-ajax.php:114
+msgid "Missing required parameter: \"%s\""
+msgstr ""
+
+#. Translators: %s = Missing paramter name.
+#: includes/class-llms-aq-ajax.php:120
+msgid "Invalid value submitted for parameter: \"%s\""
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:172
+msgid "Invalid user."
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:181
+msgid "Invalid quiz attempt."
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:187
+msgid "Invalid question."
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:191
+msgid "Invalid filetype."
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:200
+msgid "Invalid attempt."
+msgstr ""
+
+#: includes/class-llms-aq-ajax.php:212
+msgid "Success"
+msgstr ""
+
+#: includes/class-llms-aq-question-bank.php:339
+msgid "Include in all quiz variations"
+msgstr ""
+
+#: includes/class-llms-aq-question-types.php:176
+msgid "Enter your question... (3 or more underscores make a blank)"
+msgstr ""
+
+#. Translators: %d = Quiz question order.
+#: includes/class-llms-aq-question-types.php:305
+msgid "Question #%d Upload"
+msgstr ""
+
+#: includes/llms-aq-functions.php:24
+msgid "clike"
+msgstr ""
+
+#: includes/llms-aq-functions.php:25
+msgid "CoffeeScript"
+msgstr ""
+
+#: includes/llms-aq-functions.php:26
+msgid "CSS"
+msgstr ""
+
+#: includes/llms-aq-functions.php:27
+msgid "HTML"
+msgstr ""
+
+#: includes/llms-aq-functions.php:28
+msgid "Javascript"
+msgstr ""
+
+#: includes/llms-aq-functions.php:29
+msgid "Markdown"
+msgstr ""
+
+#: includes/llms-aq-functions.php:30
+msgid "NGINX"
+msgstr ""
+
+#: includes/llms-aq-functions.php:31
+msgid "PHP"
+msgstr ""
+
+#: includes/llms-aq-functions.php:32
+msgid "Python"
+msgstr ""
+
+#: includes/llms-aq-functions.php:33
+msgid "Ruby"
+msgstr ""
+
+#: includes/llms-aq-functions.php:34
+msgid "SASS"
+msgstr ""
+
+#: includes/llms-aq-functions.php:35
+msgid "SQL"
+msgstr ""
+
+#: includes/llms-aq-functions.php:36
+msgid "XML"
+msgstr ""
+
+#: includes/llms-aq-functions.php:37
+msgid "YAML"
+msgstr ""
+
+#. Translators: %1$d = Attempt number; %2$s = Quiz title; %3$s = Student name.
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:114
+msgid "Attempt #%1$d for Quiz \"%2$s\" by %3$s"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:124
+msgid "Select a passed quiz"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:128
+msgid "Send yourself a test notification using information from the selected quiz."
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:130
+msgid "Send a Test"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:180
+msgid "Quizzes: Quiz Awaiting Review"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:38
+msgid "Your quiz attempt is awaiting review by your instructor."
+msgstr ""
+
+#. Translators: %1$s = Student Name, %2$s = Quiz Title.
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:62
+msgid "%1$s quiz attempt for \"%2$s\" is awaiting your review"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:74
+msgid "Quiz Details"
+msgstr ""
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:76
+msgid "Quiz Submitted"
+msgstr ""
+
+#: templates/quiz/questions/content-upload.php:26
+msgid "Select or drop a file..."
+msgstr ""
+
+#. Translators: %s = Comma separated list of allowed file types.
+#: templates/quiz/questions/content-upload.php:32
+msgid "Allowed filetypes: %s"
+msgstr ""
+
+#: assets/js/llms-aq.js:1
+msgid "Invalid file type selected."
+msgstr ""
+
+#: assets/js/llms-aq.js:1
+msgid "Fill in all the blanks to continue."
+msgstr ""
+
+#: assets/js/llms-aq.js:1
+msgid "Fill in the blank to continue."
+msgstr ""
+
+#: assets/js/llms-aq.js:1
+#: assets/js/llms-aq.js:3
+msgid "You must provide an answer to continue"
+msgstr ""
+
+#. Translators: %1$d = Number of words in the current answer; %2$d = The minimum required number of words.
+#: assets/js/llms-aq.js:2
+msgid "Your answer is %1$d words long and it must be at least %2$d words long to proceed"
+msgstr ""
+
+#. Translators: %1$d = Number of words in the current answer; %2$d = The maximum allowed number of words.
+#: assets/js/llms-aq.js:3
+msgid "Your answer is %1$d words long and it cannot be longer than %2$d words long to proceed"
+msgstr ""
+
+#: assets/js/llms-aq.js:3
+msgid "You must select an option to continue"
+msgstr ""
+
+#: assets/js/llms-aq.js:3
+msgid "You must upload a file to proceed"
+msgstr ""
