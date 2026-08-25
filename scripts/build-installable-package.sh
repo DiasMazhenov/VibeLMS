@@ -20,6 +20,7 @@ git -C "$repo_root" archive --format=tar HEAD | tar -x -C "$package_dir"
 composer install \
 	--working-dir="$package_dir" \
 	--no-dev \
+	--no-scripts \
 	--no-interaction \
 	--prefer-dist \
 	--no-progress
