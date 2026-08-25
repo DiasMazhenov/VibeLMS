@@ -21,6 +21,7 @@ The repository now includes `scripts/build-installable-package.sh`, which create
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
-- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. The first package-build attempt exposed a dev-script mismatch and the builder was corrected to use `--no-scripts`; the corrected package build is pending.
+- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.1.0.zip` (generated, ignored, 7.8 MB). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `vendor/`, `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules.
