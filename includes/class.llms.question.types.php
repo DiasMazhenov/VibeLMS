@@ -82,8 +82,6 @@ class LLMS_Question_Types {
 	 */
 	private static function get_types() {
 
-		$upgrade_url = 'https://lifterlms.com/product/advanced-quizzes/?utm_source=LifterLMS%20Plugin&utm_medium=Quiz%20Builder%20Button&utm_campaign=Advanced%20Question%20Upsell&utm_content=3.16.0&utm_term=';
-
 		return array(
 
 			'choice'          => array(
@@ -183,7 +181,7 @@ class LLMS_Question_Types {
 				'icon'    => 'window-minimize',
 				'id'      => 'blank',
 				'name'    => esc_html__( 'Fill in the Blank', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'blank',
+				'upgrade' => false,
 			),
 
 			'reorder'         => array(
@@ -195,7 +193,7 @@ class LLMS_Question_Types {
 				'icon'    => 'sort-numeric-asc',
 				'id'      => 'reorder',
 				'name'    => esc_html__( 'Reorder Items', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'reorder',
+				'upgrade' => false,
 			),
 
 			'picture_reorder' => array(
@@ -207,7 +205,7 @@ class LLMS_Question_Types {
 				'icon'    => 'picture-o',
 				'id'      => 'picture_reorder',
 				'name'    => esc_html__( 'Reorder Pictures', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'picture_reorder',
+				'upgrade' => false,
 			),
 
 			'short_answer'    => array(
@@ -219,7 +217,7 @@ class LLMS_Question_Types {
 				'icon'    => 'align-left',
 				'id'      => 'short_answer',
 				'name'    => esc_html__( 'Short Answer', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'short_answer',
+				'upgrade' => false,
 			),
 
 			'long_answer'     => array(
@@ -231,7 +229,7 @@ class LLMS_Question_Types {
 				'icon'    => 'paragraph',
 				'id'      => 'long_answer',
 				'name'    => esc_html__( 'Long Answer', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'long_answer',
+				'upgrade' => false,
 			),
 
 			'upload'          => array(
@@ -243,7 +241,7 @@ class LLMS_Question_Types {
 				'icon'    => 'cloud-upload',
 				'id'      => 'upload',
 				'name'    => esc_html__( 'File Upload', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'upload',
+				'upgrade' => false,
 			),
 
 			'code'            => array(
@@ -255,7 +253,7 @@ class LLMS_Question_Types {
 				'icon'    => 'code',
 				'id'      => 'code',
 				'name'    => esc_html__( 'Code', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'code',
+				'upgrade' => false,
 			),
 
 			'scale'           => array(
@@ -267,7 +265,7 @@ class LLMS_Question_Types {
 				'icon'    => 'sliders',
 				'id'      => 'scale',
 				'name'    => esc_html__( 'Scale', 'lifterlms' ),
-				'upgrade' => $upgrade_url . 'scale',
+				'upgrade' => false,
 			),
 
 		);

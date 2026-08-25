@@ -99,10 +99,10 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.12 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.13 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.12.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS: the course builder includes blank, reorder, short/long answer, file upload, code and scale questions, plus a question bank. A separate Advanced Quizzes plugin is not required. The same runtime `vendor/` directory and compiled production CSS/JS are included in GitHub deployments because Push-to-Deploy does not run Composer or npm. When changing SCSS/JS, rebuild with `npm run build:scripts:legacy && npm run build:styles` and commit the generated assets. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist, create a test quiz with an advanced question, and review `VibeLMS → Статус → Логи` when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.13.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS: the course builder includes blank, reorder, short/long answer, file upload, code and scale questions, plus a question bank. A separate Advanced Quizzes plugin is not required. The same runtime `vendor/` directory and compiled production CSS/JS are included in GitHub deployments because Push-to-Deploy does not run Composer or npm. When changing SCSS/JS, rebuild with `npm run build:scripts:legacy && npm run build:styles` and commit the generated assets. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist, create a test quiz with an advanced question, and review `VibeLMS → Статус → Логи` when `VIBELMS_DEBUG` is enabled.
 
 
 ### Contributing

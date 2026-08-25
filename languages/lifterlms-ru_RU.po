@@ -16089,7 +16089,7 @@ msgstr "Ожидает оценки"
 
 #: includes/class.llms.question.types.php:269
 msgid "Scale"
-msgstr "Масштаб"
+msgstr "Шкала"
 
 #: includes/class.llms.question.types.php:245
 msgid "File Upload"
@@ -16139,15 +16139,15 @@ msgstr "Содержимое"
 
 #: includes/class.llms.question.types.php:136
 msgid "True or False"
-msgstr "True или False"
+msgstr "Верно или неверно"
 
 #: includes/class.llms.question.types.php:126
 msgid "False"
-msgstr "False"
+msgstr "Неверно"
 
 #: includes/class.llms.question.types.php:121
 msgid "True"
-msgstr "True"
+msgstr "Верно"
 
 #: includes/class.llms.question.types.php:110
 msgid "Picture Choice"
