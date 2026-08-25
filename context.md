@@ -4,6 +4,8 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
+The WordPress plugin metadata now presents the product as VibeLMS version `0.1.0`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version.
+
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
 The first VibeLMS-specific feature layer adds the neutral `vibelms_student` and `vibelms_observer` roles. The observer receives only VibeLMS report/export/material capabilities; it does not receive WordPress editor capabilities.

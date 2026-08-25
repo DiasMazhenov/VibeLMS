@@ -2,7 +2,7 @@
   <img src=".github/lifterlms-logo.png" alt="VibeLMS logo" width="300">
 </h1>
 
-<p align="center"><strong>VibeLMS</strong> is an independent WordPress learning-platform fork, built on the LifterLMS core and adapted incrementally for modern training portals.</p>
+<p align="center"><strong>VibeLMS</strong> is an independent WordPress learning-platform fork by <a href="https://mazhenov.kz">Mazhenov Design</a>, built on the LifterLMS core and adapted incrementally for modern training portals.</p>
 
 <hr />
 
