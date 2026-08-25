@@ -47,15 +47,20 @@
 		 */
 		this.init = function() {
 
+			this.bind();
+			this.load_widgets();
+
+			// Dashboard values must not depend on the optional Google Charts library.
+			if ( 'undefined' === typeof google || ! google.charts ) {
+				return;
+			}
+
 			google.charts.load( 'current', {
 				packages: [
 					'corechart'
 				]
 			} );
 			google.charts.setOnLoadCallback( this.charts_ready );
-
-			this.bind();
-			this.load_widgets();
 
 		};
 
@@ -77,11 +82,13 @@
 				} );
 			}
 
-			$( '#llms-students-ids-filter' ).llmsStudentsSelect2( {
-				multiple: true,
-				placeholder: LLMS.l10n.translate( 'Filter by Student(s)' ),
-				allow_clear: true,
-			} );
+			if ( $( '#llms-students-ids-filter' ).length && $.fn.llmsStudentsSelect2 ) {
+				$( '#llms-students-ids-filter' ).llmsStudentsSelect2( {
+					multiple: true,
+					placeholder: LLMS.l10n.translate( 'Filter by Student(s)' ),
+					allow_clear: true,
+				} );
+			}
 
 			$( 'a[href="#llms-toggle-filters"]' ).on( 'click', function( e ) {
 				e.preventDefault();

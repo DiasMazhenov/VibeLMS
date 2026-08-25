@@ -289,7 +289,7 @@ class LLMS_Admin_Assets {
 
 		wp_register_script( 'llms-admin-media-protection-attachment-settings', LLMS_PLUGIN_URL . 'assets/js/llms-admin-media-protection-attachment-settings' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'media-views', 'wp-i18n', 'llms-admin-scripts' ), LLMS_ASSETS_VERSION, true );
 
-		if ( $this->is_llms_page() ) {
+		if ( $this->is_llms_page() || 'llms-dashboard' === llms_filter_input( INPUT_GET, 'page' ) ) {
 
 			llms()->assets->enqueue_script( 'llms' );
 
@@ -524,21 +524,23 @@ class LLMS_Admin_Assets {
 	protected function maybe_enqueue_reporting( $screen ) {
 
 		$dashboard_screens = array( 'lifterlms_page_llms-dashboard', 'toplevel_page_llms-dashboard', 'dashboard' );
-		$reporting_screens = array( 'lifterlms_page_llms-reporting' );
+		$current_page     = llms_filter_input( INPUT_GET, 'page' );
+		$is_dashboard     = in_array( $screen->base, $dashboard_screens, true ) || 'llms-dashboard' === $current_page;
+		$is_reporting     = 'lifterlms_page_llms-reporting' === $screen->base || 'llms-reporting' === $current_page;
 
-		if ( in_array( $screen->base, array_merge( $reporting_screens, $dashboard_screens ), true ) ) {
+		if ( $is_dashboard || $is_reporting ) {
 
 			$current_tab = llms_filter_input( INPUT_GET, 'tab' );
 
 			wp_register_script( 'llms-google-charts', LLMS_PLUGIN_URL . 'assets/js/vendor/gcharts-loader.min.js', array(), '2019-09-04', false );
-			wp_register_script( 'llms-analytics', LLMS_PLUGIN_URL . 'assets/js/llms-analytics' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'llms', 'llms-admin-scripts', 'llms-google-charts' ), LLMS_ASSETS_VERSION, true );
+			wp_register_script( 'llms-analytics', LLMS_PLUGIN_URL . 'assets/js/llms-analytics' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'llms', 'llms-admin-scripts', 'llms-google-charts' ), VIBELMS_VERSION, true );
 
 			// Dashboard page where we have analytics widgets.
-			if ( in_array( $screen->base, $dashboard_screens, true ) ) {
+			if ( $is_dashboard ) {
 
 				wp_enqueue_script( 'llms-analytics' );
 
-			} elseif ( 'lifterlms_page_llms-reporting' === $screen->base ) {
+			} elseif ( $is_reporting ) {
 
 				if ( in_array( $current_tab, array( 'enrollments', 'sales' ), true ) ) {
 					wp_enqueue_script( 'llms-analytics' );

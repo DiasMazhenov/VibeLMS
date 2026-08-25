@@ -4,7 +4,7 @@
  *
  * @package VibeLMS/Admin/Views/Dashboard
  *
- * @since 0.0.03
+ * @since 0.0.04
  */
 
 defined( 'ABSPATH' ) || exit;
