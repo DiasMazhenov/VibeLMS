@@ -1,0 +1,3 @@
+significance: minor
+type: added
+entry: "Added opt-in VibeLMS diagnostics with structured PHP error logging and secret redaction."
