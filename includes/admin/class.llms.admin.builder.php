@@ -623,6 +623,18 @@ class LLMS_Admin_Builder {
 		}
 
 		$course = llms_get_post( $post );
+		$question_types = array_values( llms_get_question_types() );
+
+		llms_vibelms_diagnostics_log(
+			'info',
+			'Course builder question types prepared',
+			array(
+				'course_id'      => $course_id,
+				'count'          => count( $question_types ),
+				'ids'            => array_values( array_filter( array_column( $question_types, 'id' ) ) ),
+				'vibelms_version' => defined( 'VIBELMS_VERSION' ) ? VIBELMS_VERSION : '',
+			)
+		);
 
 		remove_all_actions( 'the_title' );
 		remove_all_actions( 'the_content' );
@@ -689,7 +701,7 @@ class LLMS_Admin_Builder {
 						'debug'                  => array(
 							'enabled' => ( defined( 'LLMS_BUILDER_DEBUG' ) && LLMS_BUILDER_DEBUG ),
 						),
-						'questions'              => array_values( llms_get_question_types() ),
+						'questions'              => $question_types,
 						'schemas'                => self::get_custom_schemas(),
 						'sync'                   => apply_filters(
 							/**

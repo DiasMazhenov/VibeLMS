@@ -372,14 +372,14 @@ class LLMS_Admin_Assets {
 
 			wp_enqueue_editor();
 
-			wp_enqueue_style( 'llms-builder-styles', LLMS_PLUGIN_URL . 'assets/css/builder' . LLMS_ASSETS_SUFFIX . '.css', array( 'llms-quill-bubble' ), LLMS_ASSETS_VERSION, 'screen' );
+			wp_enqueue_style( 'llms-builder-styles', LLMS_PLUGIN_URL . 'assets/css/builder' . LLMS_ASSETS_SUFFIX . '.css', array( 'llms-quill-bubble' ), VIBELMS_VERSION, 'screen' );
 			wp_style_add_data( 'llms-builder-styles', 'rtl', 'replace' );
 			wp_style_add_data( 'llms-builder-styles', 'suffix', LLMS_ASSETS_SUFFIX );
 
-			wp_enqueue_style( 'webui-popover', LLMS_PLUGIN_URL . 'assets/vendor/webui-popover/jquery.webui-popover' . LLMS_ASSETS_SUFFIX . '.css', array(), '1.2.15' );
+			wp_enqueue_style( 'webui-popover', LLMS_PLUGIN_URL . 'assets/vendor/webui-popover/jquery.webui-popover' . LLMS_ASSETS_SUFFIX . '.css', array(), VIBELMS_VERSION );
 			wp_style_add_data( 'webui-popover', 'suffix', LLMS_ASSETS_SUFFIX );
 
-			wp_enqueue_script( 'webui-popover', LLMS_PLUGIN_URL . 'assets/vendor/webui-popover/jquery.webui-popover' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery' ), LLMS_ASSETS_VERSION, true );
+			wp_enqueue_script( 'webui-popover', LLMS_PLUGIN_URL . 'assets/vendor/webui-popover/jquery.webui-popover' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery' ), VIBELMS_VERSION, true );
 			wp_enqueue_style( 'llms-datetimepicker', LLMS_PLUGIN_URL . 'assets/vendor/datetimepicker/jquery.datetimepicker.min.css', array(), '1.3.4' );
 			wp_enqueue_script( 'llms-datetimepicker', LLMS_PLUGIN_URL . 'assets/vendor/datetimepicker/jquery.datetimepicker.full' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery' ), '1.3.4', true );
 
@@ -387,7 +387,7 @@ class LLMS_Admin_Assets {
 				wp_enqueue_script( 'heartbeat' );
 			}
 
-			wp_enqueue_script( 'llms-builder', LLMS_PLUGIN_URL . 'assets/js/llms-builder' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'backbone', 'underscore', 'post', 'llms-quill' ), LLMS_ASSETS_VERSION, true );
+			wp_enqueue_script( 'llms-builder', LLMS_PLUGIN_URL . 'assets/js/llms-builder' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'backbone', 'underscore', 'post', 'llms-quill' ), VIBELMS_VERSION, true );
 
 		} elseif ( 'lifterlms_page_llms-add-ons' === $screen->id ) {
 			llms()->assets->enqueue_script( 'llms-addons' );
