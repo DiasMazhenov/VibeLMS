@@ -53,36 +53,6 @@ class LLMS_Admin_Dashboard {
 			array( 'view' => 'quick-links' )
 		);
 
-		add_meta_box(
-			'llms_dashboard_addons',
-			__( 'Most Popular Add-ons, Courses, and Resources', 'lifterlms' ),
-			array( __CLASS__, 'meta_box' ),
-			'toplevel_page_llms-dashboard',
-			'normal',
-			'default',
-			array( 'view' => 'addons' )
-		);
-
-		add_meta_box(
-			'llms_dashboard_blog',
-			__( 'LifterLMS Blog', 'lifterlms' ),
-			array( __CLASS__, 'meta_box' ),
-			'toplevel_page_llms-dashboard',
-			'side',
-			'default',
-			array( 'view' => 'blog' )
-		);
-
-		add_meta_box(
-			'llms_dashboard_podcast',
-			__( 'LifterLMS Podcast', 'lifterlms' ),
-			array( __CLASS__, 'meta_box' ),
-			'toplevel_page_llms-dashboard',
-			'side',
-			'default',
-			array( 'view' => 'podcast' )
-		);
-
 		/**
 		 * Fired after adding the meta boxes on the LifterLMS admin dashboard page.
 		 *

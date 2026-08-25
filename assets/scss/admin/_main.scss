@@ -14,86 +14,52 @@
 		padding: 0 10px;
 	}
 
+	.vibelms-brand {
+		align-items: center;
+		color: #1d2327;
+		display: inline-flex;
+		flex: 0 0 auto;
+		gap: 10px;
+		margin-right: 20px;
+		text-decoration: none;
+	}
 
-	.lifterlms-logo {
-		flex: 0 0 190px;
-		max-height: 52px;
-		margin-right: 10px;
+	.vibelms-brand-mark {
+		align-items: center;
+		background: linear-gradient(135deg, #466dd8, #7c4dff);
+		border-radius: 12px;
+		color: #fff;
+		display: inline-flex;
+		font-size: 22px;
+		font-weight: 800;
+		height: 42px;
+		justify-content: center;
+		line-height: 1;
+		width: 42px;
+	}
+
+	.vibelms-brand-name {
+		font-size: 24px;
+		font-weight: 700;
+		letter-spacing: -0.02em;
 	}
 
 	.llms-meta {
-		align-self: center;
+		align-items: center;
 		display: flex;
 		flex: 1;
 		font-size: 16px;
-		justify-content: space-between;
 		line-height: 1.5;
-
-		.llms-version {
-			background-color: #1d2327;
-			color: #FFF;
-			border-radius: 999px;
-			font-size: 13px;
-			font-weight: 700;
-			padding: 6px 12px;
-		}
-
-		a {
-			display: inline-block;
-		}
-
-		.llms-license {
-			border-right: 1px solid #CCC;
-			font-weight: 700;
-			margin-right: 12px;
-			padding-right: 12px;
-
-			a {
-				text-decoration: none;
-
-				&:before {
-					content: "\f534";
-					display: inline-block;
-					font: 400 16px/1 dashicons;
-					left: 0;
-					padding-right: 3px;
-					position: relative;
-					text-decoration: none;
-					vertical-align: text-bottom;
-				}
-
-				&.llms-license-none {
-					color: #888;
-
-					&:before {
-						content: "\f335";
-					}
-				}
-
-				&.llms-license-active {
-					color: #008a20;
-
-					&:before {
-						content: "\f112";
-					}
-
-				}
-
-			}
-		}
-
-		.llms-support {
-			font-weight: 700;
-
-			a {
-				color: #1d2327;
-				text-decoration: none;
-			}
-
-		}
-
 	}
 
+	.llms-version {
+		background-color: #1d2327;
+		border-radius: 999px;
+		color: #FFF;
+		font-size: 13px;
+		font-weight: 700;
+		padding: 6px 12px;
+	}
 }
 
 .llms-subheader {
@@ -375,11 +341,9 @@ a.llms-view-as {
 			flex-direction: column;
 			gap: 20px;
 
-			.lifterlms-logo {
+			.vibelms-brand {
 				align-self: center;
 				flex: inherit;
-				max-height: initial;
-				max-width: 200px;
 			}
 
 			.llms-meta {

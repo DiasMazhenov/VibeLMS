@@ -1,5 +1,15 @@
 .wrap.llms-dashboard {
 
+	#post-body.columns-2 {
+		display: block;
+
+		#postbox-container-1,
+		#postbox-container-2 {
+			float: none;
+			width: 100%;
+		}
+	}
+
 	.llms-inside-wrap {
 		padding-top: 30px;
 	}

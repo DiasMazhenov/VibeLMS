@@ -86,39 +86,12 @@ class LLMS_Admin_Header {
 		if ( ! empty( $show_header ) ) { ?>
 			<header class="llms-header">
 				<div class="llms-inside-wrap">
-					<a href="https://lifterlms.com/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Admin%20Header&utm_content=LifterLMS%20Logo" target="_blank"><img class="lifterlms-logo" src="<?php echo esc_url( llms()->plugin_url() ); ?>/assets/images/lifterlms-logo-black.png" alt="<?php esc_attr_e( 'LifterLMS Logo', 'lifterlms' ); ?>"></a>
+					<a class="vibelms-brand" href="https://mazhenov.kz" target="_blank" rel="noopener">
+						<span class="vibelms-brand-mark" aria-hidden="true">V</span>
+						<span class="vibelms-brand-name">VibeLMS</span>
+					</a>
 					<div class="llms-meta">
-						<div class="llms-meta-left">
-							<span class="llms-version"><?php echo esc_html( sprintf( __( 'Version: %s', 'lifterlms' ), llms()->version ) ); ?></span>
-						</div>
-						<div class="llms-meta-right">
-							<?php
-							// Show a license link in header if we aren't on the Add-ons screen.
-							$screen = get_current_screen();
-							if ( 'lifterlms_page_llms-add-ons' !== $screen->id ) {
-								?>
-								<span class="llms-license">
-									<?php
-									// Get active keys for this site.
-									$my_keys = llms_helper_options()->get_license_keys();
-
-									if ( empty( $my_keys ) ) {
-										$license_class = 'llms-license-none';
-										$license_label = __( 'No License', 'lifterlms' );
-									} else {
-										$license_class = 'llms-license-active';
-										$license_label = __( 'My License Keys', 'lifterlms' );
-									}
-									?>
-									<a class="<?php echo esc_attr( $license_class ); ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=llms-add-ons' ) ); ?>"><?php echo esc_html( $license_label ); ?></a>
-								</span>
-								<?php
-							}
-							?>
-							<span class="llms-support">
-								<a href="https://lifterlms.com/my-account/my-tickets/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Admin%20Header&utm_content=LifterLMS%20Support" target="_blank"><?php esc_html_e( 'Get Support', 'lifterlms' ); ?></a>
-							</span>
-						</div>
+						<span class="llms-version"><?php echo esc_html( sprintf( __( 'Version: %s', 'lifterlms' ), VIBELMS_VERSION ) ); ?></span>
 					</div>
 				</div>
 			</header>

@@ -227,7 +227,7 @@ class LLMS_Admin_Assets {
 
 		$screen = get_current_screen();
 
-		if ( 'lifterlms_page_llms-add-ons' === $screen->id || 'lifterlms_page_llms-dashboard' === $screen->id ) {
+		if ( 'lifterlms_page_llms-add-ons' === $screen->id ) {
 			llms()->assets->enqueue_style( 'llms-admin-add-ons' );
 		}
 	}

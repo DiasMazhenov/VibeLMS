@@ -38,7 +38,6 @@ class LLMS_Admin_Menus {
 
 		add_filter( 'custom_menu_order', array( $this, 'submenu_order' ) );
 		add_action( 'admin_menu', array( $this, 'display_admin_menu' ) );
-		add_action( 'admin_menu', array( $this, 'display_admin_menu_late' ), 7777 );
 
 		// Shame shame shame.
 		add_action( 'admin_menu', array( $this, 'instructor_menu_hack' ) );
@@ -199,23 +198,20 @@ class LLMS_Admin_Menus {
 
 		$menu[51] = array( '', 'read', 'llms-separator', '', 'wp-menu-separator' );
 
-		$icon_url = 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( LLMS_PLUGIN_DIR . 'assets/images/lifterlms-icon-grey.svg' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-		add_menu_page( 'lifterlms', 'LifterLMS', 'read', 'lifterlms', '__return_empty_string', $icon_url, 51 );
+		add_menu_page( 'VibeLMS', 'VibeLMS', 'read', 'lifterlms', '__return_empty_string', 'dashicons-welcome-learn-more', 51 );
 
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Dashboard', 'lifterlms' ), __( 'Dashboard', 'lifterlms' ), 'manage_lifterlms', 'llms-dashboard', array( $this, 'dashboard_page_init' ) );
+		add_submenu_page( 'lifterlms', __( 'VibeLMS Dashboard', 'lifterlms' ), __( 'Dashboard', 'lifterlms' ), 'manage_lifterlms', 'llms-dashboard', array( $this, 'dashboard_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Settings', 'lifterlms' ), __( 'Settings', 'lifterlms' ), 'manage_lifterlms', 'llms-settings', array( $this, 'settings_page_init' ) );
+		add_submenu_page( 'lifterlms', __( 'VibeLMS Settings', 'lifterlms' ), __( 'Settings', 'lifterlms' ), 'manage_lifterlms', 'llms-settings', array( $this, 'settings_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Reporting', 'lifterlms' ), __( 'Reporting', 'lifterlms' ), 'view_lifterlms_reports', 'llms-reporting', array( $this, 'reporting_page_init' ) );
+		add_submenu_page( 'lifterlms', __( 'VibeLMS Reporting', 'lifterlms' ), __( 'Reporting', 'lifterlms' ), 'view_lifterlms_reports', 'llms-reporting', array( $this, 'reporting_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Import', 'lifterlms' ), __( 'Import', 'lifterlms' ), 'manage_lifterlms', 'llms-import', array( $this, 'import_page_init' ) );
+		add_submenu_page( 'lifterlms', __( 'VibeLMS Import', 'lifterlms' ), __( 'Import', 'lifterlms' ), 'manage_lifterlms', 'llms-import', array( $this, 'import_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Status', 'lifterlms' ), __( 'Status', 'lifterlms' ), 'manage_lifterlms', 'llms-status', array( $this, 'status_page_init' ) );
-
-		add_submenu_page( 'lifterlms', __( 'LifterLMS Resources', 'lifterlms' ), __( 'Resources', 'lifterlms' ), 'manage_lifterlms', 'llms-resources', array( $this, 'resources_page_init' ) );
+		add_submenu_page( 'lifterlms', __( 'VibeLMS Status', 'lifterlms' ), __( 'Status', 'lifterlms' ), 'manage_lifterlms', 'llms-status', array( $this, 'status_page_init' ) );
 
 		// Passing '' to register the page without actually adding a menu item.
-		add_submenu_page( '', __( 'LifterLMS Course Builder', 'lifterlms' ), __( 'Course Builder', 'lifterlms' ), 'edit_courses', 'llms-course-builder', array( $this, 'builder_init' ) );
+		add_submenu_page( '', __( 'VibeLMS Course Builder', 'lifterlms' ), __( 'Course Builder', 'lifterlms' ), 'edit_courses', 'llms-course-builder', array( $this, 'builder_init' ) );
 	}
 
 	/**
