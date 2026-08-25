@@ -1,6 +1,7 @@
 # Package managers.
 node_modules/
-/vendor/
+# Runtime Composer dependencies are tracked for Push-to-Deploy.
+# Refresh them with `composer install --no-dev --no-scripts`.
 .cursor
 
 # Lock file intentionally excluded to allow easier testing against multiple php versions

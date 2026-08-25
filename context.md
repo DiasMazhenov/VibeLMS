@@ -12,6 +12,8 @@ The first VibeLMS-specific feature layer adds the neutral `vibelms_student` and 
 
 The repository now includes `scripts/build-installable-package.sh`, which creates a production-style ZIP with Composer runtime dependencies while keeping development dependencies out of the repository. The package build skips Composer dev scripts because those scripts configure PHPCS, which is intentionally absent from a `--no-dev` production install.
 
+The runtime Composer `vendor/` directory is now tracked so the GitHub Push-to-Deploy integration receives the required `vendor/autoload.php`. It contains only production dependencies; development tools remain excluded.
+
 ## Repository
 
 - Local path: `/Users/diasmazhenov/vibecode/VibeLMS`
@@ -23,7 +25,11 @@ The repository now includes `scripts/build-installable-package.sh`, which create
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
-- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed.
+- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages.
 - Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.1.0.zip` (generated, ignored, 7.8 MB). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
-- `vendor/`, `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules.
+- `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
+
+## Activation incident
+
+The production error log showed `lifterlms.php:48` failing because `/wp-content/plugins/VibeLMS/vendor/autoload.php` was missing. The GitHub source tree previously ignored `vendor/`, so Push-to-Deploy copied an incomplete plugin. The fix is to track the production Composer runtime directory. The same log also contains repeated `WP_DEBUG already defined` warnings in `wp-config.php`; those are a separate server configuration cleanup and are not the activation blocker.

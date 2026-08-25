@@ -95,14 +95,14 @@ Security issues and vulnerabilities should be responsibly disclosed directly to 
 
 ### Installing for development
 
-The GitHub source archive is not itself an installable plugin because runtime Composer dependencies are intentionally not committed. Build a package from a clean checkout:
+The GitHub tree includes the runtime Composer dependencies required by WordPress, so it can be deployed directly through Push-to-Deploy. Development dependencies are not committed. When refreshing dependencies, use:
 
 ```bash
-composer install --no-interaction --prefer-dist
+composer install --no-dev --no-scripts --no-interaction --prefer-dist
 VIBELMS_PACKAGE_VERSION=0.1.0 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.1.0.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist and review `LifterLMS → Status → Logs` when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.1.0.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. The same runtime `vendor/` directory is included in GitHub deployments because `lifterlms.php` loads `vendor/autoload.php` during activation. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist and review `LifterLMS → Status → Logs` when `VIBELMS_DEBUG` is enabled.
 
 
 ### Contributing
