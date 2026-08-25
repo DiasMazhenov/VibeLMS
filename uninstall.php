@@ -29,6 +29,7 @@ if ( defined( 'LLMS_REMOVE_ALL_DATA' ) && true === LLMS_REMOVE_ALL_DATA ) {
 
 	include_once dirname( __FILE__ ) . '/includes/class.llms.roles.php';
 	include_once dirname( __FILE__ ) . '/includes/class.llms.post-types.php';
+	include_once dirname( __FILE__ ) . '/includes/functions/llms-functions-vibelms-roles.php';
 
 	global $wpdb, $wp_version;
 
@@ -40,6 +41,7 @@ if ( defined( 'LLMS_REMOVE_ALL_DATA' ) && true === LLMS_REMOVE_ALL_DATA ) {
 
 	// Remove roles.
 	LLMS_Roles::remove_roles();
+	llms_vibelms_roles_remove();
 
 	// Delete options.
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'lifterlms\_%';" );

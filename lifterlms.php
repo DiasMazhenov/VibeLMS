@@ -1,15 +1,15 @@
 <?php
 /**
- * Main LifterLMS plugin file
+ * Main VibeLMS plugin file
  *
  * @package LifterLMS/Main
  *
  * @since 1.0.0
  * @version 5.3.0
  *
- * Plugin Name: LifterLMS
- * Plugin URI: https://lifterlms.com/
- * Description: Complete e-learning platform to sell online courses, protect lessons, offer memberships, and quiz students. WP Learning Management System.
+ * Plugin Name: VibeLMS
+ * Plugin URI: https://github.com/DiasMazhenov/VibeLMS
+ * Description: VibeLMS learning platform foundation for a modern training portal.
  * Version: 10.2.0
  * Author: LifterLMS
  * Author URI: https://lifterlms.com/
@@ -47,12 +47,14 @@ if ( ! defined( 'LLMS_PLUGIN_DIR' ) ) {
 // Autoloader.
 require_once LLMS_PLUGIN_DIR . 'vendor/autoload.php';
 require_once LLMS_PLUGIN_DIR . 'includes/class-llms-loader.php';
+require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-roles.php';
 
 if ( ! class_exists( 'LifterLMS' ) ) {
 	require_once LLMS_PLUGIN_DIR . 'class-lifterlms.php';
 }
 
 register_activation_hook( __FILE__, array( 'LLMS_Install', 'install' ) );
+register_activation_hook( __FILE__, 'llms_vibelms_roles_install' );
 
 require_once LLMS_PLUGIN_DIR . 'includes/llms-notifications.php';
 

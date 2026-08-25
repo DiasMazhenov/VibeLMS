@@ -1,8 +1,8 @@
 <h1 align="center">
-  <img src=".github/lifterlms-logo.png" alt="LifterLMS logo" width="300">
+  <img src=".github/lifterlms-logo.png" alt="VibeLMS logo" width="300">
 </h1>
 
-<p align="center"><a href="https://lifterlms.com" title="LifterLMS website external link">LifterLMS</a> is a powerful WordPress learning management system plugin that makes it easy to create, sell, and protect engaging online courses and training based membership websites.</p>
+<p align="center"><strong>VibeLMS</strong> is an independent WordPress learning-platform fork, built on the LifterLMS core and adapted incrementally for modern training portals.</p>
 
 <hr />
 
@@ -29,9 +29,25 @@
 
 <hr />
 
-Welcome to the LifterLMS GitHub repository. This repository serves as the core project's central location for issue tracking and feature development.
+Welcome to the VibeLMS repository. It contains the forked LMS core, VibeLMS-specific platform code and the diagnostics needed for safe development on a staging WordPress site.
 
-If you're not a developer or contributor, please use [LifterLMS plugin page][link-wp-repo] at WordPress.org.
+The repository is currently a development fork; do not use it as a production release until the VibeLMS acceptance checks are complete.
+
+### VibeLMS implementation status
+
+Implemented:
+
+- LifterLMS core snapshot as the VibeLMS foundation;
+- opt-in structured PHP diagnostics with sensitive-value redaction;
+- `vibelms_student` and `vibelms_observer` roles with restricted capabilities;
+- reproducible installable ZIP build through `scripts/build-installable-package.sh`.
+
+In progress:
+
+- RU/KZ content model and language switching;
+- protected training materials and responsive learning screens;
+- server-side 15-question assessment, attempts and retakes;
+- CSV reports and authenticated PDF/PNG certificates.
 
 
 ### Getting Help and Support
@@ -77,13 +93,16 @@ Also check our [known issues and conflicts](https://lifterlms.com/doc-category/l
 Security issues and vulnerabilities should be responsibly disclosed directly to the LifterLMS core developers via email. Please see our [Security Policy](.github/SECURITY.md) for details on disclosing a security vulnerability.
 
 
-### Installing
+### Installing for development
 
-If you clone or download this repo directly it will not run as a plugin inside WordPress!
+The GitHub source archive is not itself an installable plugin because runtime Composer dependencies are intentionally not committed. Build a package from a clean checkout:
 
-Installable production releases are available in on the [Releases tab](https://github.com/gocodebox/lifterlms/releases). You can get the latest stable release from [WordPress.org](https://downloads.wordpress.org/plugin/lifterlms.zip)
+```bash
+composer install --no-interaction --prefer-dist
+VIBELMS_PACKAGE_VERSION=0.1.0 ./scripts/build-installable-package.sh
+```
 
-If you're interested in installing development versions, see [Installing for Development](docs/installing.md)
+The resulting `dist/vibelms-0.1.0.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist and review `LifterLMS → Status → Logs` when `VIBELMS_DEBUG` is enabled.
 
 
 ### Contributing
