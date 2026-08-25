@@ -10,7 +10,7 @@
  * Plugin Name: VibeLMS
  * Plugin URI: https://mazhenov.kz
  * Description: VibeLMS learning platform foundation for a modern training portal.
- * Version: 0.1.0
+ * Version: 0.0.01
  * Author: Mazhenov Design
  * Author URI: https://mazhenov.kz
  * Text Domain: lifterlms
