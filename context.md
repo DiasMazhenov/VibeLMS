@@ -4,11 +4,11 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.13`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.14`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
-The first VibeLMS-specific feature layer adds the neutral `vibelms_student` and `vibelms_observer` roles. The observer receives only VibeLMS report/export/material capabilities; it does not receive WordPress editor capabilities.
+The first VibeLMS-specific feature layer adds the neutral `vibelms_student` and `vibelms_observer` roles. The observer receives only VibeLMS report/export/material capabilities; it does not receive WordPress editor capabilities. Existing installations refresh the administrator report capabilities through the role-version migration.
 
 The repository now includes `scripts/build-installable-package.sh`, which creates a production-style ZIP with Composer runtime dependencies while keeping development dependencies out of the repository. The package build skips Composer dev scripts because those scripts configure PHPCS, which is intentionally absent from a `--no-dev` production install.
 
@@ -29,6 +29,16 @@ VibeLMS remains a reusable LMS engine for different projects. Project-specific b
 The dashboard analytics enqueue now supports both the legacy LifterLMS screen base and the `toplevel_page_llms-dashboard` screen produced by the VibeLMS menu. The official WordPress.org Russian translation package is included in `languages/` as `lifterlms-ru_RU.po/.mo` plus JavaScript JSON catalogs, and custom VibeLMS admin labels are Russian.
 
 The dashboard analytics path now also recognizes the `page=llms-dashboard` query directly. Widget AJAX starts before Google Charts initialization, and the optional student filter/Google Charts APIs are guarded so a missing optional script cannot leave the metric cards stuck in the loading state. The customized analytics asset uses `VIBELMS_VERSION` for cache busting instead of the unchanged internal LifterLMS version.
+
+The universal VibeLMS platform layer stores employee identity fields (`company`, `employee_name`, `region`, `station`) in user meta and exposes them through `[vibelms_student_identity]`. When the optional setting is enabled, quiz access requires these fields. The same form is available as an Elementor widget.
+
+Completed quiz attempts are copied into the protected `{$wpdb->prefix}vibelms_attempts` table. The journal is available to administrators and observers, supports paginated viewing and UTF-8 CSV export, and stores email, identity snapshot, locale, attempt number, question count, correct answers, grade, status and dates. The table is created on activation and through the update-safe admin migration.
+
+General settings now expose the project-neutral assessment rule: target question count defaults to `15`, passing score defaults to `100%`, optional identity requirement, and an optional certificate template. A successful attempt must match the configured question count and pass threshold before the selected certificate template is awarded. The question builder itself is not limited to 15 questions.
+
+Elementor widget registration supports the modern `elementor/widgets/register` hook with backward compatibility for older Elementor releases. The visible category is `VibeLMS`; the internal category key remains `lifterlms` so saved Elementor documents continue to resolve. The old external Elementor upsell text was removed and replaced with a local VibeLMS note.
+
+Translated UI strings from the compatibility domains replace visible `LifterLMS`/`Lifterlms` product-name text with `VibeLMS`. Internal class names, hooks, post types, shortcodes, text domains and compatibility URLs are intentionally not mass-renamed.
 
 The course builder now uses the public `VIBELMS_VERSION` for its builder CSS, JavaScript and popover assets, preventing stale internal LifterLMS asset URLs after a VibeLMS update. Builder page output records the prepared question-type count and IDs through the existing `vibelms-diagnostics` handle when `VIBELMS_DEBUG` is enabled; this makes an empty “Add Question” panel distinguishable between a PHP data problem and a browser asset/cache problem.
 
@@ -51,8 +61,8 @@ The Advanced Questions buttons are native VibeLMS functionality. Their core defi
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
-- Current checks: PHP lint, JS syntax, Advanced Quizzes asset-manifest checks and `git diff --check` passed for the current integration; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Diagnostics and role-definition smoke tests passed earlier. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages. A full WordPress/PHPUnit test remains blocked until the WordPress test library and database are installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.13.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Current checks: PHP lint for the changed plugin, admin, Elementor, uninstall and PHPUnit files, the VibeLMS platform smoke checks and `git diff --check` passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Diagnostics and role-definition smoke tests passed earlier. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.14.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 

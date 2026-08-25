@@ -22,9 +22,8 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 				'label'           => '',
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
 				'raw'             => '<hr><p style="margin-top: 20px;">' .
-									/* translators: %1$s: Opening learn more link tag, %2$s: Closing link tag. */
-									sprintf( esc_html__( 'Learn more about %1$sediting LifterLMS courses with Elementor%2$s', 'lifterlms' ), '<a target="_blank" href="https://lifterlms.com/docs/how-to-edit-courses-with-elementor/?utm_source=LifterLMS%20Plugin&utm_medium=Elementor%20Edit%20Panel%20&utm_campaign=Plugin%20to%20Sale">', '</a>' ) .
-									'</p>',
+					esc_html__( 'Виджет VibeLMS работает с текущим курсом и доступен в категории VibeLMS.', 'lifterlms' ) .
+					'</p>',
 				'content_classes' => 'lifterlms-notice',
 			)
 		);

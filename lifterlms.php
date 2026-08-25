@@ -10,7 +10,7 @@
  * Plugin Name: VibeLMS
  * Plugin URI: https://mazhenov.kz
  * Description: VibeLMS learning platform foundation for a modern training portal.
- * Version: 0.0.13
+ * Version: 0.0.14
  * Author: Mazhenov Design
  * Author URI: https://mazhenov.kz
  * Text Domain: lifterlms
@@ -23,13 +23,12 @@
  *
  * * * * * * * * * * * * * * * * * * * * * *
  *                                         *
- * Reporting a Security Vulnerability      *
+ * Project support                          *
  *                                         *
- * Please disclose any security issues or  *
- * vulnerabilities to team@lifterlms.com   *
+ * Please report issues through the project *
+ * website: https://mazhenov.kz             *
  *                                         *
- * See our full Security Policy at         *
- * https://lifterlms.com/security-policy   *
+ * VibeLMS is an independent reusable LMS.  *
  *                                         *
  * * * * * * * * * * * * * * * * * * * * * *
  */
@@ -45,13 +44,15 @@ if ( ! defined( 'LLMS_PLUGIN_DIR' ) ) {
 }
 
 if ( ! defined( 'VIBELMS_VERSION' ) ) {
-	define( 'VIBELMS_VERSION', '0.0.13' );
+	define( 'VIBELMS_VERSION', '0.0.14' );
 }
 
 // Autoloader.
 require_once LLMS_PLUGIN_DIR . 'vendor/autoload.php';
 require_once LLMS_PLUGIN_DIR . 'includes/class-llms-loader.php';
+require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-branding.php';
 require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-roles.php';
+require_once LLMS_PLUGIN_DIR . 'includes/class.llms.vibelms.platform.php';
 
 if ( ! class_exists( 'LifterLMS' ) ) {
 	require_once LLMS_PLUGIN_DIR . 'class-lifterlms.php';
@@ -77,6 +78,7 @@ if ( function_exists( 'llms_aq' ) ) {
 
 register_activation_hook( __FILE__, array( 'LLMS_Install', 'install' ) );
 register_activation_hook( __FILE__, 'llms_vibelms_roles_install' );
+register_activation_hook( __FILE__, 'llms_vibelms_platform_install' );
 
 require_once LLMS_PLUGIN_DIR . 'includes/llms-notifications.php';
 
@@ -90,4 +92,7 @@ require_once LLMS_PLUGIN_DIR . 'includes/llms-notifications.php';
 function llms() {
 	return LifterLMS::instance();
 }
+
+llms_vibelms_platform();
+
 return llms();

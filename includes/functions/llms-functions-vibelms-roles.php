@@ -66,7 +66,13 @@ function llms_vibelms_roles_install() {
 		}
 	}
 
-	update_option( 'vibelms_roles_version', '2', false );
+	$administrator = get_role( 'administrator' );
+	if ( $administrator ) {
+		$administrator->add_cap( 'vibelms_view_reports' );
+		$administrator->add_cap( 'vibelms_export_reports' );
+	}
+
+	update_option( 'vibelms_roles_version', '3', false );
 }
 
 /**
@@ -75,7 +81,7 @@ function llms_vibelms_roles_install() {
  * @return void
  */
 function llms_vibelms_roles_maybe_install() {
-	if ( '2' !== get_option( 'vibelms_roles_version' ) ) {
+	if ( '3' !== get_option( 'vibelms_roles_version' ) ) {
 		llms_vibelms_roles_install();
 	}
 }

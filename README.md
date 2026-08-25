@@ -2,7 +2,7 @@
   <img src=".github/lifterlms-logo.png" alt="VibeLMS logo" width="300">
 </h1>
 
-<p align="center"><strong>VibeLMS</strong> is an independent WordPress learning-platform fork by <a href="https://mazhenov.kz">Mazhenov Design</a>, built on the LifterLMS core and adapted incrementally for modern training portals.</p>
+<p align="center"><strong>VibeLMS</strong> is a reusable WordPress learning platform by <a href="https://mazhenov.kz">Mazhenov Design</a>.</p>
 
 <hr />
 
@@ -37,60 +37,28 @@ The repository is currently a development fork; do not use it as a production re
 
 Implemented:
 
-- LifterLMS core snapshot as the VibeLMS foundation;
+- reusable course, lesson, quiz and certificate foundation;
 - opt-in structured PHP diagnostics with sensitive-value redaction;
 - `vibelms_student` and `vibelms_observer` roles with restricted capabilities;
+- Russian admin interface and VibeLMS branding;
+- bundled Advanced Quizzes with question bank and advanced question types;
+- Elementor widgets for courses and employee identification;
+- configurable assessment rule, identity form, protected attempt journal and CSV export;
+- optional automatic certificate award after a successful assessment;
 - reproducible installable ZIP build through `scripts/build-installable-package.sh`.
 
-In progress:
+Configuration remains project-neutral:
 
-- RU/KZ content model and language switching;
-- protected training materials and responsive learning screens;
-- server-side 15-question assessment, attempts and retakes;
-- CSV reports and authenticated PDF/PNG certificates.
+- project branding, languages, slides, videos, documents, questions and certificate templates are supplied through WordPress content, Elementor and ACF Pro;
+- internal compatibility identifiers remain unchanged so existing course data and Elementor documents continue to work.
 
 
-### Getting Help and Support
+### Documentation and support
 
-GitHub is for bug reports and contributions only! If you have a support question or a request for a customization this is not the right place to post it. Please refer to [LifterLMS Support][link-support] or the [community forums][link-support-forums]. If you're looking for help customizing LifterLMS, please consider hiring a [LifterLMS Expert][link-experts].
-
-
-### Resources and Documentation
-
-+ [Changelog](./CHANGELOG.md)
-+ User documentation and knowledge base: https://lifterlms.com/docs/
-+ Contributor's blog: https://make.lifterlms.com/
-+ Developer portal: https://developer.lifterlms.com/
-
-
-### Included Core Packages
-
-The LifterLMS core includes several additional packages which are included in releases through composer. These core projects are installable as standalone plugins for development and testing purposes. The stable versions are automatically included in LifterLMS core releases.
-
-These packages have their own GitHub repositories:
-
-+ [LifterLMS Blocks](https://github.com/gocodebox/lifterlms-blocks)
-+ [LifterLMS CLI](https://github.com/gocodebox/lifterlms-cli)
-+ [LifterLMS REST API](https://github.com/gocodebox/lifterlms-rest)
-
-
-### AI Agent Integration
-
-LifterLMS supports AI coding assistants through its [CLI](https://github.com/gocodebox/lifterlms-cli) (for shell-based agents like Claude Code and Cursor) and [MCP server](https://github.com/gocodebox/lifterlms-mcp) (for chat-based agents like Claude Desktop). See the [AI agent guide](docs/ai-agents.md) for setup and usage.
-
-
-### Reporting a Bug
-
-Bugs can be reported at https://github.com/gocodebox/lifterlms/issues/new.
-
-Before reporting a bug, [search existing issues](https://github.com/gocodebox/lifterlms/issues) and ensure you're not creating a duplicate. If the issue already exists you can add your information to the existing report.
-
-Also check our [known issues and conflicts](https://lifterlms.com/doc-category/lifterlms/known-conflicts/) for possible resolutions.
-
-
-### Reporting a Security Vulnerability
-
-Security issues and vulnerabilities should be responsibly disclosed directly to the LifterLMS core developers via email. Please see our [Security Policy](.github/SECURITY.md) for details on disclosing a security vulnerability.
+- [Changelog](./CHANGELOG.md)
+- [План разработки](./docs/)
+- вопросы и сообщения об ошибках: <https://github.com/DiasMazhenov/VibeLMS/issues>
+- сайт разработчика: <https://mazhenov.kz>
 
 
 ### Installing for development
@@ -99,17 +67,17 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.13 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.14 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.13.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS: the course builder includes blank, reorder, short/long answer, file upload, code and scale questions, plus a question bank. A separate Advanced Quizzes plugin is not required. The same runtime `vendor/` directory and compiled production CSS/JS are included in GitHub deployments because Push-to-Deploy does not run Composer or npm. When changing SCSS/JS, rebuild with `npm run build:scripts:legacy && npm run build:styles` and commit the generated assets. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist, create a test quiz with an advanced question, and review `VibeLMS → Статус → Логи` when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.14.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
 
 
 ### Contributing
 
 [![Contributions Welcome][img-contributions-welcome]](.github/CONTRIBUTING.md)
 
-Interested in contributing to LifterLMS? We'd love to have your contributions. Read our contributor's guidelines [here](.github/CONTRIBUTING.md).
+Interested in contributing to VibeLMS? Read the contributor guidelines [here](.github/CONTRIBUTING.md).
 
 
 ### Contributors

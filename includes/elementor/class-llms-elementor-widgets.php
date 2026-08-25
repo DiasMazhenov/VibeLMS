@@ -24,7 +24,11 @@ class LLMS_Elementor_Widgets {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'init' ) );
+		if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
+			add_action( 'elementor/widgets/register', array( $this, 'init' ) );
+		} else {
+			add_action( 'elementor/widgets/widgets_registered', array( $this, 'init' ) );
+		}
 		add_action( 'elementor/elements/categories_registered', array( $this, 'add_widget_categories' ) );
 		add_filter( 'llms_render_block', array( $this, 'maybe_stop_rendering_block' ), 10, 2 );
 	}
@@ -67,7 +71,14 @@ class LLMS_Elementor_Widgets {
 		return $should_render;
 	}
 
-	public function init() {
+	public function init( $widgets_manager = null ) {
+		static $initialized = false;
+		if ( $initialized ) {
+			return;
+		}
+		$initialized    = true;
+		$widgets_manager = $widgets_manager ? $widgets_manager : \Elementor\Plugin::instance()->widgets_manager;
+
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-base.php';
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-course-meta-info.php';
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-course-instructors.php';
@@ -75,13 +86,15 @@ class LLMS_Elementor_Widgets {
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-course-progress.php';
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-course-continue-button.php';
 		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-course-syllabus.php';
+		require_once LLMS_PLUGIN_DIR . 'includes/elementor/class-llms-elementor-widget-student-identity.php';
 
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Course_Meta_Info() );
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Course_Instructors() );
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Pricing_Table() );
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Course_Progress() );
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Course_Continue_Button() );
-		\Elementor\Plugin::instance()->widgets_manager->register( new LLMS_Elementor_Widget_Course_Syllabus() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Course_Meta_Info() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Course_Instructors() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Pricing_Table() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Course_Progress() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Course_Continue_Button() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Course_Syllabus() );
+		$widgets_manager->register( new LLMS_Elementor_Widget_Student_Identity() );
 	}
 
 	public function add_widget_categories( $elements_manager ) {
@@ -89,7 +102,7 @@ class LLMS_Elementor_Widgets {
 		$elements_manager->add_category(
 			'lifterlms',
 			array(
-				'title' => 'LifterLMS',
+				'title' => 'VibeLMS',
 				'icon'  => 'dashicons-before dashicons-welcome-learn-more',
 			)
 		);

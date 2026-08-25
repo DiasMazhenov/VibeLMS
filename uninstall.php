@@ -46,6 +46,7 @@ if ( defined( 'LLMS_REMOVE_ALL_DATA' ) && true === LLMS_REMOVE_ALL_DATA ) {
 	// Delete options.
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'lifterlms\_%';" );
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'llms\_%';" );
+	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'vibelms\_%';" );
 
 	// Delete custom usermeta.
 	$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'llms\_%';" );
@@ -58,6 +59,7 @@ if ( defined( 'LLMS_REMOVE_ALL_DATA' ) && true === LLMS_REMOVE_ALL_DATA ) {
 	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}lifterlms_notifications" );
 	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}lifterlms_events" );
 	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}lifterlms_events_open_sessions" );
+	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}vibelms_attempts" );
 
 	// Delete all post types & related meta data.
 	$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type IN ( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_engagement', 'llms_order', 'llms_transaction', 'llms_achievement', 'llms_my_achievement', 'llms_certificate', 'llms_my_certificate', 'llms_email', 'llms_coupon', 'llms_voucher', 'llms_review', 'llms_access_plan', 'llms_form' );" );
