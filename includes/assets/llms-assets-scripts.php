@@ -40,7 +40,7 @@ return array(
 
 	// Core.
 	'llms'                                      => array(
-		'dependencies' => array( 'jquery', 'wp-i18n' ),
+		'dependencies' => array( 'jquery', 'llms-spinner' ),
 	),
 	'llms-form-checkout'                        => array(
 		'dependencies' => array( 'jquery' ),
@@ -96,10 +96,10 @@ return array(
 	),
 	'llms-spinner'                              => array(
 		/**
-		 * This script is automatically included in the `llms` script file.
+		 * This script is loaded automatically as a dependency of the `llms` script.
 		 *
 		 * If your JS already defines `llms` as a dependency and you wish to use the `llms-spinner` it's recommended
-		 * you don't also define this as a dependency as it will cause an superfluous HTTP request.
+		 * you don't also define this as a dependency as it will cause a superfluous HTTP request.
 		 */
 		'asset_file' => true,
 		'suffix'     => '',

@@ -284,7 +284,8 @@ class LLMS_Admin_Assets {
 			wp_enqueue_script( 'llms-admin-tables' );
 		}
 
-		wp_register_script( 'llms', LLMS_PLUGIN_URL . 'assets/js/llms' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery' ), LLMS_ASSETS_VERSION, true );
+		llms()->assets->register_script( 'llms-spinner' );
+		wp_register_script( 'llms', LLMS_PLUGIN_URL . 'assets/js/llms' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'llms-spinner' ), LLMS_ASSETS_VERSION, true );
 		wp_register_script( 'llms-admin-scripts', LLMS_PLUGIN_URL . 'assets/js/llms-admin' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'llms', 'llms-select2' ), LLMS_ASSETS_VERSION, true );
 
 		wp_register_script( 'llms-admin-media-protection-attachment-settings', LLMS_PLUGIN_URL . 'assets/js/llms-admin-media-protection-attachment-settings' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'media-views', 'wp-i18n', 'llms-admin-scripts' ), LLMS_ASSETS_VERSION, true );
@@ -387,7 +388,7 @@ class LLMS_Admin_Assets {
 				wp_enqueue_script( 'heartbeat' );
 			}
 
-			wp_enqueue_script( 'llms-builder', LLMS_PLUGIN_URL . 'assets/js/llms-builder' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'backbone', 'underscore', 'post', 'llms-quill' ), VIBELMS_VERSION, true );
+			wp_enqueue_script( 'llms-builder', LLMS_PLUGIN_URL . 'assets/js/llms-builder' . LLMS_ASSETS_SUFFIX . '.js', array( 'jquery', 'llms', 'jquery-ui-sortable', 'jquery-ui-draggable', 'backbone', 'underscore', 'post', 'llms-quill' ), VIBELMS_VERSION, true );
 
 		} elseif ( 'lifterlms_page_llms-add-ons' === $screen->id ) {
 			llms()->assets->enqueue_script( 'llms-addons' );
