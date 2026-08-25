@@ -11,25 +11,6 @@ composer.lock
 # Ignore built files
 /readme.txt
 # Production CSS and JS are tracked because Push-to-Deploy does not run npm.
-blocks/certificate-title/*
-blocks/my-account/*
-blocks/pricing-table/*
-blocks/access-plan-button/*
-blocks/checkout/*
-blocks/course-author/*
-blocks/course-continue/*
-blocks/course-meta-info/*
-blocks/course-outline/*
-blocks/course-prerequisites/*
-blocks/course-reviews/*
-blocks/course-syllabus/*
-blocks/courses/*
-blocks/login/*
-blocks/memberships/*
-blocks/my-achievements/*
-blocks/navigation-link/*
-blocks/registration/*
-
 languages/lifterlms.pot
 
 # Bundled libraries: ignore built artifacts and per-library node_modules only.
