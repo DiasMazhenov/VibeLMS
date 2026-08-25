@@ -2419,11 +2419,6 @@ a.llms-view-as {
   font-style: italic;
 }
 
-.llms-rating-stars {
-  color: #ffb900;
-  text-decoration: none;
-}
-
 @media screen and (max-width: 782px) {
   .llms-header {
     top: 46px;
