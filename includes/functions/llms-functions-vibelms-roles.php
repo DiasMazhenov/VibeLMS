@@ -4,7 +4,7 @@
  *
  * @package VibeLMS/Functions
  * @since 0.0.01
- * @version 0.0.01
+ * @version 0.0.07
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -45,6 +45,13 @@ function llms_vibelms_roles_install() {
 		return;
 	}
 
+	// Push-to-Deploy updates an active plugin without running its activation hook.
+	// Refresh the core post-type capabilities so existing administrators can
+	// create access groups after an update.
+	if ( class_exists( 'LLMS_Roles' ) ) {
+		LLMS_Roles::install();
+	}
+
 	foreach ( llms_vibelms_role_definitions() as $role_name => $definition ) {
 		$role = get_role( $role_name );
 		if ( ! $role ) {
@@ -59,7 +66,7 @@ function llms_vibelms_roles_install() {
 		}
 	}
 
-	update_option( 'vibelms_roles_version', '1', false );
+	update_option( 'vibelms_roles_version', '2', false );
 }
 
 /**
@@ -68,7 +75,7 @@ function llms_vibelms_roles_install() {
  * @return void
  */
 function llms_vibelms_roles_maybe_install() {
-	if ( '1' !== get_option( 'vibelms_roles_version' ) ) {
+	if ( '2' !== get_option( 'vibelms_roles_version' ) ) {
 		llms_vibelms_roles_install();
 	}
 }

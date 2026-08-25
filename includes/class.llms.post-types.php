@@ -671,26 +671,26 @@ class LLMS_Post_Types {
 			)
 		);
 
-		// Membership.
+		// Access group. Keep the internal post type for LifterLMS compatibility.
 		$membership_page_id = llms_get_page_id( 'memberships' );
 		self::register_post_type(
 			'llms_membership',
 			array(
 				'labels'              => array(
-					'name'               => __( 'Memberships', 'lifterlms' ),
-					'singular_name'      => __( 'Membership', 'lifterlms' ),
-					'menu_name'          => _x( 'Memberships', 'Admin menu name', 'lifterlms' ),
-					'add_new'            => __( 'Add Membership', 'lifterlms' ),
-					'add_new_item'       => __( 'Add New Membership', 'lifterlms' ),
+					'name'               => __( 'Access Groups', 'lifterlms' ),
+					'singular_name'      => __( 'Access Group', 'lifterlms' ),
+					'menu_name'          => _x( 'Access Groups', 'Admin menu name', 'lifterlms' ),
+					'add_new'            => __( 'Add Access Group', 'lifterlms' ),
+					'add_new_item'       => __( 'Add New Access Group', 'lifterlms' ),
 					'edit'               => __( 'Edit', 'lifterlms' ),
-					'edit_item'          => __( 'Edit Membership', 'lifterlms' ),
-					'new_item'           => __( 'New Membership', 'lifterlms' ),
-					'view'               => __( 'View Membership', 'lifterlms' ),
-					'view_item'          => __( 'View Membership', 'lifterlms' ),
-					'search_items'       => __( 'Search Memberships', 'lifterlms' ),
-					'not_found'          => __( 'No Memberships found', 'lifterlms' ),
-					'not_found_in_trash' => __( 'No Memberships found in trash', 'lifterlms' ),
-					'parent'             => __( 'Parent Membership', 'lifterlms' ),
+					'edit_item'          => __( 'Edit Access Group', 'lifterlms' ),
+					'new_item'           => __( 'New Access Group', 'lifterlms' ),
+					'view'               => __( 'View Access Group', 'lifterlms' ),
+					'view_item'          => __( 'View Access Group', 'lifterlms' ),
+					'search_items'       => __( 'Search Access Groups', 'lifterlms' ),
+					'not_found'          => __( 'No Access Groups found', 'lifterlms' ),
+					'not_found_in_trash' => __( 'No Access Groups found in trash', 'lifterlms' ),
+					'parent'             => __( 'Parent Access Group', 'lifterlms' ),
 				),
 				'public'              => true,
 				'show_ui'             => true,

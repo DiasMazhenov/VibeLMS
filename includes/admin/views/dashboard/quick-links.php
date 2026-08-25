@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 		<h3><?php esc_html_e( 'Content', 'lifterlms' ); ?></h3>
 		<ul>
 			<li><a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=course' ) ); ?>"><?php esc_html_e( 'Create a New Course', 'lifterlms' ); ?></a></li>
-			<li><a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=llms_membership' ) ); ?>"><?php esc_html_e( 'Add a New Membership', 'lifterlms' ); ?></a></li>
+			<li><a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=llms_membership' ) ); ?>"><?php esc_html_e( 'Add a New Access Group', 'lifterlms' ); ?></a></li>
 		</ul>
 		<a class="llms-button-primary" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=course' ) ); ?>"><?php esc_html_e( 'Create a New Course', 'lifterlms' ); ?></a>
 	</div>

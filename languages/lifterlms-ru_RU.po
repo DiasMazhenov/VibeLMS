@@ -6360,6 +6360,56 @@ msgctxt "block title"
 msgid "Courses"
 msgstr "Курсы"
 
+#: includes/class.llms.post-types.php:680
+msgctxt "Admin menu name"
+msgid "Access Groups"
+msgstr "Группы доступа"
+
+#: includes/class.llms.post-types.php:681
+msgid "Access Group"
+msgstr "Группа доступа"
+
+#: includes/class.llms.post-types.php:683
+msgid "Add Access Group"
+msgstr "Добавить группу доступа"
+
+#: includes/class.llms.post-types.php:684
+msgid "Add New Access Group"
+msgstr "Добавить новую группу доступа"
+
+#: includes/class.llms.post-types.php:686
+msgid "Edit Access Group"
+msgstr "Изменить группу доступа"
+
+#: includes/class.llms.post-types.php:687
+msgid "New Access Group"
+msgstr "Новая группа доступа"
+
+#: includes/class.llms.post-types.php:688
+#: includes/class.llms.post-types.php:689
+msgid "View Access Group"
+msgstr "Просмотреть группу доступа"
+
+#: includes/class.llms.post-types.php:690
+msgid "Search Access Groups"
+msgstr "Поиск групп доступа"
+
+#: includes/class.llms.post-types.php:691
+msgid "No Access Groups found"
+msgstr "Группы доступа не найдены"
+
+#: includes/class.llms.post-types.php:692
+msgid "No Access Groups found in trash"
+msgstr "Группы доступа не найдены в корзине"
+
+#: includes/class.llms.post-types.php:693
+msgid "Parent Access Group"
+msgstr "Родительская группа доступа"
+
+#: includes/admin/views/dashboard/quick-links.php:19
+msgid "Add a New Access Group"
+msgstr "Добавить новую группу доступа"
+
 #: blocks/course-syllabus/block.json
 msgctxt "block description"
 msgid "Display the Course Syllabus for a specific course."
