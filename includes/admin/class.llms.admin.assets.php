@@ -215,7 +215,7 @@ class LLMS_Admin_Assets {
 	 */
 	public function admin_styles() {
 
-		wp_enqueue_style( 'llms-admin-styles', LLMS_PLUGIN_URL . 'assets/css/admin' . LLMS_ASSETS_SUFFIX . '.css', array(), LLMS_ASSETS_VERSION );
+		wp_enqueue_style( 'llms-admin-styles', LLMS_PLUGIN_URL . 'assets/css/admin' . LLMS_ASSETS_SUFFIX . '.css', array(), VIBELMS_VERSION );
 		wp_style_add_data( 'llms-admin-styles', 'rtl', 'replace' );
 		wp_style_add_data( 'llms-admin-styles', 'suffix', LLMS_ASSETS_SUFFIX );
 

@@ -53,11 +53,7 @@ defined( 'ABSPATH' ) || exit;
 
 		<form id="llms-dashboard-form" method="post" action="admin-post.php">
 			<div id="poststuff">
-				<div id="post-body" class="metabox-holder columns-2">
-
-					<div id="postbox-container-1" class="postbox-container">
-						<?php do_meta_boxes( 'toplevel_page_llms-dashboard', 'side', '' ); ?>
-					</div>
+				<div id="post-body" class="metabox-holder columns-1">
 
 					<div id="postbox-container-2" class="postbox-container">
 						<?php do_meta_boxes( 'toplevel_page_llms-dashboard', 'normal', '' ); ?>

@@ -4,7 +4,7 @@
  *
  * @package VibeLMS/Admin/Views/Dashboard
  *
- * @since 0.0.04
+ * @since 0.0.05
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -25,6 +25,6 @@ defined( 'ABSPATH' ) || exit;
 			<li><a href="<?php echo esc_url( admin_url( 'admin.php?page=llms-reporting&tab=students' ) ); ?>"><?php esc_html_e( 'View Students', 'lifterlms' ); ?></a></li>
 			<li><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=llms_order' ) ); ?>"><?php esc_html_e( 'View Orders', 'lifterlms' ); ?></a></li>
 		</ul>
-		<a class="llms-button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=llms-reporting' ) ); ?>"><?php esc_html_e( 'Open Reports', 'lifterlms' ); ?></a>
+		<a class="llms-button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=llms-reporting' ) ); ?>">Открыть отчёты</a>
 	</div>
 </div>

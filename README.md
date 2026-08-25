@@ -29,7 +29,7 @@
 
 <hr />
 
-Welcome to the VibeLMS repository. It contains the forked LMS core, VibeLMS-specific platform code and the diagnostics needed for safe development on a staging WordPress site.
+Welcome to the VibeLMS repository. It contains a reusable WordPress LMS core, generic platform capabilities and the diagnostics needed for safe development on a staging WordPress site. Project-specific branding, languages, materials, questions and certificates are configured as content and settings; they are not hard-coded into the plugin.
 
 The repository is currently a development fork; do not use it as a production release until the VibeLMS acceptance checks are complete.
 
@@ -99,10 +99,10 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.04 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.05 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.04.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. The same runtime `vendor/` directory and compiled production CSS/JS are included in GitHub deployments because Push-to-Deploy does not run Composer or npm. When changing SCSS/JS, rebuild with `npm run build:scripts:legacy && npm run build:styles` and commit the generated assets. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist and review `VibeLMS → Статус → Логи` when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.05.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. The same runtime `vendor/` directory and compiled production CSS/JS are included in GitHub deployments because Push-to-Deploy does not run Composer or npm. When changing SCSS/JS, rebuild with `npm run build:scripts:legacy && npm run build:styles` and commit the generated assets. Do not activate it on production yet. After activation, confirm that the **VibeLMS Student** and **VibeLMS Observer** roles exist and review `VibeLMS → Статус → Логи` when `VIBELMS_DEBUG` is enabled.
 
 
 ### Contributing
