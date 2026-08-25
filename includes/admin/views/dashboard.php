@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="llms-subheader">
 
-		<h1><?php esc_html_e( 'VibeLMS Dashboard', 'lifterlms' ); ?></h1>
+		<h1>Панель управления VibeLMS</h1>
 
 	</div>
 

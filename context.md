@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.02`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment: the next update must use `0.0.03`.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.03`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment: the next update must use `0.0.04`.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -15,6 +15,8 @@ The repository now includes `scripts/build-installable-package.sh`, which create
 The runtime Composer `vendor/` directory is now tracked so the GitHub Push-to-Deploy integration receives the required `vendor/autoload.php`. It contains only production dependencies; development tools remain excluded.
 
 The admin interface now uses VibeLMS branding, shows the public VibeLMS version, hides the old license/support/add-ons/promotional dashboard blocks, and keeps only local content/report shortcuts. Compiled production CSS and JS are tracked because Push-to-Deploy does not execute npm; the missing `admin.css` was the cause of the unstyled dashboard and oversized logo.
+
+The dashboard analytics enqueue now supports both the legacy LifterLMS screen base and the `toplevel_page_llms-dashboard` screen produced by the VibeLMS menu. The official WordPress.org Russian translation package is included in `languages/` as `lifterlms-ru_RU.po/.mo` plus JavaScript JSON catalogs, and custom VibeLMS admin labels are Russian.
 
 ## Repository
 
@@ -27,8 +29,8 @@ The admin interface now uses VibeLMS branding, shows the public VibeLMS version,
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
-- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. Legacy JS and SCSS builds passed; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.02.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Current checks: PHP lint passed; diagnostics and role-definition smoke tests passed; PHPCS and `git diff --check` passed for the changed files. Legacy JS and SCSS builds passed; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics screen-ID guard and Russian translation catalogs are checked before release. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.03.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 

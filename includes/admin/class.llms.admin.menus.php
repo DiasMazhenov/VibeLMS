@@ -200,18 +200,18 @@ class LLMS_Admin_Menus {
 
 		add_menu_page( 'VibeLMS', 'VibeLMS', 'read', 'lifterlms', '__return_empty_string', 'dashicons-welcome-learn-more', 51 );
 
-		add_submenu_page( 'lifterlms', __( 'VibeLMS Dashboard', 'lifterlms' ), __( 'Dashboard', 'lifterlms' ), 'manage_lifterlms', 'llms-dashboard', array( $this, 'dashboard_page_init' ) );
+		add_submenu_page( 'lifterlms', 'Панель управления VibeLMS', 'Панель управления', 'manage_lifterlms', 'llms-dashboard', array( $this, 'dashboard_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'VibeLMS Settings', 'lifterlms' ), __( 'Settings', 'lifterlms' ), 'manage_lifterlms', 'llms-settings', array( $this, 'settings_page_init' ) );
+		add_submenu_page( 'lifterlms', 'Настройки VibeLMS', 'Настройки', 'manage_lifterlms', 'llms-settings', array( $this, 'settings_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'VibeLMS Reporting', 'lifterlms' ), __( 'Reporting', 'lifterlms' ), 'view_lifterlms_reports', 'llms-reporting', array( $this, 'reporting_page_init' ) );
+		add_submenu_page( 'lifterlms', 'Отчёты VibeLMS', 'Отчёты', 'view_lifterlms_reports', 'llms-reporting', array( $this, 'reporting_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'VibeLMS Import', 'lifterlms' ), __( 'Import', 'lifterlms' ), 'manage_lifterlms', 'llms-import', array( $this, 'import_page_init' ) );
+		add_submenu_page( 'lifterlms', 'Импорт VibeLMS', 'Импорт', 'manage_lifterlms', 'llms-import', array( $this, 'import_page_init' ) );
 
-		add_submenu_page( 'lifterlms', __( 'VibeLMS Status', 'lifterlms' ), __( 'Status', 'lifterlms' ), 'manage_lifterlms', 'llms-status', array( $this, 'status_page_init' ) );
+		add_submenu_page( 'lifterlms', 'Статус VibeLMS', 'Статус', 'manage_lifterlms', 'llms-status', array( $this, 'status_page_init' ) );
 
 		// Passing '' to register the page without actually adding a menu item.
-		add_submenu_page( '', __( 'VibeLMS Course Builder', 'lifterlms' ), __( 'Course Builder', 'lifterlms' ), 'edit_courses', 'llms-course-builder', array( $this, 'builder_init' ) );
+		add_submenu_page( '', 'Конструктор курсов VibeLMS', 'Конструктор курсов', 'edit_courses', 'llms-course-builder', array( $this, 'builder_init' ) );
 	}
 
 	/**
