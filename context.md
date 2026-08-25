@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.07`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment: the next update must use `0.0.08`.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.08`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment: the next update must use `0.0.09`.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -19,6 +19,8 @@ The admin interface now uses VibeLMS branding, shows the public VibeLMS version,
 The old LifterLMS review-request module was removed from the VibeLMS load path, so the admin footer and review notice no longer contain LifterLMS promotional text or WordPress.org review links.
 
 The access-group creation route keeps the internal `post_type=llms_membership` identifier for compatibility, but its visible admin labels are now `Access Groups` / `Группы доступа`. The update-safe role installer refreshes the core post-type capabilities on the first admin request after Push-to-Deploy, so existing active installations regain the capability required to create access groups even when the activation hook did not run.
+
+Generated runtime files required by WordPress are tracked for Push-to-Deploy: `includes/class.llms.l10n.frontend.php` and the production `libraries/lifterlms-blocks/assets/` bundle. They must not be excluded by `.gitignore`, because the deployment server does not run the localization or Gutenberg block build.
 
 VibeLMS remains a reusable LMS engine for different projects. Project-specific branding, languages, slides, videos, documents, companies, questions, passing scores and certificate text must be supplied through configurable content/settings rather than hard-coded client names or assets.
 
@@ -38,7 +40,7 @@ The dashboard analytics path now also recognizes the `page=llms-dashboard` query
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint and `git diff --check` passed for the current change; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Diagnostics and role-definition smoke tests passed earlier. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. The production package build passed with `--no-scripts`; `unzip -t` and the packaged Composer autoloader smoke test also passed. The runtime `vendor/autoload.php` is present and `composer show --direct --no-dev` lists only the three production packages.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.07.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.08.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 
