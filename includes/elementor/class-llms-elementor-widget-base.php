@@ -217,11 +217,118 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 		$original_post = $post;
 		$post          = $quiz_post;
 		setup_postdata( $post );
-		$content = apply_filters( 'the_content', $quiz_post->post_content );
+		$content = has_filter( 'the_content', 'llms_get_post_content' )
+			? apply_filters( 'the_content', $quiz_post->post_content )
+			: llms_get_post_content( $quiz_post->post_content );
 		wp_reset_postdata();
 		$post = $original_post;
 
 		return $content;
+	}
+
+	/**
+	 * Add common Elementor style controls to every VibeLMS widget.
+	 *
+	 * @return void
+	 */
+	protected function add_common_style_controls() {
+		$selector         = '{{WRAPPER}}';
+		$heading_selector = $selector . ' h1, ' . $selector . ' h2, ' . $selector . ' h3, ' . $selector . ' h4, ' . $selector . ' h5, ' . $selector . ' h6';
+
+		$this->start_controls_section(
+			'vibelms_style_section',
+			array(
+				'label' => __( 'Стили VibeLMS', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'vibelms_typography',
+				'label'    => __( 'Типографика', 'lifterlms' ),
+				'selector' => $selector,
+			)
+		);
+
+		$this->add_control(
+			'vibelms_text_color',
+			array(
+				'label'     => __( 'Цвет текста', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( $selector => 'color: {{VALUE}};' ),
+			)
+		);
+
+		$this->add_control(
+			'vibelms_heading_color',
+			array(
+				'label'     => __( 'Цвет заголовков', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( $heading_selector => 'color: {{VALUE}};' ),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			array(
+				'name'     => 'vibelms_background',
+				'label'    => __( 'Фон', 'lifterlms' ),
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => $selector,
+			)
+		);
+
+		$this->add_responsive_control(
+			'vibelms_padding',
+			array(
+				'label'      => __( 'Внутренние отступы', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem' ),
+				'selectors'  => array( $selector => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'vibelms_margin',
+			array(
+				'label'      => __( 'Внешние отступы', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem' ),
+				'selectors'  => array( $selector => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'vibelms_border',
+				'label'    => __( 'Рамка', 'lifterlms' ),
+				'selector' => $selector,
+			)
+		);
+
+		$this->add_responsive_control(
+			'vibelms_border_radius',
+			array(
+				'label'      => __( 'Скругление', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem' ),
+				'selectors'  => array( $selector => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Box_Shadow::get_type(),
+			array(
+				'name'     => 'vibelms_box_shadow',
+				'label'    => __( 'Тень', 'lifterlms' ),
+				'selector' => $selector,
+			)
+		);
+
+		$this->end_controls_section();
 	}
 
 	/**

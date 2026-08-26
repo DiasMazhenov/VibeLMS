@@ -37,6 +37,7 @@ class LLMS_Elementor_Widget_Course_Card extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -120,6 +121,7 @@ class LLMS_Elementor_Widget_Course_Catalog extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -166,6 +168,7 @@ class LLMS_Elementor_Widget_Lesson_List extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -225,6 +228,7 @@ class LLMS_Elementor_Widget_Quiz extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -261,6 +265,7 @@ class LLMS_Elementor_Widget_Quiz_Results extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -320,6 +325,7 @@ class LLMS_Elementor_Widget_Certificates extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -367,6 +373,7 @@ class LLMS_Elementor_Widget_Student_Profile extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -417,6 +424,7 @@ class LLMS_Elementor_Widget_Student_Dashboard extends LLMS_Elementor_Widget_Base
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
@@ -461,6 +469,7 @@ class LLMS_Elementor_Widget_Access_Groups extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {

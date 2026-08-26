@@ -1,6 +1,17 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.21 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Elementor test widgets now render the LifterLMS quiz content pipeline during editor previews where the WordPress content filter is not registered.
+
+##### Enhancements
+
++ Added shared VibeLMS style controls to all Elementor widgets: typography, text and heading colors, background, responsive spacing, border, radius and shadow.
+
 VibeLMS 0.0.20 - 2026-08-26
 ---------------------------
 

@@ -33,6 +33,7 @@ class LLMS_Elementor_Widget_Course_Syllabus extends LLMS_Elementor_Widget_Base {
 		$this->add_footer_promo_control();
 
 		$this->end_controls_section();
+		$this->add_common_style_controls();
 	}
 
 	protected function render() {
