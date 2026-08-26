@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.23 - 2026-08-27
+---------------------------
+
+##### Enhancements
+
++ Registration and guest checkout now include a required, project-extensible learning-language selector.
++ Administrators can map each supported language to a VibeLMS access group; new participants are enrolled automatically and their language is shown in the journal and CSV export.
+
 VibeLMS 0.0.22 - 2026-08-27
 ---------------------------
 

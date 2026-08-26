@@ -25,6 +25,10 @@ class LLMS_VibeLMS_Platform {
 
 	const CERTIFICATE_TEMPLATE_OPTION = 'vibelms_certificate_template_id';
 
+	const LANGUAGE_META_KEY = 'vibelms_language';
+
+	const LANGUAGE_GROUP_OPTION_PREFIX = 'vibelms_language_group_';
+
 	/**
 	 * Identity user-meta keys.
 	 *
@@ -42,6 +46,9 @@ class LLMS_VibeLMS_Platform {
 	 */
 	public function __construct() {
 		add_filter( 'lifterlms_general_settings', array( $this, 'add_settings' ) );
+		add_filter( 'lifterlms_get_person_fields', array( $this, 'add_language_field' ), 10, 3 );
+		add_filter( 'lifterlms_user_registration_data', array( $this, 'validate_registration_language' ), 10, 3 );
+		add_action( 'lifterlms_user_registered', array( $this, 'assign_language_group' ), 20, 3 );
 		add_action( 'admin_init', array( $this, 'maybe_install' ), 2 );
 		add_action( 'admin_menu', array( $this, 'register_admin_page' ), 100 );
 		add_action( 'admin_post_vibelms_export_attempts', array( $this, 'export_attempts' ) );
@@ -50,6 +57,153 @@ class LLMS_VibeLMS_Platform {
 		add_filter( 'llms_quiz_is_open', array( $this, 'maybe_require_identity' ), 10, 5 );
 		add_action( 'lifterlms_single_quiz_before_summary', array( $this, 'render_quiz_identity_prompt' ), 20 );
 		add_shortcode( 'vibelms_student_identity', array( $this, 'render_identity_form' ) );
+	}
+
+	/**
+	 * Return the languages available to the current project.
+	 *
+	 * @return array<string,string>
+	 */
+	public function get_supported_languages() {
+		$default = array(
+			'ru' => __( 'Русский', 'lifterlms' ),
+			'kz' => __( 'Казахский', 'lifterlms' ),
+		);
+		$values  = apply_filters( 'vibelms_supported_languages', $default );
+		$result  = array();
+
+		if ( ! is_array( $values ) ) {
+			return $default;
+		}
+
+		foreach ( $values as $key => $label ) {
+			$key = sanitize_key( $key );
+			if ( $key && is_scalar( $label ) ) {
+				$result[ $key ] = (string) $label;
+			}
+		}
+
+		return $result ? $result : $default;
+	}
+
+	/**
+	 * Return the option name used for a language access group.
+	 *
+	 * @param string $language Language key.
+	 * @return string
+	 */
+	private function get_language_group_option( $language ) {
+		return self::LANGUAGE_GROUP_OPTION_PREFIX . sanitize_key( $language );
+	}
+
+	/**
+	 * Return a user's normalized language key.
+	 *
+	 * @param int $user_id User ID. Defaults to the current user.
+	 * @return string
+	 */
+	public function get_user_language( $user_id = 0 ) {
+		$user_id  = $user_id ? absint( $user_id ) : get_current_user_id();
+		$stored   = get_user_meta( $user_id, self::LANGUAGE_META_KEY, true );
+		$language = is_scalar( $stored ) ? sanitize_key( (string) $stored ) : '';
+		$languages = $this->get_supported_languages();
+
+		return isset( $languages[ $language ] ) ? $language : '';
+	}
+
+	/**
+	 * Add the project language selector to registration forms.
+	 *
+	 * @param array  $fields   Existing custom fields.
+	 * @param string $location Form location.
+	 * @param array  $args     Form arguments.
+	 * @return array
+	 */
+	public function add_language_field( $fields, $location, $args ) {
+		if (
+			! in_array( $location, array( 'registration', 'checkout' ), true ) ||
+			( 'checkout' === $location && get_current_user_id() )
+		) {
+			return $fields;
+		}
+
+		$fields[] = array(
+			'id'             => self::LANGUAGE_META_KEY,
+			'name'           => self::LANGUAGE_META_KEY,
+			'type'           => 'select',
+			'label'          => __( 'Язык обучения', 'lifterlms' ),
+			'description'    => __( 'Выберите язык материалов и тестирования.', 'lifterlms' ),
+			'options'        => $this->get_supported_languages(),
+			'placeholder'    => __( 'Выберите язык', 'lifterlms' ),
+			'required'       => true,
+			'data_store'     => 'usermeta',
+			'data_store_key' => self::LANGUAGE_META_KEY,
+			'classes'        => 'vibelms-language-field',
+		);
+
+		return $fields;
+	}
+
+	/**
+	 * Validate the language submitted by a registration form.
+	 *
+	 * @param WP_Error|true $valid       Current validation result.
+	 * @param array         $posted_data Submitted form data.
+	 * @param string        $location    Form location.
+	 * @return WP_Error|true
+	 */
+	public function validate_registration_language( $valid, $posted_data, $location ) {
+		if ( is_wp_error( $valid ) || ! in_array( $location, array( 'registration', 'checkout' ), true ) ) {
+			return $valid;
+		}
+
+		$language = is_array( $posted_data ) && isset( $posted_data[ self::LANGUAGE_META_KEY ] ) && is_scalar( $posted_data[ self::LANGUAGE_META_KEY ] )
+			? sanitize_key( (string) $posted_data[ self::LANGUAGE_META_KEY ] )
+			: '';
+		$languages = $this->get_supported_languages();
+
+		if ( ! isset( $languages[ $language ] ) ) {
+			return new WP_Error( 'vibelms_invalid_language', __( 'Выберите язык обучения.', 'lifterlms' ) );
+		}
+
+		return $valid;
+	}
+
+	/**
+	 * Store the language and enroll a new user into its configured access group.
+	 *
+	 * @param int    $user_id     New user ID.
+	 * @param array  $posted_data Submitted form data.
+	 * @param string $location    Form location.
+	 * @return void
+	 */
+	public function assign_language_group( $user_id, $posted_data, $location ) {
+		if ( ! in_array( $location, array( 'registration', 'checkout' ), true ) ) {
+			return;
+		}
+
+		$language = is_array( $posted_data ) && isset( $posted_data[ self::LANGUAGE_META_KEY ] ) && is_scalar( $posted_data[ self::LANGUAGE_META_KEY ] )
+			? sanitize_key( (string) $posted_data[ self::LANGUAGE_META_KEY ] )
+			: '';
+		$languages = $this->get_supported_languages();
+		if ( ! isset( $languages[ $language ] ) ) {
+			return;
+		}
+
+		update_user_meta( absint( $user_id ), self::LANGUAGE_META_KEY, $language );
+		$group_id = absint( get_option( $this->get_language_group_option( $language ), 0 ) );
+		if ( ! $group_id ) {
+			return;
+		}
+
+		if ( 'llms_membership' !== get_post_type( $group_id ) || ! function_exists( 'llms_enroll_student' ) ) {
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'warning', 'Language access group is not available', array( 'language' => $language, 'group_id' => $group_id ) );
+			}
+			return;
+		}
+
+		llms_enroll_student( absint( $user_id ), $group_id, 'vibelms_language_' . $language );
 	}
 
 	/**
@@ -151,6 +305,27 @@ class LLMS_VibeLMS_Platform {
 			'type'    => 'checkbox',
 		);
 		$settings[] = array(
+			'id'    => 'vibelms_language_groups_title',
+			'title' => __( 'Языковые группы доступа', 'lifterlms' ),
+			'type'  => 'title',
+		);
+		foreach ( $this->get_supported_languages() as $language => $label ) {
+			$group_option = $this->get_language_group_option( $language );
+			$settings[]   = array(
+				'class'             => 'llms-select2-post',
+				'custom_attributes' => array(
+					'data-allow-clear' => true,
+					'data-post-type'   => 'llms_membership',
+					'data-placeholder' => __( 'Выберите группу доступа', 'lifterlms' ),
+				),
+				'desc'              => sprintf( __( 'После регистрации участник с языком «%s» будет автоматически добавлен в эту группу доступа.', 'lifterlms' ), $label ),
+				'id'                => $group_option,
+				'options'           => function_exists( 'llms_make_select2_post_array' ) ? llms_make_select2_post_array( get_option( $group_option, '' ) ) : array(),
+				'title'             => sprintf( __( 'Группа доступа: %s', 'lifterlms' ), $label ),
+				'type'              => 'select',
+			);
+		}
+		$settings[] = array(
 			'class'             => 'llms-select2-post',
 			'custom_attributes' => array(
 				'data-allow-clear' => true,
@@ -217,12 +392,13 @@ class LLMS_VibeLMS_Platform {
 					<th><?php esc_html_e( 'Компания', 'lifterlms' ); ?></th>
 					<th><?php esc_html_e( 'Регион', 'lifterlms' ); ?></th>
 					<th><?php esc_html_e( 'АЗС / точка', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Язык', 'lifterlms' ); ?></th>
 					<th><?php esc_html_e( 'Результат', 'lifterlms' ); ?></th>
 					<th><?php esc_html_e( 'Статус', 'lifterlms' ); ?></th>
 				</tr></thead>
 				<tbody>
 				<?php if ( empty( $rows ) ) : ?>
-					<tr><td colspan="7"><?php esc_html_e( 'Попыток пока нет.', 'lifterlms' ); ?></td></tr>
+					<tr><td colspan="8"><?php esc_html_e( 'Попыток пока нет.', 'lifterlms' ); ?></td></tr>
 				<?php else : ?>
 					<?php foreach ( $rows as $row ) : ?>
 						<tr>
@@ -231,6 +407,7 @@ class LLMS_VibeLMS_Platform {
 							<td><?php echo esc_html( $row->company ); ?></td>
 							<td><?php echo esc_html( $row->region ); ?></td>
 							<td><?php echo esc_html( $row->station ); ?></td>
+							<td><?php echo esc_html( $row->language ); ?></td>
 							<td><?php echo esc_html( sprintf( '%d/%d (%.2f%%)', $row->correct_count, $row->question_count, $row->grade ) ); ?></td>
 							<td><?php echo esc_html( 'passed' === $row->status ? __( 'Сдано', 'lifterlms' ) : __( 'Не сдано', 'lifterlms' ) ); ?></td>
 						</tr>
@@ -299,11 +476,12 @@ class LLMS_VibeLMS_Platform {
 		$grade          = (float) $attempt->get( 'grade' );
 		$status         = $this->is_vibelms_pass( $attempt ) ? 'passed' : 'failed';
 		$identity       = $this->get_identity( $student_id );
+		$language       = $this->get_user_language( $student_id ) ?: get_locale();
 
 		global $wpdb;
 		$wpdb->replace(
 			$this->get_table_name(),
-			array( 'user_id' => absint( $student_id ), 'quiz_id' => absint( $quiz_id ), 'attempt_id' => absint( $attempt->get_id() ), 'email' => $user->user_email, 'company' => $identity['company'], 'employee_name' => $identity['employee_name'], 'region' => $identity['region'], 'station' => $identity['station'], 'language' => get_user_meta( $student_id, 'vibelms_language', true ) ?: get_locale(), 'attempt_number' => absint( $attempt->get( 'attempt' ) ), 'question_count' => $question_count, 'correct_count' => $correct_count, 'grade' => $grade, 'status' => $status, 'started_at' => $attempt->get( 'start_date' ), 'completed_at' => $attempt->get( 'end_date' ) ),
+			array( 'user_id' => absint( $student_id ), 'quiz_id' => absint( $quiz_id ), 'attempt_id' => absint( $attempt->get_id() ), 'email' => $user->user_email, 'company' => $identity['company'], 'employee_name' => $identity['employee_name'], 'region' => $identity['region'], 'station' => $identity['station'], 'language' => $language, 'attempt_number' => absint( $attempt->get( 'attempt' ) ), 'question_count' => $question_count, 'correct_count' => $correct_count, 'grade' => $grade, 'status' => $status, 'started_at' => $attempt->get( 'start_date' ), 'completed_at' => $attempt->get( 'end_date' ) ),
 			array( '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%f', '%s', '%s', '%s' )
 		);
 
