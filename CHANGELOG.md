@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.20 - 2026-08-26
+---------------------------
+
+##### Fixes
+
++ Quiz widgets now pass selected quiz content through the standard WordPress content pipeline.
+
 VibeLMS 0.0.19 - 2026-08-26
 ---------------------------
 

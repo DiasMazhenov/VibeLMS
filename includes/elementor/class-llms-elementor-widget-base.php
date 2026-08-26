@@ -217,7 +217,7 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 		$original_post = $post;
 		$post          = $quiz_post;
 		setup_postdata( $post );
-		$content = llms_get_post_content( $quiz_post->post_content );
+		$content = apply_filters( 'the_content', $quiz_post->post_content );
 		wp_reset_postdata();
 		$post = $original_post;
 
