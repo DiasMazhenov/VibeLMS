@@ -324,7 +324,7 @@ define( [
 			},
 
 			/**
-			 * Shows a dirty dirty ad popover for advanced assignments.
+			 * Shows a local notice when assignments are not available.
 			 *
 			 * @since 3.17.0
 			 *
@@ -333,10 +333,8 @@ define( [
 			 */
 			show_ad_popover: function( el ) {
 
-				var h3 = LLMS.l10n.translate( 'Get Your Students Taking Action' ),
-				p      = 'Great learning content is only half of teaching online. When your learners fully engage, they will take your content and move into action. Remove barriers for your learners by telling them what to do to apply what they just learned. Create graded assignments or simply give them a checklist of action items to complete before moving on.',
-				btn    = LLMS.l10n.translate( 'Get Assignments Now!' ),
-				url    = 'https://lifterlms.com/product/lifterlms-assignments?utm_source=LifterLMS%20Plugin&utm_medium=Assignment%20Builder%20Button&utm_campaign=Assignment%20Addon%20Upsell&utm_content=3.17.0';
+				var h3 = LLMS.l10n.translate( 'Задания' ),
+				p      = LLMS.l10n.translate( 'Модуль заданий пока не подключён в этой установке VibeLMS.' );
 
 				this.ad_popover = new Popover( {
 					el: el,
@@ -347,10 +345,10 @@ define( [
 						dismissible: true,
 						// placement: 'left',
 						width: 380,
-						title: LLMS.l10n.translate( 'Unlock LifterLMS Assignments' ),
+						title: LLMS.l10n.translate( 'Задания VibeLMS' ),
 						// This is here for translation but not actually used by the popover.
 						closeLabel: LLMS.l10n.translate( 'Close' ),
-						content: '<h3>' + h3 + '</h3><p>' + p + '</p><br><p><a class="llms-button-primary" href="' + url + '" target="_blank">' + btn + '</a></p>'
+						content: '<h3>' + h3 + '</h3><p>' + p + '</p>'
 					}
 				} );
 

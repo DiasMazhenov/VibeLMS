@@ -4,6 +4,7 @@
  *
  * @since 3.16.0
  * @since 7.2.0 Added video explainer wrapper element.
+ * @since 0.0.17 Removed the upstream tutorial link from the VibeLMS builder.
  * @version 7.2.0
  */
 defined( 'ABSPATH' ) || exit;
@@ -13,17 +14,6 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="llms-elements" id="llms-elements"></div>
 	<div class="llms-utilities" id="llms-utilities"></div>
-	<div class="llms-video-explainer" id="llms-video-explainer">
-		<span class="llms-video-explainer-trigger">
-			<a href="https://lifterlms.com/docs/using-course-builder/" target="_blank">
-				<img
-					src="<?php echo esc_url( plugin_dir_url( LLMS_PLUGIN_FILE ) . 'assets/images/course-builder-video-thumbnail.jpg' ); ?>"
-					alt="<?php esc_attr_e( 'How to Build Your Course Outline with the LifterLMS Course Builder', 'lifterlms' ); ?>"
-				/>
-			</a>
-		</span>
-	</div>
-
 	<div class="llms-editor" id="llms-editor"></div>
 
 	<footer class="llms-builder-save">

@@ -3311,7 +3311,8 @@ define( 'Collections/Questions',[ 'Models/Question' ], function( model ) {
  * Quiz Schema.
  *
  * @since 3.17.6
- * @since 7.4.0 Added upsell for Question Bank and condition in `random_questions` schema.
+ * @since 7.4.0 Added Question Bank setting and condition in `random_questions` schema.
+ * @since 0.0.17 Exposed the bundled Question Bank without an upstream upsell link.
  * @since 7.6.2 Added `disable_retake` schema.
  * @since 7.8.0 Added `can_be_resumed` option.
  * @version 7.8.0
@@ -3404,12 +3405,11 @@ define( 'Schemas/Quiz',[], function() {
 			},
 				], [
 					{
+						attribute: 'question_bank',
 						id: 'question-bank',
 						label: LLMS.l10n.translate( 'Question Bank' ),
-						tip: LLMS.l10n.translate( 'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)' ),
-						type: 'upsell',
-						text: LLMS.l10n.translate( 'Get LifterLMS Advanced Quizzes' ),
-						url: 'https://lifterlms.com/product/advanced-quizzes/?utm_source=LifterLMS%20Plugin&utm_medium=Quiz%20Builder%20Button&utm_campaign=Advanced%20Question%20Upsell&utm_content=3.16.0&utm_term=Questions%20Bank'
+						tip: LLMS.l10n.translate( 'Выберите случайные вопросы из банка для каждого прохождения теста.' ),
+						type: 'switch'
 					}
 				]
 
@@ -3921,16 +3921,6 @@ define( 'Schemas/Lesson',[], function() {
 						label: LLMS.l10n.translate( 'Time' ),
 			type: 'datepicker',
 		},
-			], [
-				{
-					label: LLMS.l10n.translate( 'Associated Event(s)' ),
-					id: 'llms-events-promo',
-					type: 'heading',
-					detail: LLMS.l10n.translate( 'Schedule events for your lessons with the LifterLMS Events add-on.' ) + ' <a href="https://lifterlms.com/product/lifterlms-events/?utm_source=LifterLMS%20Plugin&utm_medium=Lesson%20Builder&utm_campaign=Events%20Addon%20Upsell" target="_blank">' + LLMS.l10n.translate( 'Learn More' ) + '</a>',
-					condition: function() {
-						return ! window.llms_builder.events;
-					},
-				},
 			],
 		],
 	},
@@ -10979,7 +10969,7 @@ define( 'Views/Assignment',[
 			},
 
 			/**
-			 * Shows a dirty dirty ad popover for advanced assignments.
+			 * Shows a local notice when assignments are not available.
 			 *
 			 * @since 3.17.0
 			 *
@@ -10988,10 +10978,8 @@ define( 'Views/Assignment',[
 			 */
 			show_ad_popover: function( el ) {
 
-				var h3 = LLMS.l10n.translate( 'Get Your Students Taking Action' ),
-				p      = 'Great learning content is only half of teaching online. When your learners fully engage, they will take your content and move into action. Remove barriers for your learners by telling them what to do to apply what they just learned. Create graded assignments or simply give them a checklist of action items to complete before moving on.',
-				btn    = LLMS.l10n.translate( 'Get Assignments Now!' ),
-				url    = 'https://lifterlms.com/product/lifterlms-assignments?utm_source=LifterLMS%20Plugin&utm_medium=Assignment%20Builder%20Button&utm_campaign=Assignment%20Addon%20Upsell&utm_content=3.17.0';
+				var h3 = LLMS.l10n.translate( 'Задания' ),
+				p      = LLMS.l10n.translate( 'Модуль заданий пока не подключён в этой установке VibeLMS.' );
 
 				this.ad_popover = new Popover( {
 					el: el,
@@ -11002,10 +10990,10 @@ define( 'Views/Assignment',[
 						dismissible: true,
 						// placement: 'left',
 						width: 380,
-						title: LLMS.l10n.translate( 'Unlock LifterLMS Assignments' ),
+						title: LLMS.l10n.translate( 'Задания VibeLMS' ),
 						// This is here for translation but not actually used by the popover.
 						closeLabel: LLMS.l10n.translate( 'Close' ),
-						content: '<h3>' + h3 + '</h3><p>' + p + '</p><br><p><a class="llms-button-primary" href="' + url + '" target="_blank">' + btn + '</a></p>'
+						content: '<h3>' + h3 + '</h3><p>' + p + '</p>'
 					}
 				} );
 

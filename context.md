@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.16`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.17`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -16,7 +16,7 @@ The runtime Composer `vendor/` directory is now tracked so the GitHub Push-to-De
 
 The admin interface now uses VibeLMS branding, shows the public VibeLMS version, hides the old license/support/add-ons/promotional dashboard blocks, and keeps only local content/report shortcuts. The dashboard uses one normal postbox column after the removed promotional side column; this prevents the empty WordPress side-sortables area from creating a large vertical gap. The remaining report shortcut is Russian. Compiled production CSS and JS are tracked because Push-to-Deploy does not execute npm; the missing `admin.css` was the cause of the unstyled dashboard and oversized logo. The customized admin stylesheet now uses `VIBELMS_VERSION` for cache busting.
 
-The old LifterLMS review-request module was removed from the VibeLMS load path, so the admin footer and review notice no longer contain LifterLMS promotional text or WordPress.org review links.
+The old LifterLMS review-request module was removed from the VibeLMS load path, so the admin footer and review notice no longer contain LifterLMS promotional text or WordPress.org review links. The legacy Add-ons screen is also disabled in the reusable fork.
 
 The access-group creation route keeps the internal `post_type=llms_membership` identifier for compatibility, but its visible admin labels are now `Access Groups` / `Группы доступа`. The update-safe role installer refreshes the core post-type capabilities on the first admin request after Push-to-Deploy, so existing active installations regain the capability required to create access groups even when the activation hook did not run.
 
@@ -44,7 +44,7 @@ Elementor widget registration supports the modern `elementor/widgets/register` h
 
 Translated UI strings from the compatibility domains replace visible `LifterLMS`/`Lifterlms` product-name text with `VibeLMS`. Internal class names, hooks, post types, shortcodes, text domains and compatibility URLs are intentionally not mass-renamed.
 
-The course builder now uses the public `VIBELMS_VERSION` for its builder CSS, JavaScript and popover assets, preventing stale internal LifterLMS asset URLs after a VibeLMS update. Builder page output records the prepared question-type count and IDs through the existing `vibelms-diagnostics` handle when `VIBELMS_DEBUG` is enabled; this makes an empty “Add Question” panel distinguishable between a PHP data problem and a browser asset/cache problem.
+The course builder now uses the public `VIBELMS_VERSION` for its builder CSS, JavaScript and popover assets, preventing stale internal LifterLMS asset URLs after a VibeLMS update. Builder page output records the prepared question-type count and IDs through the existing `vibelms-diagnostics` handle when `VIBELMS_DEBUG` is enabled; this makes an empty “Add Question” panel distinguishable between a PHP data problem and a browser asset/cache problem. The builder no longer renders the upstream tutorial, Question Bank, Events or Assignments upsell URLs; the bundled Question Bank is exposed as a native setting, while unavailable assignments show a local notice.
 
 The course-builder failure `Cannot read properties of undefined (reading 'start')` was caused by the production `llms.js` bundle missing `LLMS.Spinner`, even though builder quiz views call it. The generated `llms-spinner` asset is now tracked and loaded as a dependency of the core `llms` script and the builder, so quiz question creation works on admin and frontend paths that use the shared script.
 
@@ -66,7 +66,7 @@ The Advanced Questions buttons are native VibeLMS functionality. Their core defi
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint for the transfer module and main plugin, shell syntax, `git diff --check`, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.16.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.17.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 

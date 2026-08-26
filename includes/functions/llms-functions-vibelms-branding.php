@@ -31,3 +31,4 @@ add_filter( 'gettext', 'llms_vibelms_brand_translation', 20, 3 );
 // Do not expose upstream paid add-on promotions in the reusable fork.
 add_filter( 'llms_access_plan_dialog_show_gifts_addon_option', '__return_false' );
 add_filter( 'llms_access_plan_dialog_show_group_addon_option', '__return_false' );
+add_filter( 'lifterlms_disable_addons_screen', '__return_true' );

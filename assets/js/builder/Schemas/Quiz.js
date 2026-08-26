@@ -2,7 +2,8 @@
  * Quiz Schema.
  *
  * @since 3.17.6
- * @since 7.4.0 Added upsell for Question Bank and condition in `random_questions` schema.
+ * @since 7.4.0 Added Question Bank setting and condition in `random_questions` schema.
+ * @since 0.0.17 Exposed the bundled Question Bank without an upstream upsell link.
  * @since 7.6.2 Added `disable_retake` schema.
  * @since 7.8.0 Added `can_be_resumed` option.
  * @version 7.8.0
@@ -95,12 +96,11 @@ define( [], function() {
 			},
 				], [
 					{
+						attribute: 'question_bank',
 						id: 'question-bank',
 						label: LLMS.l10n.translate( 'Question Bank' ),
-						tip: LLMS.l10n.translate( 'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)' ),
-						type: 'upsell',
-						text: LLMS.l10n.translate( 'Get LifterLMS Advanced Quizzes' ),
-						url: 'https://lifterlms.com/product/advanced-quizzes/?utm_source=LifterLMS%20Plugin&utm_medium=Quiz%20Builder%20Button&utm_campaign=Advanced%20Question%20Upsell&utm_content=3.16.0&utm_term=Questions%20Bank'
+						tip: LLMS.l10n.translate( 'Выберите случайные вопросы из банка для каждого прохождения теста.' ),
+						type: 'switch'
 					}
 				]
 
