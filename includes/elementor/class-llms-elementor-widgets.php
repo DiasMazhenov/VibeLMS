@@ -43,9 +43,96 @@ class LLMS_Elementor_Widgets {
 		} else {
 			add_action( 'elementor/widgets/widgets_registered', array( $this, 'init' ) );
 		}
+		add_filter( 'option_elementor_cpt_support', array( $this, 'add_supported_post_types' ) );
+		add_filter( 'default_option_elementor_cpt_support', array( $this, 'add_supported_post_types' ) );
+		add_action( 'init', array( $this, 'enable_post_type_support' ), 20 );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'add_widget_categories' ) );
+		add_filter( 'post_row_actions', array( $this, 'add_elementor_row_action' ), 20, 2 );
 		add_action( 'admin_notices', array( $this, 'maybe_display_compatibility_notice' ) );
 		add_filter( 'llms_render_block', array( $this, 'maybe_stop_rendering_block' ), 10, 2 );
+	}
+
+	/**
+	 * Return the VibeLMS post types which can be edited with Elementor.
+	 *
+	 * @return string[]
+	 */
+	public static function get_elementor_post_types() {
+		return array( 'course', 'lesson', 'llms_quiz' );
+	}
+
+	/**
+	 * Keep Elementor's configured post types and add VibeLMS content types.
+	 *
+	 * Elementor reads this option before LifterLMS registers its post types, so
+	 * explicit support is also added on init below.
+	 *
+	 * @param mixed $post_types Configured Elementor post types.
+	 * @return string[]
+	 */
+	public function add_supported_post_types( $post_types ) {
+		$post_types = is_array( $post_types ) ? $post_types : array();
+		return array_values( array_unique( array_merge( $post_types, self::get_elementor_post_types() ) ) );
+	}
+
+	/**
+	 * Add Elementor support after LifterLMS registers its custom post types.
+	 *
+	 * @return void
+	 */
+	public function enable_post_type_support() {
+		if ( ! class_exists( 'Elementor\\Plugin' ) ) {
+			return;
+		}
+
+		foreach ( self::get_elementor_post_types() as $post_type ) {
+			if ( post_type_exists( $post_type ) ) {
+				add_post_type_support( $post_type, 'elementor' );
+			}
+		}
+	}
+
+	/**
+	 * Build an Elementor editor URL for a supported VibeLMS post.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string
+	 */
+	public static function get_elementor_edit_url( $post_id ) {
+		$post_id = absint( $post_id );
+		$post    = $post_id ? get_post( $post_id ) : false;
+		if ( ! $post || ! class_exists( 'Elementor\\Plugin' ) || ! in_array( $post->post_type, self::get_elementor_post_types(), true ) || ! post_type_supports( $post->post_type, 'elementor' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			return '';
+		}
+
+		return add_query_arg(
+			array(
+				'post'   => $post_id,
+				'action' => 'elementor',
+			),
+			admin_url( 'post.php' )
+		);
+	}
+
+	/**
+	 * Add a direct Elementor action when Elementor has not added one yet.
+	 *
+	 * @param array   $actions Row actions.
+	 * @param WP_Post $post    Current post.
+	 * @return array
+	 */
+	public function add_elementor_row_action( $actions, $post ) {
+		if ( isset( $actions['edit_with_elementor'] ) || ! $post instanceof WP_Post ) {
+			return $actions;
+		}
+
+		$url = self::get_elementor_edit_url( $post->ID );
+		if ( ! $url ) {
+			return $actions;
+		}
+
+		$actions['edit_with_elementor'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Редактировать в Elementor', 'lifterlms' ) . '</a>';
+		return $actions;
 	}
 
 	/**

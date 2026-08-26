@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.22 - 2026-08-27
+---------------------------
+
+##### Enhancements
+
++ Courses, lessons and quizzes can now be opened in Elementor through native post-type support and direct admin actions.
++ The existing VibeLMS course builder remains unchanged and is available from Elementor Finder in a separate tab.
+
 VibeLMS 0.0.21 - 2026-08-27
 ---------------------------
 

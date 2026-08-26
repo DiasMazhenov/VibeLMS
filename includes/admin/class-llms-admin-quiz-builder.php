@@ -257,7 +257,12 @@ class LLMS_Admin_Quiz_Builder {
 	echo '<h2>' . esc_html__( 'Мои тесты', 'lifterlms' ) . '</h2><table class="widefat striped"><thead><tr><th>' . esc_html__( 'Название', 'lifterlms' ) . '</th><th>' . esc_html__( 'Вопросы', 'lifterlms' ) . '</th><th>' . esc_html__( 'Статус', 'lifterlms' ) . '</th><th></th></tr></thead><tbody>';
 	foreach ( $quizzes as $quiz_post ) {
 		$quiz = new LLMS_Quiz( $quiz_post );
-		echo '<tr><td><a href="' . esc_url( $this->builder_url( $quiz->get( 'id' ) ) ) . '">' . esc_html( get_the_title( $quiz->get( 'id' ) ) ) . '</a></td><td>' . esc_html( $quiz->get_questions_count() ) . '</td><td>' . esc_html( 'publish' === $quiz_post->post_status ? __( 'Опубликован', 'lifterlms' ) : __( 'Черновик', 'lifterlms' ) ) . '</td><td><a class="button" href="' . esc_url( $this->builder_url( $quiz->get( 'id' ) ) ) . '">' . esc_html__( 'Открыть', 'lifterlms' ) . '</a></td></tr>';
+		$elementor_url = class_exists( 'LLMS_Elementor_Widgets' ) ? LLMS_Elementor_Widgets::get_elementor_edit_url( $quiz->get( 'id' ) ) : '';
+		$actions       = '<a class="button" href="' . esc_url( $this->builder_url( $quiz->get( 'id' ) ) ) . '">' . esc_html__( 'Открыть конструктор', 'lifterlms' ) . '</a>';
+		if ( $elementor_url ) {
+			$actions .= ' <a class="button" href="' . esc_url( $elementor_url ) . '">' . esc_html__( 'Редактировать в Elementor', 'lifterlms' ) . '</a>';
+		}
+		echo '<tr><td><a href="' . esc_url( $this->builder_url( $quiz->get( 'id' ) ) ) . '">' . esc_html( get_the_title( $quiz->get( 'id' ) ) ) . '</a></td><td>' . esc_html( $quiz->get_questions_count() ) . '</td><td>' . esc_html( 'publish' === $quiz_post->post_status ? __( 'Опубликован', 'lifterlms' ) : __( 'Черновик', 'lifterlms' ) ) . '</td><td>' . $actions . '</td></tr>';
 	}
 	echo '</tbody></table>';
 	}
