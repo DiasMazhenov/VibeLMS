@@ -59,20 +59,6 @@
 			 */
 			do_action( 'llms_access_plan_dialog_after_pre_sale' );
 			?>
-			<?php if ( apply_filters( 'llms_access_plan_dialog_show_gifts_addon_option', true ) ) : ?>
-				<a target="_blank" href="https://lifterlms.com/product/lifterlms-gifts/?utm_source=LifterLMS%20Plugin&utm_medium=Access%20Plans&utm_campaign=Plugin%20to%20Sale">
-					<span class="add-on"><?php echo esc_html( __( 'Add-on', 'lifterlms' ) ); ?></span>
-					<strong><?php echo esc_html( __( 'Gift Purchases', 'lifterlms' ) ); ?></strong>
-					<span><?php echo esc_html( __( 'Allow a buyer to purchase a voucher to gift access to someone else.', 'lifterlms' ) ); ?></span>
-				</a>
-			<?php endif; ?>
-			<?php if ( apply_filters( 'llms_access_plan_dialog_show_group_addon_option', true ) ) : ?>
-				<a target="_blank" href="https://lifterlms.com/product/groups/?utm_source=LifterLMS%20Plugin&utm_medium=Access%20Plans&utm_campaign=Plugin%20to%20Sale">
-					<span class="add-on"><?php echo esc_html( __( 'Add-on', 'lifterlms' ) ); ?></span>
-					<strong><?php echo esc_html( __( 'Group Access', 'lifterlms' ) ); ?></strong>
-					<span><?php echo esc_html( __( 'Allow a buyer to purchase lifetime access for a group of people.', 'lifterlms' ) ); ?></span>
-				</a>
-			<?php endif; ?>
 			<button class="template" data-template="advanced">
 				<strong><?php echo esc_html( __( 'Advanced', 'lifterlms' ) ); ?></strong>
 				<span><?php echo esc_html( __( 'Show all settings to create an access plan from scratch.', 'lifterlms' ) ); ?></span>

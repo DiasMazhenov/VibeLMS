@@ -177,7 +177,7 @@ class LLMS_Settings_Checkout extends LLMS_Settings_Page {
 
 			array(
 				'title' => __( 'Payment Gateways', 'lifterlms' ),
-				'desc'  => sprintf( __( 'Gateways allow you to accept payments on your site. %1$1sLearn More%2$2s', 'lifterlms' ), '<a href="https://lifterlms.com/docs/what-payment-gateways-can-i-use-with-lifterlms/?utm_source=LifterLMS%20Plugin&utm_medium=Resource%20Screen&utm_campaign=Backend%20Help%20Page">', '</a>' ),
+				'desc'  => __( 'Платёжные шлюзы позволяют принимать оплату на сайте.', 'lifterlms' ),
 				'type'  => 'title',
 				'id'    => 'checkout_settings_gateways_list_title',
 			),
@@ -229,8 +229,7 @@ class LLMS_Settings_Checkout extends LLMS_Settings_Page {
 
 			array(
 				'title'   => __( 'Force SSL', 'lifterlms' ),
-				'desc'    => __( 'Force secure checkout via SSL (https) on the checkout page(s).', 'lifterlms' ) .
-								'<p class="description">' . sprintf( __( 'Requires an SSL certificate. %1$sLearn More%2$s', 'lifterlms' ), '<a href="https://lifterlms.com/docs/ssl-and-https/" target="_blank">', '</a>' ) . '</p>',
+				'desc'    => __( 'Force secure checkout via SSL (https) on the checkout page(s). Требуется SSL-сертификат.', 'lifterlms' ),
 				'id'      => 'lifterlms_checkout_force_ssl',
 				'type'    => 'checkbox',
 				'default' => 'no',
@@ -238,8 +237,7 @@ class LLMS_Settings_Checkout extends LLMS_Settings_Page {
 
 			array(
 				'default' => 'yes',
-				'desc'    => __( 'Enable automatic retry of failed recurring payments.', 'lifterlms' ) .
-								'<p class="description">' . sprintf( esc_html__( 'Recover lost revenue from temporarily declined payment methods. %1$sLearn More%2$s', 'lifterlms' ), '<a href="https://lifterlms.com/docs/automatic-retry-failed-payments/" target="_blank">', '</a>' ) . '</p>',
+				'desc'    => __( 'Enable automatic retry of failed recurring payments. Помогает восстановить платежи, временно отклонённые банком.', 'lifterlms' ),
 				'id'      => 'lifterlms_recurring_payment_retry',
 				'title'   => __( 'Retry Failed Payments', 'lifterlms' ),
 				'type'    => 'checkbox',

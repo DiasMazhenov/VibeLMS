@@ -48,12 +48,7 @@ function llms_update_3130_builder_notice() {
 	LLMS_Admin_Notices::add_notice(
 		'update-3130',
 		array(
-			'html'        => sprintf(
-				__( 'Welcome to LifterLMS 3.13.0! We\'ve packed a ton of features into this release: Take a moment to get familiar with the all new %1$scourse builder%3$s and our new %2$suser roles%3$s.', 'lifterlms' ),
-				'<a href="https://lifterlms.com/docs/using-course-builder/" target="_blank">',
-				'<a href="https://lifterlms.com/docs/roles-and-capabilities/" target="_blank">',
-				'</a>'
-			),
+			'html'        => __( 'Обновление VibeLMS добавило конструктор курсов и новые роли пользователей.', 'lifterlms' ),
 			'type'        => 'info',
 			'dismissible' => true,
 			'remindable'  => false,

@@ -81,12 +81,7 @@ class LLMS_Rest_Admin_Settings_API_Keys {
 				$settings[] = array(
 					'title'             => __( 'User', 'lifterlms' ),
 					'class'             => 'llms-select2-student',
-					'desc'              => sprintf(
-						// Translators: %1$s = opening anchor tag to capabilities doc; %2$s closing anchor tag.
-						__( 'The owner is used to determine what user %1$scapabilities%2$s are available to the API key.', 'lifterlms' ),
-						'<a href="https://lifterlms.com/docs/roles-and-capabilities/" target="_blank">',
-						'</a>'
-					),
+					'desc'              => __( 'Владелец определяет доступные API-ключу возможности пользователя.', 'lifterlms' ),
 					'custom_attributes' => array(
 						'data-placeholder' => __( 'Select a user', 'lifterlms' ),
 					),
@@ -97,12 +92,7 @@ class LLMS_Rest_Admin_Settings_API_Keys {
 
 				$settings[] = array(
 					'title'   => __( 'Permissions', 'lifterlms' ),
-					'desc'    => '<br>' . sprintf(
-						// Translators: %1$s = opening anchor tag to doc; %2$s closing anchor tag.
-						__( 'Determines what kind of requests can be made with the API key. %1$sRead more%2$s.', 'lifterlms' ),
-						'<a href="https://lifterlms.com/docs/getting-started-with-the-lifterlms-rest-api/#api-keys" target="_blank">',
-						'</a>'
-					),
+					'desc'    => '<br>' . __( 'Определяет, какие запросы можно выполнять с помощью API-ключа.', 'lifterlms' ),
 					'id'      => 'llms_rest_key_permissions',
 					'type'    => 'select',
 					'options' => LLMS_REST_API()->keys()->get_permissions(),
@@ -342,4 +332,3 @@ class LLMS_Rest_Admin_Settings_API_Keys {
 	}
 
 }
-

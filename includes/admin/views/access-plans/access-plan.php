@@ -390,23 +390,7 @@ if ( ! isset( $plan ) ) {
 
 								<div class="llms-admin-notice-content">
 								<?php
-									$allowed_ecommerce_add_ons_html = array(
-										'a'  => array(
-											'href'   => array(),
-											'target' => array(),
-											'title'  => array(),
-											'rel'    => array(),
-										),
-										'em' => array(),
-									);
-									printf(
-										wp_kses(
-											/* translators: %s: URL to the LifterLMS Ecommerce Add-ons page */
-											__( 'Your site is not set up to process payments. Check out the <a href="%s" target="_blank">Ecommerce Add-ons for LifterLMS</a> to enable live payments via credit card, PayPal, and more.', 'lifterlms' ),
-											$allowed_ecommerce_add_ons_html
-										),
-										'https://lifterlms.com/product-category/e-commerce/?utm_source=LifterLMS%20Plugin&utm_medium=Access%20Plans&utm_campaign=Plugin%20to%20Sale'
-									);
+									esc_html_e( 'Для онлайн-оплаты настройте совместимый платёжный шлюз в разделе «Настройки → Оплата».', 'lifterlms' );
 								?>
 									<a href="
 									<?php

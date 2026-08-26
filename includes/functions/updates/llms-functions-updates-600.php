@@ -126,12 +126,6 @@ function show_notice() {
 			__( '%1$sGet Started%2$s', 'lifterlms' ),
 			'<a class="button-primary" href="' . esc_url( $get_started_link ) . '" >',
 			'</a>'
-		) . ' ' .
-		sprintf(
-			// Translators: %1$s = Opening anchor tag to the welcome blog post on lifterlms.com; %2$s = Closing anchor tag.
-			__( '%1$sRead More%2$s', 'lifterlms' ),
-			'<a class="button" href="https://blog.lifterlms.com/6-beta?utm_source=notice&utm_medium=product&utm_campaign=lifterlmsplugin&utm_content=600-welcome" target="_blank" rel="noopener">',
-			'</a>'
 		)
 	);
 

@@ -68,10 +68,10 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.17 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.18 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.17.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.18.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
 
 
 ### Перенос между сайтами

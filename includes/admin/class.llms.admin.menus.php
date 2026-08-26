@@ -206,8 +206,6 @@ class LLMS_Admin_Menus {
 
 		add_submenu_page( 'lifterlms', 'Отчёты VibeLMS', 'Отчёты', 'view_lifterlms_reports', 'llms-reporting', array( $this, 'reporting_page_init' ) );
 
-		add_submenu_page( 'lifterlms', 'Импорт VibeLMS', 'Импорт', 'manage_lifterlms', 'llms-import', array( $this, 'import_page_init' ) );
-
 		add_submenu_page( 'lifterlms', 'Статус VibeLMS', 'Статус', 'manage_lifterlms', 'llms-status', array( $this, 'status_page_init' ) );
 
 		// Passing '' to register the page without actually adding a menu item.

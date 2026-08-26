@@ -662,7 +662,7 @@ function llms_update_300_update_orders() {
 			$order->set( 'original_total', $total );
 			$order->set( 'total', $total );
 
-			$order->add_note( sprintf( __( 'This order was migrated to the LifterLMS 3.0 data structure. %1$sLearn more%2$s.', 'lifterlms' ), '<a href="https://lifterlms.com/docs/lifterlms-orders#migration" target="_blank">', '</a>' ) );
+			$order->add_note( __( 'Заказ перенесён в структуру данных VibeLMS 3.0.', 'lifterlms' ) );
 
 			// Remove deprecated.
 			delete_post_meta( $post->ID, '_llms_order_recurring_price' );

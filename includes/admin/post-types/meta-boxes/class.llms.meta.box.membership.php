@@ -332,7 +332,7 @@ class LLMS_Meta_Box_Membership extends LLMS_Admin_Metabox {
 				'fields' => array(
 					array(
 						'label'      => __( 'Automatic Enrollment', 'lifterlms' ),
-						'desc'       => sprintf( __( 'When a student joins this membership they will be automatically enrolled in these courses. Click %1$shere%2$s for more information.', 'lifterlms' ), '<a href="https://lifterlms.com/docs/membership-auto-enrollment/" target="_blank">', '</a>' ),
+						'desc'       => __( 'When a student joins this membership they will be automatically enrolled in these courses.', 'lifterlms' ),
 						'id'         => $this->prefix . 'content_table',
 						'titles'     => array( '', __( 'Course Name', 'lifterlms' ), '' ),
 						'type'       => 'table',

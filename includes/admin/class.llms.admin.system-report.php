@@ -61,7 +61,6 @@ class LLMS_Admin_System_Report {
 				<textarea style="display:none;width: 100%" rows="12" readonly="readonly"></textarea>
 				<p class="submit">
 					<button id="copy-for-support" class="llms-button-primary"><?php esc_html_e( 'Copy for Support', 'lifterlms' ); ?></button>
-					<a class="llms-button-secondary" href="https://lifterlms.com/my-account/my-tickets/?utm_source=LifterLMS%20Plugin&utm_medium=System%20Report&utm_campaign=Get%20Help&utm_content=button001" target="_blank"><?php esc_html_e( 'Get Help', 'lifterlms' ); ?></a>
 				</p>
 			</div>
 		</div>

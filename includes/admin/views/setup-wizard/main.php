@@ -24,11 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="llms-setup-wrapper">
 
-		<h1 id="llms-logo">
-			<a href="https://lifterlms.com/" target="_blank">
-				<img src="<?php echo esc_url( llms()->plugin_url() . '/assets/images/lifterlms-logo-black.png' ); ?>" alt="LifterLMS">
-			</a>
-		</h1>
+		<h1 id="llms-logo">VibeLMS</h1>
 
 		<ul class="llms-setup-progress">
 			<?php foreach ( $steps as $slug => $step ) : ?>

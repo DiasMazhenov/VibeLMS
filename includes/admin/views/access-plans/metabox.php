@@ -18,14 +18,7 @@ defined( 'ABSPATH' ) || exit;
 <div class="llms-metabox" id="llms-product-options-access-plans">
 	<p>
 		<?php
-			$access_plan_allowed_html = array(
-				'a' => array(
-					'href'   => array(),
-					'target' => array(),
-				),
-			);
-			// Translators: %1$s = Link to access plans documentation; %2$s = The singular label of the custom post type.
-			printf( wp_kses( __( '<a target="_blank" href="%1$s">Access plans</a> define the payment options and access time-periods available for this %2$s.', 'lifterlms' ), $access_plan_allowed_html ), esc_url( 'https://lifterlms.com/docs/what-is-an-access-plan/' ), esc_html( strtolower( $product->get_post_type_label( 'singular_name' ) ) ) );
+			printf( esc_html__( 'Тарифы доступа определяют варианты оплаты и срок доступа для этого объекта: %s.', 'lifterlms' ), esc_html( strtolower( $product->get_post_type_label( 'singular_name' ) ) ) );
 			?>
 	</p>
 

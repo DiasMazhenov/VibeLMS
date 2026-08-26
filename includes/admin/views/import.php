@@ -8,7 +8,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$courses = LLMS_Export_API::list();
+$courses = array();
 ?>
 
 <div class="wrap lifterlms lifterlms-settings llms-import-export">
@@ -59,11 +59,7 @@ $courses = LLMS_Export_API::list();
 
 			</div>
 
-			<p>
-				<?php
-					// Translators: %s = anchor link HTML to LifterLMS.com.
-					printf( esc_html__( 'Download and import courses, templates, and more from %s.', 'lifterlms' ), '<a href="https://lifterlms.com" target="_blank">LifterLMS.com</a>' );
-				?>
+			<p><?php esc_html_e( 'Для полного переноса данных используйте раздел «VibeLMS → Перенос данных».', 'lifterlms' ); ?>
 				<button class="llms-cloud-import-help button-link" type="button" title="<?php esc_attr_e( 'Help', 'lifterlms' ); ?>">
 					<span class="screen-reader-text"><?php esc_html_e( 'Help', 'lifterlms' ); ?></span>
 					<span class="dashicons dashicons-editor-help"></span>

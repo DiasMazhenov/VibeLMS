@@ -34,8 +34,7 @@ class LLMS_Admin_Media_Protection_Attachment_Settings {
 
 		$protector = new LLMS_Media_Protector();
 		if ( ! $protector->is_media_protected( $post->ID ) ) {
-			// translators: %s is a link to the LifterLMS documentation.
-			$protection_warning_html = '<div class="llms-media-protection-warning">' . sprintf( __( 'This media is not protected. If you select a product here, the media will be moved to the protected uploads directory and existing links to the media will no longer work. %1$sLearn More%2$s', 'lifterlms' ), '<a target="_blank" href="https://lifterlms.com/docs/how-protected-media-files-work/?utm_source=LifterLMS%20Plugin&utm_medium=Media&utm_campaign=Backend%20Help%20Page">', '</a>' ) . '</div>';
+			$protection_warning_html = '<div class="llms-media-protection-warning">' . esc_html__( 'This media is not protected. If you select a product here, the media will be moved to the protected uploads directory and existing links to the media will no longer work.', 'lifterlms' ) . '</div>';
 		}
 
 		$auth_filter        = $protector->get_authorization_filter_name( $post->ID );
@@ -47,7 +46,7 @@ class LLMS_Admin_Media_Protection_Attachment_Settings {
 			'input' => 'html',
 			// TODO: Add selected course/membership to the select2 dropdown if known for this attachment post.
 			'html'  => "$protection_warning_html<select id='attachments-" . $post->ID . "-llms_media_protection_post' class='llms-posts-select2' data-no-view-button='true' data-allow_clear='false' data-post-type='course,llms_membership' name='attachments[" . $post->ID . "][llms_media_protection_post]'>$selected_product_html</select>",
-			'helps' => $is_core_protected ? sprintf( __( 'Access is restricted to the selected course/membership. %1$sLearn More%2$s', 'lifterlms' ), '<a target="_blank" href="https://lifterlms.com/docs/how-protected-media-files-work/?utm_source=LifterLMS%20Plugin&utm_medium=Media&utm_campaign=Backend%20Help%20Page">', '</a>' ) : '',
+			'helps' => $is_core_protected ? __( 'Access is restricted to the selected course/membership.', 'lifterlms' ) : '',
 		);
 
 		if ( $is_core_protected ) {

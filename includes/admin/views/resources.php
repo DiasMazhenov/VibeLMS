@@ -1,6 +1,6 @@
 <?php
 /**
- * Resources Page HTML.
+ * VibeLMS help page HTML.
  *
  * @package LifterLMS/Admin/Views
  *
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="llms-subheader">
 
-		<h1><?php esc_html_e( 'LifterLMS Resources', 'lifterlms' ); ?></h1>
+		<h1><?php esc_html_e( 'Справка VibeLMS', 'lifterlms' ); ?></h1>
 
 	</div>
 

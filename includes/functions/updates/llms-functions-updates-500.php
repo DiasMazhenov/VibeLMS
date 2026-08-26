@@ -70,12 +70,6 @@ function llms_update_500_add_admin_notice() {
 			__( '%1$sGet Started%2$s', 'lifterlms' ),
 			'<a class="button-primary" href="' . esc_url( $get_started_link ) . '" >',
 			'</a>'
-		) . ' ' .
-		sprintf(
-			// Translators: %1$s = Opening anchor tag to the welcome blog post on lifterlms.com; %2$s = Closing anchor tag.
-			__( '%1$sRead More%2$s', 'lifterlms' ),
-			'<a class="button" href="https://blog.lifterlms.com/5-0/" target="_blank" rel="noopener">',
-			'</a>'
 		)
 	);
 

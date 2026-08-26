@@ -44,7 +44,7 @@ class LLMS_Admin_Dashboard_Widget {
 
 		wp_add_dashboard_widget(
 			'llms_dashboard_widget',
-			'LifterLMS ' . __( 'Quick Links', 'lifterlms' ),
+			'VibeLMS ' . __( 'Quick Links', 'lifterlms' ),
 			array( $this, 'output' )
 		);
 	}
@@ -68,45 +68,6 @@ class LLMS_Admin_Dashboard_Widget {
 		<div class="activity-block">
 			<?php echo $this->get_widgets(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in template file. ?>
 		</div>
-		<div class="activity-block">
-			<h3><?php esc_html_e( 'LifterLMS News & Podcasts', 'lifterlms' ); ?></h3>
-		</div>
-		<ul class="llms-dashboard-widget-feed">
-			<?php foreach ( $this->get_feed() as $item ) : ?>
-				<li>
-					<a href="<?php echo esc_url( $item->get_permalink() ); ?>" target="_blank" rel="noopener">
-						<?php echo esc_html( $item->get_title() ); ?>
-					</a>
-					<span class="llms-dashboard-widget-feed-date">
-						<?php echo esc_html( date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) ); ?>
-						|
-						<?php echo strpos( $item->get_permalink(), '//podcast' ) !== false ? esc_html__( 'Podcast', 'lifterlms' ) : esc_html__( 'Blog', 'lifterlms' ); ?>
-					</span>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-		<ul class="subsubsub">
-			<li>
-				<a href="https://lifterlms.com/blog/" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Opens in a new tab', 'lifterlms' ); ?>">
-					<?php esc_html_e( 'View all blog posts', 'lifterlms' ); ?>
-					<span aria-hidden="true" class="dashicons dashicons-external"></span>
-				</a>
-				|
-			</li>
-			<li>
-				<a href="https://podcast.lifterlms.com/" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Opens in a new tab', 'lifterlms' ); ?>">
-					<?php esc_html_e( 'View all podcasts', 'lifterlms' ); ?>
-					<span aria-hidden="true" class="dashicons dashicons-external"></span>
-				</a>
-				|
-			</li>
-			<li>
-				<a href="https://lifterlms.com/help/" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Opens in a new tab', 'lifterlms' ); ?>">
-					<?php esc_html_e( 'Get support', 'lifterlms' ); ?>
-					<span aria-hidden="true" class="dashicons dashicons-external"></span>
-				</a>
-			</li>
-		</ul>
 		<?php
 	}
 
@@ -137,42 +98,6 @@ class LLMS_Admin_Dashboard_Widget {
 				'widget_data' => array( self::get_dashboard_widget_data() ),
 			)
 		) ?? '';
-	}
-
-	/**
-	 * Get blog and podcast feed.
-	 *
-	 * @since 7.2.0
-	 *
-	 * @return array
-	 */
-	private function get_feed(): array {
-		$blog    = fetch_feed( 'https://lifterlms.com/feed' );
-		$podcast = fetch_feed( 'https://podcast.lifterlms.com/feed/' );
-
-		if ( ! is_wp_error( $blog ) ) {
-			$blog_max   = $blog->get_item_quantity( 3 );
-			$blog_items = $blog->get_items( 0, $blog_max );
-		}
-
-		if ( ! is_wp_error( $podcast ) ) {
-			$podcast_max   = $podcast->get_item_quantity( 3 );
-			$podcast_items = $podcast->get_items( 0, $podcast_max );
-		}
-
-		$merged = array_merge(
-			$blog_items ?? array(),
-			$podcast_items ?? array()
-		);
-
-		usort(
-			$merged,
-			function ( $a, $b ) {
-				return $b->get_date( 'U' ) - $a->get_date( 'U' );
-			}
-		);
-
-		return array_slice( $merged, 0, 5 );
 	}
 
 	/**

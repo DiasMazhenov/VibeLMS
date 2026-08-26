@@ -34,12 +34,6 @@ function show_notice() {
 			__( 'We\'ve added spam and security features to protect your website inside the core plugin. You can review the available features on the new %1$sSecurity settings tab%2$s.', 'lifterlms' ),
 			'<a href="' . admin_url( 'admin.php?page=llms-settings&tab=security' ) . '">',
 			'</a>'
-		),
-		sprintf(
-			// Translators: %1$s = Opening anchor tag to the blog post on lifterlms.com; %2$s = Closing anchor tag.
-			__( '%1$sRead More%2$s', 'lifterlms' ),
-			'<a class="button" href="https://lifterlms.com/blog/new-website-spam-and-security-features/?utm_source=notice&utm_medium=product&utm_campaign=lifterlmsplugin&utm_content=900-notice" target="_blank" rel="noopener">',
-			'</a>'
 		)
 	);
 

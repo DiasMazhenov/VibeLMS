@@ -90,7 +90,7 @@
 		div.className = HELP_CLASS;
 		div.style     = 'display:none';
 
-		div.innerHTML = '<div class="llms-admin-notice-icon"></div><div class="llms-admin-notice-content"><h3>Create Custom Forms and Fields</h3><p>Create unique student information forms for specific courses and memberships. Also unlock the power of custom fields so you can collect and display any form field data you can imagine.</p><p><a class="llms-button-primary" target="_blank" rel="noopener" href="https://lifterlms.com/product/custom-fields/?utm_source=LifterLMS%20Plugin&utm_medium=Add%20Form%20Notice&utm_campaign=Add%20Form%20In%20App%20Upgrade%20Flow">Learn More</a></p></div>';
+		div.innerHTML = '<div class="llms-admin-notice-icon"></div><div class="llms-admin-notice-content"><h3>Пользовательские формы и поля</h3><p>Настройте поля профиля пользователя и формы регистрации средствами текущей установки WordPress.</p></div>';
 
 		return div;
 
@@ -141,5 +141,4 @@
 	init();
 
 } )();
-
 

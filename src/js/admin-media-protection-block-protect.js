@@ -1,8 +1,8 @@
 ( function( wp ) {
 	const { addFilter } = wp.hooks;
 	const { createHigherOrderComponent } = wp.compose;
-	const { Fragment, useState, useEffect, useRef, createInterpolateElement } = wp.element;
-	const { ToolbarButton, Modal, Button, Flex, FlexItem, Notice, ExternalLink } = wp.components;
+	const { Fragment, useState, useEffect, useRef } = wp.element;
+	const { ToolbarButton, Modal, Button, Flex, FlexItem, Notice } = wp.components;
 	const { BlockControls } = wp.blockEditor;
 	const { apiFetch } = wp;
 
@@ -45,17 +45,8 @@
 
 	const withProtectImageToolbar = createHigherOrderComponent( ( BlockEdit ) => {
 		return ( props ) => {
-			const warningText = createInterpolateElement(
-				LLMS.l10n.translate(
-					'This media is not protected. If you select a product here, the media will be moved to the protected uploads directory and existing links to the media will no longer work. <link>Learn More</link>'
-				),
-				{
-					link: (
-						<ExternalLink
-							href="https://lifterlms.com/docs/how-protected-media-files-work/?utm_source=LifterLMS%20Plugin&utm_medium=Media&utm_campaign=Backend%20Help%20Page"
-						/>
-					),
-				}
+			const warningText = LLMS.l10n.translate(
+				'This media is not protected. If you select a product here, the media will be moved to the protected uploads directory and existing links to the media will no longer work.'
 			);
 
 			// We don't have a media ID if "insert from URL" is used.

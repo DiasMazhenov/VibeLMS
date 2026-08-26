@@ -243,7 +243,7 @@ class LLMS_Install {
 		 * Filters the essential starter pages.
 		 *
 		 * These are the pages that are going to be created when installing LifterLMS.
-		 * All these pages, as long as their `docs_url`, `description` and `wizard_title`
+		 * All these pages, as long as their `description` and `wizard_title`
 		 * fields are defined, are going to be shown in the Setup Wizard.
 		 *
 		 * @since 7.3.0
@@ -260,7 +260,6 @@ class LLMS_Install {
 					'title'        => __( 'Course Catalog', 'lifterlms' ),
 					'wizard_title' => __( 'Course Catalog', 'lifterlms' ),
 					'description'  => __( 'This page is where your visitors will find a list of all your available courses.', 'lifterlms' ),
-					'docs_url'     => 'https://lifterlms.com/docs/course-catalog/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Wizard&utm_content=LifterLMS%20Course%20Catalog',
 				),
 				array(
 					'content'      => '',
@@ -269,7 +268,6 @@ class LLMS_Install {
 					'title'        => __( 'Membership Catalog', 'lifterlms' ),
 					'wizard_title' => __( 'Membership Catalog', 'lifterlms' ),
 					'description'  => __( 'This page is where your visitors will find a list of all your available memberships.', 'lifterlms' ),
-					'docs_url'     => 'https://lifterlms.com/docs/membership-catalog/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Wizard&utm_content=LifterLMS%20Membership%20Catalog',
 				),
 				array(
 					'content'      => '[lifterlms_checkout]',
@@ -278,7 +276,6 @@ class LLMS_Install {
 					'title'        => __( 'Purchase', 'lifterlms' ),
 					'wizard_title' => __( 'Checkout', 'lifterlms' ),
 					'description'  => __( 'This is the page where visitors will be directed in order to pay for courses and memberships.', 'lifterlms' ),
-					'docs_url'     => 'https://lifterlms.com/docs/checkout-page/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Wizard&utm_content=LifterLMS%20Checkout%20Page',
 				),
 				array(
 					'content'      => '[lifterlms_my_account]',
@@ -287,7 +284,6 @@ class LLMS_Install {
 					'title'        => __( 'Dashboard', 'lifterlms' ),
 					'wizard_title' => __( 'Student Dashboard', 'lifterlms' ),
 					'description'  => __( 'Page where students can view and manage their current enrollments, earned certificates and achievements, account information, and purchase history.', 'lifterlms' ),
-					'docs_url'     => 'https://lifterlms.com/docs/student-dashboard/?utm_source=LifterLMS%20Plugin&utm_campaign=Plugin%20to%20Sale&utm_medium=Wizard&utm_content=LifterLMS%20Student%20Dashboard',
 				),
 			)
 		);

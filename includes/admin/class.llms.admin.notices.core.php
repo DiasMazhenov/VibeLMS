@@ -100,9 +100,9 @@ class LLMS_Admin_Notices_Core {
 		$id = 'no-gateways';
 
 		if ( ! apply_filters( 'llms_admin_notice_no_payment_gateways', llms()->payment_gateways()->has_gateways( true ) ) ) {
-			$html  = __( 'No LifterLMS Payment Gateways are currently enabled. Students will only be able to enroll in courses or memberships with free access plans.', 'lifterlms' ) . '<br><br>';
+			$html  = __( 'Платёжные шлюзы VibeLMS не включены. Пользователи смогут записываться только на курсы и группы доступа с бесплатным тарифом.', 'lifterlms' ) . '<br><br>';
 			$html .= sprintf(
-				__( 'For starters you can configure manual payments on the %1$sCheckout Settings tab%2$s. Be sure to check out all the available %3$sLifterLMS Payment Gateways%4$s and install one later so that you can start selling your courses and memberships.', 'lifterlms' ),
+				__( 'Сначала настройте ручные платежи на вкладке %1$s«Оплата»%2$s. Для онлайн-оплаты установите совместимый платёжный шлюз и настройте его ниже.', 'lifterlms' ),
 				'<a href="' . add_query_arg(
 					array(
 						'page' => 'llms-settings',
@@ -111,8 +111,6 @@ class LLMS_Admin_Notices_Core {
 					admin_url( 'admin.php' )
 				) . '">',
 				'</a>',
-				'<a href="https://lifterlms.com/product-category/plugins/payment-gateways/" target="_blank">',
-				'</a>'
 			);
 			LLMS_Admin_Notices::add_notice(
 				$id,
@@ -144,13 +142,8 @@ class LLMS_Admin_Notices_Core {
 				||
 				( function_exists( 'is_wpe' ) && is_wpe() )
 			) ) {
-			$html = sprintf(
-				/* translators: 1. opening link tag; 2. closing link tag */
-				__( 'For the best protection for your media files, you should use this doc to add this %1$sNGINX redirect rule%2$s.', 'lifterlms' ),
-				'<a href="https://lifterlms.com/docs/protected-media-files-on-nginx/" target="_blank">',
-				'</a>'
-			);
-			$html .= '<br><br>' . __( 'If you have already reviewed these instructions you may dismiss this notice.', 'lifterlms' );
+			$html = __( 'Для защиты медиафайлов настройте правило перенаправления NGINX на сервере.', 'lifterlms' );
+			$html .= '<br><br>' . __( 'Если вы уже выполнили настройку, это уведомление можно закрыть.', 'lifterlms' );
 
 			LLMS_Admin_Notices::add_notice(
 				$id,
@@ -207,12 +200,8 @@ class LLMS_Admin_Notices_Core {
 		if ( ! current_theme_supports( 'lifterlms-sidebars' ) && ! in_array( $theme->get_template(), llms_get_core_supported_themes(), true ) ) {
 
 			$msg = sprintf(
-				__( '<strong>The current theme, %1$s, does not declare support for LifterLMS Sidebars.</strong> Course and Lesson sidebars may not work as expected. Please see our %2$sintegration guide%3$s or check out our %4$sLaunchPad%5$s theme which is designed specifically for use with LifterLMS.', 'lifterlms' ),
-				$theme->get( 'Name' ),
-				'<a href="https://lifterlms.com/docs/lifterlms-sidebar-support/?utm_source=notice&utm_medium=product&utm_content=sidebarsupport&utm_campaign=lifterlmsplugin" target="_blank">',
-				'</a>',
-				'<a href="https://lifterlms.com/product/launchpad/?utm_source=notice&utm_medium=product&utm_content=launchpad&utm_campaign=lifterlmsplugin" target="_blank">',
-				'</a>'
+				__( '<strong>Текущая тема «%1$s» не заявляет поддержку боковых панелей VibeLMS.</strong> Боковые панели курсов и уроков могут отображаться не полностью.', 'lifterlms' ),
+				$theme->get( 'Name' )
 			);
 
 			LLMS_Admin_Notices::add_notice(

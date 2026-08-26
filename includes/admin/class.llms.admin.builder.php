@@ -716,7 +716,6 @@ class LLMS_Admin_Builder {
 								'check_interval_ms' => ( 'yes' === self::get_autosave_status() ? 10000 : 1000 ),
 							)
 						),
-						'enable_video_explainer' => true,
 						'home_url'               => home_url(),
 					)
 				)

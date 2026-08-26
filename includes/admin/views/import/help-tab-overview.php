@@ -10,10 +10,10 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<h4><?php esc_html_e( 'Importing into LifterLMS', 'lifterlms' ); ?></h4>
+<h4><?php esc_html_e( 'Импорт в VibeLMS', 'lifterlms' ); ?></h4>
 
-<p><?php esc_html_e( 'Importing allows you to copy courses from one LifterLMS site to another.', 'lifterlms' ); ?></p>
+<p><?php esc_html_e( 'Импорт позволяет переносить курсы с одного сайта VibeLMS на другой.', 'lifterlms' ); ?></p>
 
-<p><?php esc_html_e( 'You can upload <code>.json</code> files exported from another LifterLMS site using the "Upload" button.', 'lifterlms' ); ?></p>
+<p><?php esc_html_e( 'Старый экран поддерживает загрузку файлов <code>.json</code>. Для полного переноса используйте раздел «VibeLMS → Перенос данных».', 'lifterlms' ); ?></p>
 
-<p><?php esc_html_e( 'The courses listed below are samples and templates you can import into your site directly from LifterLMS.com. When importing these courses the content (including images) will be downloaded from LifterLMS.com and imported into your site.', 'lifterlms' ); ?></p>
+<p><?php esc_html_e( 'Этот устаревший экран не загружает внешние образцы курсов.', 'lifterlms' ); ?></p>
