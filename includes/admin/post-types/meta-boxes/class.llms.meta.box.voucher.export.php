@@ -225,8 +225,8 @@ class LLMS_Meta_Box_Voucher_Export {
 
 	public static function send_email( $csv, $emails, $title ) {
 
-		$subject = 'Your LifterLMS Voucher Export';
-		$message = 'Please find the attached voucher csv export for ' . $title . '.';
+		$subject = __( 'Your VibeLMS Voucher Export', 'lifterlms' );
+		$message = sprintf( __( 'Please find the attached voucher CSV export for %s.', 'lifterlms' ), $title );
 
 		// Create temp file.
 		$temp = tempnam( '/tmp', 'vouchers' );

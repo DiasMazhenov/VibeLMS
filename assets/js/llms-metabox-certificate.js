@@ -19,9 +19,9 @@ jQuery( document ).ready(function($){
 
 		// Extend the wp.media object
 		certificate_uploader = wp.media.frames.file_frame = wp.media({
-			title: 'Choose Certificate Image',
+			title: LLMS.l10n.translate( 'Choose Certificate Image' ),
 			button: {
-				text: 'Choose Certificate'
+				text: LLMS.l10n.translate( 'Choose Certificate' )
 			},
 			multiple: false
 		});

@@ -80,7 +80,7 @@
 		// between saves.
 		startTracking: function() {
 			this._unsavedConfig = _.extend({}, {
-				prompt: 'You have unsaved changes!',
+				prompt: window.LLMS && LLMS.l10n ? LLMS.l10n.translate( 'You have unsaved changes!' ) : 'You have unsaved changes!',
 				unloadRouterPrompt: false,
 				unloadWindowPrompt: false
 			}, this.unsaved || {});

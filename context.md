@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.23`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.24`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -52,7 +52,7 @@ The course-builder failure `Cannot read properties of undefined (reading 'start'
 
 Advanced Quizzes 3.3.0 is now bundled into VibeLMS rather than installed as a separate plugin. The bundle includes question-type behavior, the question bank, manual-review notifications/reporting, secure file-upload AJAX handling, admin question settings, frontend templates, CodeMirror, Quill Snow styling, and production JS/CSS assets. The existing core question-type definitions remain the compatibility base; the bundled module removes upgrade prompts and attaches the full behavior. If a standalone Advanced Quizzes plugin is already active, VibeLMS reuses its `llms_aq()` integration instead of loading a second copy.
 
-The Russian catalog now translates the True/False labels as `Верно`, `Неверно`, and `Верно или неверно`, and translates Scale as `Шкала`.
+The Russian catalog now translates the True/False labels as `Верно`, `Неверно`, and `Верно или неверно`, and translates Scale as `Шкала`. The 0.0.24 localization pass covers the previously missing course builder, access-plan, reporting, quiz, Advanced Quizzes, media-protection, password-visibility and voucher/export strings. Hard-coded voucher, email, media and default-title labels now use the core catalog or `LLMS.l10n`; language names such as PHP and Python remain intentionally unchanged. Advanced Quizzes now loads its PHP and JavaScript Russian catalogs from the bundled `languages/` directory.
 
 The Advanced Questions buttons are native VibeLMS functionality. Their core definitions now set `upgrade` to `false` directly, so the course builder cannot render them as disabled premium upsells even if a stale cache or delayed add-on initialization is present.
 
@@ -71,8 +71,8 @@ VibeLMS now has a separate **VibeLMS → Тесты** constructor. It creates an
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
-- Current checks: PHP lint for the platform module, transfer module and main plugin, shell syntax, `git diff --check`, the language registration/enrollment contract check, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.23.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Current checks: PHP lint for all changed PHP files, shell syntax, `git diff --check`, the language registration/enrollment contract check, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax, the rebuilt course-builder bundle and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. Both Russian translation catalogs pass `msgfmt --check`; the Advanced Quizzes catalog is loaded from the bundled `languages/` directory. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.24.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 

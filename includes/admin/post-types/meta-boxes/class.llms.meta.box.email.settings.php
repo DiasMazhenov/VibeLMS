@@ -63,7 +63,7 @@ class LLMS_Meta_Box_Email_Settings extends LLMS_Admin_Metabox {
 
 		return array(
 			array(
-				'title'  => 'Settings',
+				'title'  => __( 'Settings', 'lifterlms' ),
 				'fields' => array(
 					array(
 						'type'       => 'text',

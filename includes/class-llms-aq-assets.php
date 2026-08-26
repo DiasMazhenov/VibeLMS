@@ -49,7 +49,8 @@ class LLMS_AQ_Assets {
 				),
 				// Script specific defaults.
 				'script' => array(
-					'translate'  => true,
+					// Advanced Quizzes has its own text domain and catalog.
+					'translate'  => false,
 					'asset_file' => true,
 				),
 			)
@@ -93,6 +94,7 @@ class LLMS_AQ_Assets {
 
 		LLMS_Admin_Assets::register_quill();
 		$this->assets->enqueue_script( 'llms-aq' );
+		$this->set_script_translations( 'llms-aq' );
 		$this->assets->enqueue_style( 'llms-aq' );
 
 	}
@@ -131,6 +133,24 @@ class LLMS_AQ_Assets {
 			'path'      => 'assets/vendor/codemirror',
 			'version'   => '5.34.0',
 		);
+	}
+
+	/**
+	 * Load the bundled Advanced Quizzes JavaScript catalog.
+	 *
+	 * @since 0.0.24
+	 *
+	 * @param string $handle Script handle.
+	 * @return void
+	 */
+	private function set_script_translations( $handle ) {
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations(
+				$handle,
+				'lifterlms-advanced-quizzes',
+				trailingslashit( LLMS_ADVANCED_QUIZZES_PLUGIN_DIR ) . 'languages'
+			);
+		}
 	}
 
 	/**

@@ -1,0 +1,22 @@
+{
+  "translation-revision-date": "2026-08-27 00:00:00+0000",
+  "generator": "VibeLMS",
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "lang": "ru",
+        "plural-forms": "nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);"
+      },
+      "Invalid file type selected.": ["Выбран недопустимый тип файла."],
+      "Fill in all the blanks to continue.": ["Заполните все пропуски, чтобы продолжить."],
+      "Fill in the blank to continue.": ["Заполните пропуск, чтобы продолжить."],
+      "You must provide an answer to continue": ["Укажите ответ, чтобы продолжить"],
+      "Your answer is %1$d words long and it must be at least %2$d words long to proceed": ["Ваш ответ содержит %1$d слов. Для продолжения нужно не менее %2$d слов."],
+      "Your answer is %1$d words long and it cannot be longer than %2$d words long to proceed": ["Ваш ответ содержит %1$d слов. Для продолжения нужно не более %2$d слов."],
+      "You must select an option to continue": ["Выберите вариант, чтобы продолжить"],
+      "You must upload a file to proceed": ["Загрузите файл, чтобы продолжить"]
+    }
+  }
+}

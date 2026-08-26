@@ -20,9 +20,9 @@
 
 		// Extend the wp.media object
 		achievement_uploader = wp.media.frames.file_frame = wp.media({
-			title: 'Choose Achievement Image',
+			title: LLMS.l10n.translate( 'Choose Achievement Image' ),
 			button: {
-				text: 'Choose Achievement'
+				text: LLMS.l10n.translate( 'Choose Achievement' )
 			},
 			multiple: false
 		});

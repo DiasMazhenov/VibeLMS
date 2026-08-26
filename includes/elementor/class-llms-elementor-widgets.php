@@ -147,7 +147,7 @@ class LLMS_Elementor_Widgets {
 		return array(
 			'elementor'          => $version,
 			'elementor_compatible' => $available && version_compare( ELEMENTOR_VERSION, self::MINIMUM_ELEMENTOR_VERSION, '>=' ) ? __( 'Да', 'lifterlms' ) : __( 'Нет', 'lifterlms' ),
-			'vibelms_category'   => __( 'VibeLMS (внутренний ID lifterlms)', 'lifterlms' ),
+			'vibelms_category'   => __( 'VibeLMS (технический идентификатор lifterlms)', 'lifterlms' ),
 			'registered_widgets' => self::$registered_widgets ? implode( ', ', self::$registered_widgets ) : __( 'ещё не зарегистрированы', 'lifterlms' ),
 		);
 	}

@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.24 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Added a Russian PHP and JavaScript catalog for the bundled Advanced Quizzes module.
++ Advanced question settings, review notifications, file-upload messages and quiz validation errors now use Russian in the active locale.
+
 VibeLMS 0.0.23 - 2026-08-27
 ---------------------------
 

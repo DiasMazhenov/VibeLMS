@@ -6191,17 +6191,101 @@ msgstr "Чайяпхум"
 #: includes/class.llms.l10n.frontend.php:196
 #: includes/class.llms.l10n.frontend.php:360
 msgid "Get LifterLMS Advanced Quizzes"
-msgstr "Получите расширенные тесты LifterLMS"
+msgstr "Получить расширенные тесты VibeLMS"
 
 #: includes/class.llms.l10n.frontend.php:195
 #: includes/class.llms.l10n.frontend.php:359
 msgid "A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)"
-msgstr "Банк вопросов помогает предотвратить списывание и укрепляет процесс обучения, позволяя преподавателям создавать оценки с рандомизированными вопросами, взятыми из банка вопросов. (Доступно в аддоне Advanced Quizzes)"
+msgstr "Банк вопросов помогает предотвращать списывание и укрепляет обучение, позволяя преподавателям создавать задания со случайными вопросами из банка."
 
 #: includes/class.llms.l10n.frontend.php:194
 #: includes/class.llms.l10n.frontend.php:358
 msgid "Question Bank"
 msgstr "Банк вопросов"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Enter the total number of questions to be included in all quiz variations."
+msgstr "Введите общее количество вопросов для всех вариантов теста."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Number of questions per type"
+msgstr "Количество вопросов каждого типа"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Select the minimum number of questions for each type to be included in all quiz variations. The total number should not be greater than the total number of questions to be included in all variations. 0 stays for unlimited."
+msgstr "Укажите минимальное количество вопросов каждого типа для всех вариантов теста. Общее количество не должно превышать количество вопросов во всех вариантах. Значение 0 означает отсутствие ограничения."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions."
+msgstr "Банк вопросов помогает предотвращать списывание и укрепляет обучение, позволяя преподавателям создавать задания со случайными вопросами из банка."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.php
+msgid "Add"
+msgstr "Добавить"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.php
+msgid "new code(s) with"
+msgstr "новых кодов по"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.php
+msgid "use(s) per code"
+msgstr "использований на один код"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.php
+msgid "Uses"
+msgstr "Использований"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.php
+msgid "Redemption Date"
+msgstr "Дата погашения"
+
+#: includes/admin/post-types/meta-boxes/fields/llms.class.meta.box.image.php
+msgid "Upload Image"
+msgstr "Загрузить изображение"
+
+#: includes/admin/post-types/meta-boxes/fields/llms.class.meta.box.image.php
+msgid "Remove Image"
+msgstr "Удалить изображение"
+
+#: includes/class.llms.post.handler.php
+msgid "Section 1"
+msgstr "Раздел 1"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "You can only generate 50 rows at a time"
+msgstr "За один раз можно создать не более 50 строк."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Please save before adding any more codes, limit is 50 at a time"
+msgstr "Сохраните изменения перед добавлением новых кодов; за один раз можно добавить не более 50 кодов."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Please make sure that there are no duplicate voucher codes."
+msgstr "Убедитесь, что коды ваучеров не повторяются."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Please select course or membership before saving."
+msgstr "Перед сохранением выберите курс или группу доступа."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "If you leave this page you will lose your unsaved changes."
+msgstr "Если покинуть страницу, несохранённые изменения будут потеряны."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Choose Achievement Image"
+msgstr "Выберите изображение достижения"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Choose Achievement"
+msgstr "Выбрать достижение"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Choose Certificate Image"
+msgstr "Выберите изображение сертификата"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Choose Certificate"
+msgstr "Выбрать сертификат"
 
 #: languages/currency-symbols.php:121
 msgid "&#8376;"
@@ -6359,6 +6443,892 @@ msgstr "Отображает цикл \"плиток\" курсов LifterLMS, �
 msgctxt "block title"
 msgid "Courses"
 msgstr "Курсы"
+
+#: includes/controllers/class.llms.controller.lesson.progression.php
+msgid "You are not allowed to complete this lesson."
+msgstr "У вас нет прав завершить этот урок."
+
+#: includes/controllers/class.llms.controller.lesson.progression.php
+msgid "You are not allowed to update this lesson."
+msgstr "У вас нет прав обновить этот урок."
+
+#: includes/abstracts/llms-abstract-generator-posts.php
+msgid "You are not allowed to create a user with the requested role."
+msgstr "У вас нет прав создавать пользователя с указанной ролью."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.order.details.php
+msgid "Order total for future payments updated to %s."
+msgstr "Сумма заказа для будущих платежей обновлена: %s."
+
+#: includes/admin/post-types/class.llms.post.tables.php
+msgid "There was an error detaching the post."
+msgstr "При отсоединении записи произошла ошибка."
+
+#: assets/js/app/llms-visibility-toggle.js
+msgid "Hide Password"
+msgstr "Скрыть пароль"
+
+#: assets/js/llms-form-checkout.js
+msgid "Operation timed out, please try again"
+msgstr "Время ожидания истекло, попробуйте снова"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "Currently protected by:"
+msgstr "Сейчас защищено объектом:"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "Select Course or Membership"
+msgstr "Выберите курс или группу доступа"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "Select a Course or Membership to protect this %s:"
+msgstr "Выберите курс или группу доступа для защиты объекта «%s»:"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "Protect %s"
+msgstr "Защитить: %s"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "image"
+msgstr "изображение"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "audio"
+msgstr "аудио"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "video"
+msgstr "видео"
+
+#: assets/js/llms-admin-media-protection-block-protect.js
+msgid "file"
+msgstr "файл"
+
+#: templates/course/favorite.php
+msgid "Toggle favorite for lesson %s"
+msgstr "Переключить избранное для урока %s"
+
+#: templates/course/lesson-preview.php
+msgid "Lesson %1$d of %2$d within section %3$s."
+msgstr "Урок %1$d из %2$d в разделе %3$s."
+
+#: templates/course/lesson-preview.php
+msgid "Lesson %1$d within section %2$s."
+msgstr "Урок %1$d в разделе %2$s."
+
+#: templates/course/lesson-preview.php
+msgid "Has Quiz"
+msgstr "Есть тест"
+
+#: templates/course/lesson-preview.php
+msgid "Has Assignment"
+msgstr "Есть задание"
+
+#: templates/quiz/start-button.php
+msgid "You have a partially completed attempt for this quiz. You can continue where you left off by clicking the Resume Quiz button below."
+msgstr "У вас есть незавершённая попытка этого теста. Вы можете продолжить с места остановки, нажав кнопку «Продолжить тест» ниже."
+
+#: templates/quiz/start-button.php
+msgid "Restart Quiz Instead"
+msgstr "Начать тест заново"
+
+#: templates/quiz/start-button.php
+msgid "Resume Quiz"
+msgstr "Продолжить тест"
+
+#: templates/quiz/results-attempt-questions-list.php
+msgid "Show answer details"
+msgstr "Показать подробности ответов"
+
+#: templates/quiz/results-attempt-questions-list.php
+msgid "Hide answer details"
+msgstr "Скрыть подробности ответов"
+
+#: templates/quiz/results-attempt-questions-list.php
+msgid "The quiz is still ongoing."
+msgstr "Тест ещё выполняется."
+
+#: templates/quiz/results-attempt-questions-list.php
+msgid "The quiz is still ongoing. You can resume your attempt by clicking the 'Resume Quiz' button."
+msgstr "Тест ещё выполняется. Вы можете продолжить попытку, нажав кнопку «Продолжить тест»."
+
+#: templates/quiz/questions/content-upload.php
+msgid "Select or drop a file..."
+msgstr "Выберите файл или перетащите его сюда..."
+
+#: templates/quiz/questions/content-upload.php
+msgid "Allowed filetypes: %s"
+msgstr "Разрешённые типы файлов: %s"
+
+#: includes/class-llms-aq-ajax.php
+msgid "%1$s answer by %2$s"
+msgstr "%1$s — ответ пользователя %2$s"
+
+#: includes/class-llms-aq-ajax.php
+msgid "Missing required parameter: \"%s\""
+msgstr "Не указан обязательный параметр: «%s»"
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid value submitted for parameter: \"%s\""
+msgstr "Для параметра «%s» передано недопустимое значение"
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid user."
+msgstr "Недопустимый пользователь."
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid quiz attempt."
+msgstr "Недопустимая попытка теста."
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid question."
+msgstr "Недопустимый вопрос."
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid filetype."
+msgstr "Недопустимый тип файла."
+
+#: includes/class-llms-aq-ajax.php
+msgid "Invalid attempt."
+msgstr "Недопустимая попытка."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Free lessons can be accessed without enrollment."
+msgstr "Бесплатные уроки доступны без зачисления."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "When enabled, students must pass this quiz before the lesson can be completed."
+msgstr "Если включено, ученик должен пройти этот тест, прежде чем урок можно будет завершить."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "When enabled, students must pass this assignment before the lesson can be completed."
+msgstr "Если включено, ученик должен выполнить это задание, прежде чем урок можно будет завершить."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Minimum Time on Lesson"
+msgstr "Минимальное время урока"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Require students to spend a minimum amount of time on this lesson before they can mark it complete"
+msgstr "Требовать, чтобы ученик провёл на уроке минимальное время, прежде чем сможет отметить его завершённым"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Drip settings are currently set at the course level, under the Restrictions settings tab. Disable to allow lesson level drip settings."
+msgstr "Настройки последовательного открытия заданы на уровне курса во вкладке «Ограничения». Отключите эту настройку, чтобы задавать их для отдельных уроков."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Drip settings can be set at the course level to release course content at a specified interval, in the Restrictions settings tab."
+msgstr "Настройки последовательного открытия материалов курса задаются на уровне курса во вкладке «Ограничения»."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Schedule events for your lessons with the LifterLMS Events add-on."
+msgstr "Планируйте события для уроков с помощью модуля событий VibeLMS."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Prevent quiz retake after student passed the quiz."
+msgstr "Запретить повторное прохождение теста после успешной сдачи."
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Unknown response"
+msgstr "Неизвестный ответ"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Paid Trial"
+msgstr "Платный пробный период"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Hidden Access"
+msgstr "Скрытый доступ"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Pre-sale"
+msgstr "Предварительная продажа"
+
+#: includes/class.llms.l10n.frontend.php
+msgid "Save & Exit Quiz"
+msgstr "Сохранить и выйти из теста"
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php
+msgid "Quizzes: Quiz Awaiting Review"
+msgstr "Тесты: тест ожидает проверки"
+
+#: includes/class-llms-aq-question-bank.php
+msgid "Include in all quiz variations"
+msgstr "Включить во все варианты теста"
+
+#: includes/class.llms.ajax.handler.php
+msgid "This quiz does not belong to the specified lesson."
+msgstr "Этот тест не относится к указанному уроку."
+
+#: includes/class.llms.ajax.handler.php
+msgid "This quiz is not associated with a valid course."
+msgstr "Этот тест не связан с действующим курсом."
+
+#: includes/class.llms.ajax.handler.php
+msgid "You must be enrolled in this course to take this quiz."
+msgstr "Чтобы пройти этот тест, вы должны быть зачислены на курс."
+
+#: includes/class.llms.ajax.handler.php
+msgid "You must spend the required minimum time on the lesson before taking the quiz."
+msgstr "Перед прохождением теста необходимо провести на уроке установленное минимальное время."
+
+#: includes/class.llms.ajax.handler.php
+msgid "The requested attempt could not be found."
+msgstr "Запрошенная попытка не найдена."
+
+#: includes/class.llms.ajax.handler.php
+msgid "No quiz found."
+msgstr "Тест не найден."
+
+#: includes/class.llms.ajax.handler.php
+msgid "There was an error resuming the quiz. Please return to the lesson and begin again."
+msgstr "При продолжении теста произошла ошибка. Вернитесь к уроку и начните заново."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Unable to resume quiz because the quiz does not contain any questions."
+msgstr "Невозможно продолжить тест: в нём нет вопросов."
+
+#: includes/class.llms.ajax.handler.php
+msgid "There was an error retrieving the question. Please return to the lesson and try again."
+msgstr "При загрузке вопроса произошла ошибка. Вернитесь к уроку и попробуйте снова."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Invalid access plan ID."
+msgstr "Недопустимый ID тарифа доступа."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Session token is required."
+msgstr "Требуется токен сессии."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Invalid session token."
+msgstr "Недопустимый токен сессии."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Invalid session."
+msgstr "Недопустимая сессия."
+
+#: includes/class.llms.ajax.handler.php
+msgid "This session has been replaced. Please reload the page to continue tracking time."
+msgstr "Эта сессия заменена. Перезагрузите страницу, чтобы продолжить отсчёт времени."
+
+#: includes/class.llms.ajax.handler.php
+msgid "Rate limit exceeded."
+msgstr "Превышено ограничение частоты запросов."
+
+#: includes/llms.spam.functions.php
+msgid "Suspicious activity detected. Try again in a few minutes."
+msgstr "Обнаружена подозрительная активность. Попробуйте снова через несколько минут."
+
+#: includes/spam/class-llms-turnstile.php
+msgid "Verification failed. Please try again."
+msgstr "Проверка не пройдена. Попробуйте снова."
+
+#: includes/bricks/class-llms-bricks-element-course-author.php
+msgid "Inherit from current course"
+msgstr "Наследовать из текущего курса"
+
+#: includes/class-llms-rest-fields.php
+msgid "The ID of the product that protects this media."
+msgstr "ID объекта, который защищает этот медиафайл."
+
+#: includes/admin/class.llms.admin.menus.php
+msgid "You are not authorized to edit this course."
+msgstr "У вас нет прав на редактирование этого курса."
+
+#: includes/admin/class.llms.student.bulk.enroll.php
+msgid "You do not have permission to enroll users into this course or membership."
+msgstr "У вас нет прав зачислять пользователей на этот курс или в эту группу доступа."
+
+#: includes/admin/class-llms-admin-media-protection-attachment-settings.php
+msgid "This media is not protected. If you select a product here, the media will be moved to the protected uploads directory and existing links to the media will no longer work."
+msgstr "Этот медиафайл не защищён. Если выбрать здесь объект, файл будет перемещён в защищённую папку загрузок, а существующие ссылки на него перестанут работать."
+
+#: includes/admin/class-llms-admin-media-protection-attachment-settings.php
+msgid "LifterLMS Media Protection:"
+msgstr "Защита медиафайлов VibeLMS:"
+
+#: includes/admin/class-llms-admin-media-protection-attachment-settings.php
+msgid "Access is restricted to the selected course/membership."
+msgstr "Доступ ограничен выбранным курсом или группой доступа."
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "LifterLMS Permalinks"
+msgstr "Постоянные ссылки VibeLMS"
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "LifterLMS uses custom post types and taxonomies to organize your courses and memberships. You can customize the URLs for these items here."
+msgstr "VibeLMS использует собственные типы записей и таксономии для организации курсов и групп доступа. Здесь можно настроить URL этих объектов."
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Note: The Courses Catalog is currently set to a static page."
+msgstr "Примечание: каталог курсов сейчас настроен как статическая страница."
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "You can edit the page slug to change its location."
+msgstr "Чтобы изменить расположение страницы, отредактируйте её ярлык."
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Note: The Memberships Catalog is currently set to a static page."
+msgstr "Примечание: каталог групп доступа сейчас настроен как статическая страница."
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Earned Certificate Post Type"
+msgstr "Тип записи выданного сертификата"
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Course Tag base"
+msgstr "Основа URL меток курса"
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Membership Category base"
+msgstr "Основа URL категорий групп доступа"
+
+#: includes/admin/class-llms-admin-permalinks.php
+msgid "Membership Tag base"
+msgstr "Основа URL меток групп доступа"
+
+#: includes/admin/class-llms-admin-help-beacon.php
+msgid "LifterLMS Help"
+msgstr "Справка VibeLMS"
+
+#: includes/admin/views/question-match.php
+msgid "Text to Text"
+msgstr "Текст — текст"
+
+#: includes/admin/views/question-match.php
+msgid "Text to Image"
+msgstr "Текст — изображение"
+
+#: includes/admin/views/question-match.php
+msgid "Image to Image"
+msgstr "Изображение — изображение"
+
+#: includes/admin/views/question-match.php
+msgid "Matching Type"
+msgstr "Тип сопоставления"
+
+#: includes/admin/views/metaboxes/view-order-details.php
+msgid "Edit payment information"
+msgstr "Изменить платёжную информацию"
+
+#: includes/admin/views/builder/utilities.php
+msgid "Expand Sections"
+msgstr "Развернуть разделы"
+
+#: includes/admin/views/builder/course.php
+msgid "Edit Course Page"
+msgstr "Редактировать страницу курса"
+
+#: includes/admin/views/builder/settings-fields.php
+msgid "This lesson's content was created outside of the Course Builder."
+msgstr "Содержимое этого урока создано вне конструктора курса."
+
+#: includes/admin/views/builder/lesson.php
+msgid "Edit assignment"
+msgstr "Редактировать задание"
+
+#: includes/admin/views/builder/lesson.php
+msgid "Edit quiz: %s"
+msgstr "Редактировать тест: %s"
+
+#: includes/admin/views/builder/lesson.php
+msgid "Free lesson"
+msgstr "Бесплатный урок"
+
+#: includes/admin/views/builder/lesson.php
+msgid "Drip enabled"
+msgstr "Последовательное открытие включено"
+
+#: includes/admin/views/question-scale.php
+msgid "Minimum Value"
+msgstr "Минимальное значение"
+
+#: includes/admin/views/question-scale.php
+msgid "Minimum Label"
+msgstr "Метка минимального значения"
+
+#: includes/admin/views/question-scale.php
+msgid "Maximum Value"
+msgstr "Максимальное значение"
+
+#: includes/admin/views/question-scale.php
+msgid "Maximum Label"
+msgstr "Метка максимального значения"
+
+#: includes/admin/views/question-scale.php
+#: includes/admin/views/question-blank.php
+msgid "Correct Answer"
+msgstr "Правильный ответ"
+
+#: includes/admin/views/question-blank.php
+msgid "Separate multiple blanks with a pipe '|' character"
+msgstr "Разделяйте несколько пропусков символом вертикальной черты «|»"
+
+#: includes/admin/views/question-blank.php
+msgid "Answers are case-sensitive"
+msgstr "Ответы чувствительны к регистру"
+
+#: includes/admin/views/question-blank.php
+msgid "Answers are not case-sensitive"
+msgstr "Ответы не чувствительны к регистру"
+
+#: includes/admin/views/question-upload.php
+msgid "Restrict File Types"
+msgstr "Ограничить типы файлов"
+
+#: includes/admin/views/question-code.php
+msgid "Language / Syntax"
+msgstr "Язык / синтаксис"
+
+#: includes/admin/class-llms-aq-reporting-tables.php
+msgid "Awaiting Review"
+msgstr "Ожидает проверки"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php
+msgid "Your quiz attempt is awaiting review by your instructor."
+msgstr "Ваша попытка теста ожидает проверки преподавателем."
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php
+msgid "%1$s quiz attempt for \"%2$s\" is awaiting your review"
+msgstr "Попытка теста пользователя %1$s для «%2$s» ожидает вашей проверки"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php
+msgid "Quiz Details"
+msgstr "Данные теста"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php
+msgid "Quiz Submitted"
+msgstr "Тест отправлен"
+
+#: includes/functions/llms.functions.certificate.php
+msgid "Student Display Name"
+msgstr "Отображаемое имя ученика"
+
+#: includes/functions/updates/llms-functions-updates-900.php
+msgid "New Features Available"
+msgstr "Доступны новые функции"
+
+#: includes/functions/updates/llms-functions-updates-900.php
+msgid "We've added spam and security features to protect your website inside the core plugin. You can review the available features on the new %1$sSecurity settings tab%2$s."
+msgstr "В основной плагин добавлены функции защиты от спама и угроз безопасности. Доступные возможности можно посмотреть на новой вкладке %1$s«Безопасность»%2$s."
+
+#: includes/functions/updates/llms-functions-updates-785.php
+msgid "Security Notice"
+msgstr "Уведомление безопасности"
+
+#: includes/functions/llms.functions.order.php
+msgid "This access plan is not available."
+msgstr "Этот тариф доступа недоступен."
+
+#: includes/functions/llms.functions.order.php
+msgid "This product is not available for purchase."
+msgstr "Этот объект недоступен для покупки."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.export.php
+msgid "Your VibeLMS Voucher Export"
+msgstr "Экспорт ваучеров VibeLMS"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.voucher.export.php
+msgid "Please find the attached voucher CSV export for %s."
+msgstr "Во вложении находится экспорт ваучеров в формате CSV для объекта «%s»."
+
+#: includes/admin/tools/class-llms-admin-tool-limited-billing-order-locator.php
+msgid "Expected Payments"
+msgstr "Ожидаемые платежи"
+
+#: includes/admin/tools/class-llms-admin-tool-limited-billing-order-locator.php
+msgid "Total Payments"
+msgstr "Всего платежей"
+
+#: includes/admin/tools/class-llms-admin-tool-limited-billing-order-locator.php
+msgid "Successful Payments"
+msgstr "Успешные платежи"
+
+#: includes/admin/tools/class-llms-admin-tool-limited-billing-order-locator.php
+msgid "Refunded Payments"
+msgstr "Возвращённые платежи"
+
+#: includes/admin/tools/class-llms-admin-tool-limited-billing-order-locator.php
+msgid "Edit Link"
+msgstr "Ссылка редактирования"
+
+#: assets/js/builder/vendor/backbone.trackit.js
+msgid "You have unsaved changes!"
+msgstr "У вас есть несохранённые изменения!"
+
+#: includes/admin/class-llms-admin-events-promo.php
+msgid "Schedule Events for Your Students"
+msgstr "Планируйте события для учеников"
+
+#: includes/admin/tools/class-llms-admin-tool-course-data-lock-eraser.php
+msgid "There is currently %d lock that will be deleted."
+msgstr "Сейчас будет удалена одна блокировка: %d."
+
+#: includes/admin/tools/class-llms-admin-tool-course-data-lock-eraser.php
+msgid "There are currently %d locks that will be deleted."
+msgstr "Сейчас будет удалено блокировок: %d."
+
+#: templates/admin/reporting/tabs/students/courses-course.php
+msgid "Enrollment Updated Date"
+msgstr "Дата обновления зачисления"
+
+#: templates/admin/reporting/tabs/students/courses-course.php
+msgid "Total Course Time"
+msgstr "Общее время на курсе"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.engagement.php
+msgid "Leave blank to apply to all."
+msgstr "Оставьте пустым, чтобы применить ко всем."
+
+#: includes/admin/settings/class.llms.settings.general.php
+msgid "Frequency of Saving Tracked Events"
+msgstr "Частота сохранения отслеживаемых событий"
+
+#: includes/admin/settings/class.llms.settings.general.php
+msgid "Specifies how often tracked events are sent to the server. \"Minimum\" sends only when local storage is almost full (fewer network calls). \"Always\" sends each event immediately (higher accuracy, more server load)."
+msgstr "Определяет, как часто отслеживаемые события отправляются на сервер. «Минимум» отправляет их только при почти заполненном локальном хранилище (меньше сетевых запросов). «Всегда» отправляет каждое событие сразу (выше точность и нагрузка на сервер)."
+
+#: includes/admin/settings/class.llms.settings.accounts.php
+msgid "Enable new user registration on the Student Dashboard."
+msgstr "Разрешить регистрацию новых пользователей в кабинете ученика."
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "Website Security & Spam Prevention"
+msgstr "Безопасность сайта и защита от спама"
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "Requires reCAPTCHA v3 keys."
+msgstr "Требуются ключи reCAPTCHA v3."
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "The minimum score required for reCAPTCHA validation, from 1-10. Google recommends 5 as a default."
+msgstr "Минимальная оценка проверки reCAPTCHA от 1 до 10. Google рекомендует значение 5 по умолчанию."
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "reCAPTCHA Minimum Score"
+msgstr "Минимальная оценка reCAPTCHA"
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "Requires Cloudflare Turnstile keys."
+msgstr "Требуются ключи Cloudflare Turnstile."
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "Turnstile Site Key"
+msgstr "Ключ сайта Turnstile"
+
+#: includes/admin/settings/class.llms.settings.security.php
+msgid "Turnstile Secret Key"
+msgstr "Секретный ключ Turnstile"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Enabling this setting will display lessons in a distraction-free focus mode."
+msgstr "При включении уроки будут отображаться в режиме концентрации без отвлекающих элементов."
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Focus Mode"
+msgstr "Режим концентрации"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Set the maximum width of the lesson content area in focus mode."
+msgstr "Задайте максимальную ширину области содержимого урока в режиме концентрации."
+
+#: includes/functions/llms.functions.template.php
+msgid "Extra Wide (1600px)"
+msgstr "Очень широкая (160 пикс.)"
+
+#: includes/functions/llms.functions.template.php
+msgid "Wide (1180px)"
+msgstr "Широкая (1180 пикс.)"
+
+#: includes/functions/llms.functions.template.php
+msgid "Narrow (768px)"
+msgstr "Узкая (768 пикс.)"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Focus Mode Content Width"
+msgstr "Ширина содержимого в режиме концентрации"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Focus Mode Sidebar Position"
+msgstr "Положение боковой панели в режиме концентрации"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "This page will be shown to students when they complete the course."
+msgstr "Эта страница будет показана ученикам после завершения курса."
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Lesson Time Tracking"
+msgstr "Отслеживание времени уроков"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Track time on all lessons, even those without a minimum time requirement. Useful for reporting purposes."
+msgstr "Отслеживать время на всех уроках, даже если для них не задано минимальное время. Полезно для отчётности."
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Track Time on All Lessons"
+msgstr "Отслеживать время на всех уроках"
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Format for the lesson timer display. Use {CURRENT_TIME} and {MINIMUM_TIME} as placeholders."
+msgstr "Формат отображения таймера урока. Используйте {CURRENT_TIME} и {MINIMUM_TIME} как заполнители."
+
+#: includes/admin/settings/class.llms.settings.courses.php
+msgid "Timer Display Format"
+msgstr "Формат отображения таймера"
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "What type of Access Plan do you want to create?"
+msgstr "Какой тип тарифа доступа вы хотите создать?"
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "Free access that never expires."
+msgstr "Бесплатный доступ без ограничения срока."
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "Grant free access without making this plan publicly available."
+msgstr "Предоставить бесплатный доступ, не публикуя этот тариф."
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "Discount a one-time payment for lifetime access."
+msgstr "Сделать скидку на разовый платёж за бессрочный доступ."
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "Offer lifetime access for a one-time payment with a future start date."
+msgstr "Предложить бессрочный доступ за разовый платёж с будущей датой начала."
+
+#: includes/admin/views/access-plans/access-plan-dialog.php
+msgid "Show all settings to create an access plan from scratch."
+msgstr "Показать все настройки для создания тарифа доступа с нуля."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "General Plan Information"
+msgstr "Общая информация о тарифе"
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Enroll Button Text"
+msgstr "Текст кнопки зачисления"
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "The text displayed on the enrollment button for this access plan."
+msgstr "Текст, отображаемый на кнопке зачисления для этого тарифа доступа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify if the plan is free or paid."
+msgstr "Укажите, является ли тариф бесплатным или платным."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Set the pricing for this access plan."
+msgstr "Задайте стоимость этого тарифа доступа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify the duration of the plan period."
+msgstr "Укажите длительность периода тарифа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "View Payment Gateway Settings"
+msgstr "Открыть настройки платёжного шлюза"
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Enable or disable a free or paid trial period for this plan."
+msgstr "Включите или отключите бесплатный или платный пробный период для этого тарифа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Set the price for the trial period of this plan."
+msgstr "Задайте стоимость пробного периода этого тарифа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify the length of the trial period."
+msgstr "Укажите длительность пробного периода."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Trial Period"
+msgstr "Пробный период"
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Indicate if the plan has a sale."
+msgstr "Укажите, действует ли для тарифа распродажа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Set the discounted price for the sale period."
+msgstr "Задайте цену со скидкой на период распродажи."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify when the sale period starts. "
+msgstr "Укажите дату начала периода распродажи. "
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify when the sale period ends."
+msgstr "Укажите дату окончания периода распродажи."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Select the memberships required to access this plan."
+msgstr "Выберите группы доступа, необходимые для доступа к этому тарифу."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Expiration Settings"
+msgstr "Настройки окончания доступа"
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Specify the exact date when the access from this plan expires."
+msgstr "Укажите точную дату окончания доступа по этому тарифу."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Set the length of the access period for limited-duration plans."
+msgstr "Задайте длительность доступа для тарифов с ограниченным сроком."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Enable this to override membership redirects with the settings below."
+msgstr "Включите, чтобы заменить перенаправления групп доступа настройками ниже."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Select a page to redirect users to after checkout."
+msgstr "Выберите страницу, на которую перенаправлять пользователей после оформления заказа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Enter a specific URL to redirect users to after checkout."
+msgstr "Введите URL страницы, на которую перенаправлять пользователей после оформления заказа."
+
+#: includes/admin/views/access-plans/access-plan.php
+msgid "Set a unique SKU for this access plan for inventory tracking."
+msgstr "Задайте уникальный артикул этого тарифа доступа для учёта."
+
+#: includes/admin/views/access-plans/metabox.php
+msgid "Save All Plans"
+msgstr "Сохранить все тарифы"
+
+#: includes/admin/views/question-long-answer.php
+msgid "Word Count (Minimum)"
+msgstr "Количество слов (минимум)"
+
+#: includes/admin/views/question-long-answer.php
+msgid "Word Count (Maximum)"
+msgstr "Количество слов (максимум)"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.membership.php
+msgid "Display Featured Video on Membership Tile"
+msgstr "Показывать избранное видео на карточке группы доступа"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.membership.php
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Featured Pricing Information"
+msgstr "Информация о стоимости для каталога"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.membership.php
+msgid "Enter information on pricing for this membership, to be displayed on the catalog page."
+msgstr "Введите информацию о стоимости этой группы доступа для отображения на странице каталога."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Enable or disable Focus Mode for lessons in this course."
+msgstr "Включите или отключите режим концентрации для уроков этого курса."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Inherit Global Setting (%s)"
+msgstr "Наследовать общую настройку (%s)"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Enter information on pricing for this course, to be displayed on the catalog page."
+msgstr "Введите информацию о стоимости этого курса для отображения на странице каталога."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Global setting (%s)"
+msgstr "Общая настройка (%s)"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Global setting (none)"
+msgstr "Общая настройка (нет)"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Enable Lesson Drip"
+msgstr "Включить последовательное открытие уроков"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Set global drip restrictions so lesson content becomes available at an interval you define for the course."
+msgstr "Задайте общие ограничения последовательного открытия, чтобы материалы уроков становились доступными через выбранный интервал."
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.course.options.php
+msgid "Number of lessons to make immediately available on course start"
+msgstr "Количество уроков, доступных сразу после начала курса"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.lesson.php
+msgid "Enable Minimum Time"
+msgstr "Включить минимальное время"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.lesson.php
+msgid "Minutes (0-59)"
+msgstr "Минуты (0–59)"
+
+#: includes/admin/post-types/meta-boxes/class.llms.meta.box.lesson.php
+msgid "Seconds (0-59)"
+msgstr "Секунды (0–59)"
+
+#: includes/admin/reporting/tables/llms.table.student.course.php
+msgid "Time on Lesson"
+msgstr "Время на уроке"
+
+#: includes/admin/reporting/tables/llms.table.course.students.php
+msgid "Time in Course"
+msgstr "Время на курсе"
+
+#: includes/admin/reporting/tables/llms.table.quiz.non.attempts.php
+msgid "Students Without Quiz Attempts"
+msgstr "Ученики без попыток теста"
+
+#: includes/admin/reporting/tabs/class.llms.admin.reporting.tab.quizzes.php
+msgid "Students Without Attempts"
+msgstr "Ученики без попыток"
+
+#: includes/admin/reporting/tabs/class.llms.admin.reporting.tab.sales.php
+msgid "Number of new non-refunded orders placed within this period"
+msgstr "Количество новых невозвращённых заказов за этот период"
+
+#: includes/admin/reporting/tabs/class.llms.admin.reporting.tab.sales.php
+msgid "Number of transactions within this period"
+msgstr "Количество транзакций за этот период"
+
+#: includes/admin/reporting/widgets/class.llms.analytics.widget.sales.php
+msgid "# of New Sales"
+msgstr "Новых продаж"
+
+#: includes/admin/reporting/widgets/class.llms.analytics.widget.transactions.php
+msgid "# of Transactions"
+msgstr "Транзакций"
+
+#: includes/class.llms.post-types.php
+msgid "Access Groups"
+msgstr "Группы доступа"
+
+#: includes/class-llms-aq-question-types.php
+msgid "Enter your question... (3 or more underscores make a blank)"
+msgstr "Введите вопрос... (три и более символа подчёркивания создают пропуск)"
+
+#: includes/class-llms-aq-question-types.php
+msgid "Question #%d Upload"
+msgstr "Загрузка вопроса №%d"
+
+#: includes/functions/llms-functions-vibelms-roles.php
+msgid "VibeLMS Student"
+msgstr "Ученик VibeLMS"
+
+#: includes/functions/llms-functions-vibelms-roles.php
+msgid "VibeLMS Observer"
+msgstr "Наблюдатель VibeLMS"
+
+#: includes/beaver-builder/modules/membership-instructors/class.llms.lab.membership.instructors.module.php
+msgid "Membership Instructors"
+msgstr "Преподаватели группы доступа"
+
+#: includes/beaver-builder/modules/membership-instructors/class.llms.lab.membership.instructors.module.php
+msgid "Displays instructors for the current membership."
+msgstr "Показывает преподавателей текущей группы доступа."
+
+#: includes/beaver-builder/modules/course-instructors/class.llms.lab.course.instructors.module.php
+msgid "Displays instructors for the current course."
+msgstr "Показывает преподавателей текущего курса."
+
+#: includes/beaver-builder/modules/course-continue-button/class.llms.lab.course.continue.button.module.php
+msgid "Select the course to display a continue button for. Leave blank for the current course."
+msgstr "Выберите курс для отображения кнопки продолжения. Оставьте пустым для текущего курса."
 
 #: includes/class.llms.post-types.php:680
 msgctxt "Admin menu name"
@@ -6685,7 +7655,7 @@ msgstr "Добавить новое членство"
 
 #: includes/admin/views/dashboard/quick-links.php:17
 msgid "Build LMS Content"
-msgstr "Build LMS Content"
+msgstr "Создание материалов LMS"
 
 #: includes/admin/views/dashboard/blog.php:55
 #: includes/admin/views/dashboard/podcast.php:55
@@ -14257,6 +15227,10 @@ msgstr "Периодическая оплата отменена. Пользов
 #: includes/admin/class-llms-sendwp.php:131
 msgid "Email sending is currently disabled. %1$sVisit the SendWP Settings%2$s to enable sending.."
 msgstr "Отправка email сейчас отключена. %1$sПерейдите в настройки SendWP%2$s, чтобы включить отправку."
+
+#: includes/admin/class-llms-sendwp.php:144
+msgid "Connect SendWP"
+msgstr "Подключить SendWP"
 
 #. Translators: %1$s = Opening anchor tag; %2$s = Closing anchor tag.
 #: includes/admin/class-llms-sendwp.php:124

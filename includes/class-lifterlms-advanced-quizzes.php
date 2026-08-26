@@ -158,10 +158,10 @@ final class LifterLMS_Advanced_Quizzes {
 	 *      WordPress GlotPress server during updates. If you store a custom language file in this
 	 *      directory it will be overwritten during updates.
 	 *
-	 *   3. wp-content/plugins/lifterlms/languages/lifterlms-advanced-quizzes-{LOCALE}.mo
+	 *   3. wp-content/plugins/VibeLMS/languages/lifterlms-advanced-quizzes-{LOCALE}.mo
 	 *
-	 *      This is the the LifterLMS plugin directory. A language file stored in this directory will
-	 *      be removed from the server during a LifterLMS plugin update.
+	 *      This is the bundled VibeLMS plugin directory. A language file stored in this directory will
+	 *      be replaced when the plugin package is updated.
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Use `llms_load_textdomain()`.
@@ -169,7 +169,7 @@ final class LifterLMS_Advanced_Quizzes {
 	 * @return void
 	 */
 	public function load_textdomain() {
-		llms_load_textdomain( 'lifterlms-advanced-quizzes', LLMS_ADVANCED_QUIZZES_PLUGIN_DIR, 'i18n' );
+		llms_load_textdomain( 'lifterlms-advanced-quizzes', LLMS_ADVANCED_QUIZZES_PLUGIN_DIR, 'languages' );
 	}
 
 }

@@ -70,10 +70,10 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.23 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.24 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.23.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, create a test under **VibeLMS → Тесты**, attach it to a lesson, and insert it with the Elementor widget **Тест**. Courses, lessons and tests also support **Редактировать в Elementor**; for a course, the Elementor Finder contains **Открыть конструктор курса VibeLMS**, which opens the existing `llms-course-builder` in a separate tab. The widget also has a **Стили VibeLMS** tab with typography, colors, background, responsive spacing, border and shadow controls. Configure the assessment rule and language groups under **VibeLMS → Настройки → Общие**: assign one access group to Русский and one to Казахский, and new participants will be enrolled automatically after choosing their language in the registration form. Review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.24.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. Its PHP and browser messages are included in the Russian catalog. After activation, create a test under **VibeLMS → Тесты**, attach it to a lesson, and insert it with the Elementor widget **Тест**. Courses, lessons and tests also support **Редактировать в Elementor**; for a course, the Elementor Finder contains **Открыть конструктор курса VibeLMS**, which opens the existing `llms-course-builder` in a separate tab. The widget also has a **Стили VibeLMS** tab with typography, colors, background, responsive spacing, border and shadow controls. Configure the assessment rule and language groups under **VibeLMS → Настройки → Общие**: assign one access group to Русский and one to Казахский, and new participants will be enrolled automatically after choosing their language in the registration form. Review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
 
 
 ### Перенос между сайтами

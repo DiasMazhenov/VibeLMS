@@ -136,9 +136,9 @@ class LLMS_Meta_Box_Voucher extends LLMS_Admin_Metabox {
 				<thead>
 				<tr>
 					<th></th>
-					<th>Code</th>
-					<th>Uses</th>
-					<th>Actions</th>
+					<th><?php esc_html_e( 'Code', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Uses', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Actions', 'lifterlms' ); ?></th>
 				</tr>
 				</thead>
 
@@ -152,11 +152,11 @@ class LLMS_Meta_Box_Voucher extends LLMS_Admin_Metabox {
 						<tr>
 							<td></td>
 							<td>
-								<input type="text" maxlength="20" placeholder="Code" value="<?php echo esc_attr( $code->code ); ?>" name="llms_voucher_code[]">
+								<input type="text" maxlength="20" placeholder="<?php echo esc_attr__( 'Code', 'lifterlms' ); ?>" value="<?php echo esc_attr( $code->code ); ?>" name="llms_voucher_code[]">
 								<input type="hidden" name="llms_voucher_code_id[]" value="<?php echo esc_attr( $code->id ); ?>">
 							</td>
 							<td>
-								<span><?php echo esc_html( $code->used ); ?> / </span><input type="number" min="1" value="<?php echo esc_attr( $code->redemption_count ); ?>" placeholder="Uses" class="llms-voucher-uses" name="llms_voucher_uses[]">
+								<span><?php echo esc_html( $code->used ); ?> / </span><input type="number" min="1" value="<?php echo esc_attr( $code->redemption_count ); ?>" placeholder="<?php echo esc_attr__( 'Uses', 'lifterlms' ); ?>" class="llms-voucher-uses" name="llms_voucher_uses[]">
 							</td>
 							<td>
 								<a href="#" data-id="<?php echo esc_attr( $code->id ); ?>" class="llms-voucher-delete">
@@ -173,9 +173,9 @@ class LLMS_Meta_Box_Voucher extends LLMS_Admin_Metabox {
 			</table>
 
 			<div class="llms-voucher-add-codes">
-				<p>Add <input type="number" max="50" placeholder="#" id="llms_voucher_add_quantity"> new code(s) with <input
-						type="number" placeholder="#" id="llms_voucher_add_uses"> use(s) per code
-					<button id="llms_voucher_add_codes" class="button-primary">Add</button>
+				<p><?php esc_html_e( 'Add', 'lifterlms' ); ?> <input type="number" max="50" placeholder="#" id="llms_voucher_add_quantity"> <?php esc_html_e( 'new code(s) with', 'lifterlms' ); ?> <input
+						type="number" placeholder="#" id="llms_voucher_add_uses"> <?php esc_html_e( 'use(s) per code', 'lifterlms' ); ?>
+					<button id="llms_voucher_add_codes" class="button-primary"><?php esc_html_e( 'Add', 'lifterlms' ); ?></button>
 				</p>
 			</div>
 
@@ -209,10 +209,10 @@ class LLMS_Meta_Box_Voucher extends LLMS_Admin_Metabox {
 
 				<thead>
 				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Redemption Date</th>
-					<th>Code</th>
+					<th><?php esc_html_e( 'Name', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Email', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Redemption Date', 'lifterlms' ); ?></th>
+					<th><?php esc_html_e( 'Code', 'lifterlms' ); ?></th>
 				</tr>
 				</thead>
 

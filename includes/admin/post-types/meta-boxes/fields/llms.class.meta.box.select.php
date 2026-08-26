@@ -75,7 +75,7 @@ class LLMS_Metabox_Select_Field extends LLMS_Metabox_Field implements Meta_Box_F
 			?>
 			>
 			<?php if ( $allow_null ) : ?>
-				<option value="">None</option>
+				<option value=""><?php esc_html_e( 'None', 'lifterlms' ); ?></option>
 			<?php endif; ?>
 
 			<?php if ( isset( $this->field['value'] ) ) : ?>

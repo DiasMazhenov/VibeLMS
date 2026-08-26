@@ -60,11 +60,10 @@ class LLMS_Metabox_Image_Field extends LLMS_Metabox_Field implements Meta_Box_Fi
 		?>
 				<img src="<?php echo esc_url( $image ); ?>" id="<?php echo esc_attr( $this->field['id'] ); ?>" class="<?php echo esc_attr( $imgclass ); ?>" /><br />
 				<input name="<?php echo esc_attr( $this->field['id'] ); ?>" id="<?php echo esc_attr( $this->field['id'] ); ?>" type="hidden" class="upload_<?php echo esc_attr( $this->field['class'] ); ?>_image" type="text" size="36" name="ad_image" value="<?php echo esc_attr( $this->meta ); ?>" />
-				<input id="<?php echo esc_attr( $this->field['id'] ); ?>" class="button <?php echo esc_attr( $this->field['class'] ); ?>_image_button" type="button" value="Upload Image" />
-				<small> <a href="#" id="<?php echo esc_attr( $this->field['id'] ); ?>" class="llms_<?php echo esc_attr( $this->field['class'] ); ?>_clear_image_button">Remove Image</a></small>
+				<input id="<?php echo esc_attr( $this->field['id'] ); ?>" class="button <?php echo esc_attr( $this->field['class'] ); ?>_image_button" type="button" value="<?php echo esc_attr__( 'Upload Image', 'lifterlms' ); ?>" />
+				<small> <a href="#" id="<?php echo esc_attr( $this->field['id'] ); ?>" class="llms_<?php echo esc_attr( $this->field['class'] ); ?>_clear_image_button"><?php esc_html_e( 'Remove Image', 'lifterlms' ); ?></a></small>
 				<br /><span class="description"><?php echo wp_kses_post( $this->field['desc'] ); ?></span>
 		<?php
 		parent::close_output();
 	}
 }
-

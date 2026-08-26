@@ -20,14 +20,14 @@
 				if ( parseInt( qty ) > 0 && parseInt( uses ) > 0 ) {
 
 					if ( qty > 50 ) {
-						alert( "You can only generate 50 rows at a time" );
+						alert( LLMS.l10n.translate( "You can only generate 50 rows at a time" ) );
 						return;
 					}
 
 					codesAddedSinceLastSave += parseInt( qty );
 
 					if ( codesAddedSinceLastSave > 50 ) {
-						alert( "Please save before adding any more codes, limit is 50 at a time" );
+						alert( LLMS.l10n.translate( "Please save before adding any more codes, limit is 50 at a time" ) );
 						codesAddedSinceLastSave -= parseInt( qty );
 						return;
 					}
@@ -36,10 +36,10 @@
 						html += '<tr>' +
 							'<td></td>' +
 							'<td>' +
-							'<input type="text" maxlength="20" placeholder="Code" value="' + randomizeCode() + '" name="llms_voucher_code[]">' +
+							'<input type="text" maxlength="20" placeholder="' + LLMS.l10n.translate( 'Code' ) + '" value="' + randomizeCode() + '" name="llms_voucher_code[]">' +
 							'<input type="hidden" name="llms_voucher_code_id[]" value="0">' +
 							'</td>' +
-							'<td><span>0 / </span><input type="text" placeholder="Uses" value="' + uses + '" class="llms-voucher-uses" name="llms_voucher_uses[]"></td>' +
+							'<td><span>0 / </span><input type="text" placeholder="' + LLMS.l10n.translate( 'Uses' ) + '" value="' + uses + '" class="llms-voucher-uses" name="llms_voucher_uses[]"></td>' +
 							'<td><a href="#" class="llms-voucher-delete">' + delete_icon + '</a></td>' +
 							'</tr>';
 					}
@@ -68,7 +68,7 @@
 		} );
 
 		window.onbeforeunload = function() {
-			return changeNotSaved ? "If you leave this page you will lose your unsaved changes." : null;
+			return changeNotSaved ? LLMS.l10n.translate( "If you leave this page you will lose your unsaved changes." ) : null;
 		};
 
 		$( 'input[type=submit][name=publish], input[type=submit][name=save]' ).click( function ( e ) {
@@ -86,13 +86,13 @@
 			} );
 
 			if ( duplicate ) {
-				alert( 'Please make sure that there are no duplicate voucher codes.' );
+				alert( LLMS.l10n.translate( 'Please make sure that there are no duplicate voucher codes.' ) );
 				return false;
 			}
 
 			// If course or membership is not selected, don't allow user to save.
 			if ( ! $( '#_llms_voucher_courses' ).val().length && ! $( '#_llms_voucher_membership' ).val().length ) {
-				alert( 'Please select course or membership before saving.' );
+				alert( LLMS.l10n.translate( 'Please select course or membership before saving.' ) );
 				return false;
 			}
 
@@ -181,7 +181,7 @@ function llms_on_voucher_duplicate( results ) {
 		for ( var i = 0; i < results.length; i++ ) {
 			jQuery( 'input[value="' + results[i].code + '"]' ).css( 'background-color', 'rgba(226, 96, 73, 0.6)' );
 		}
-		alert( 'Please make sure that there are no duplicate voucher codes.' );
+		alert( LLMS.l10n.translate( 'Please make sure that there are no duplicate voucher codes.' ) );
 	} else {
 		jQuery( "#post" ).submit();
 	}

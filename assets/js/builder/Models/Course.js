@@ -31,7 +31,7 @@ define( [ 'Collections/Sections', 'Models/_Relationships', 'Models/_Utilities' ]
 			return {
 				edit_url: '',
 				sections: [],
-				title: 'New Course',
+				title: LLMS.l10n.translate( 'New Course' ),
 				type: 'course',
 				view_url: '',
 			}

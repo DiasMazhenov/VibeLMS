@@ -1,0 +1,183 @@
+# Copyright (C) 2026 Mazhenov Design
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: VibeLMS Advanced Quizzes 0.0.24\n"
+"Report-Msgid-Bugs-To: https://mazhenov.kz/\n"
+"Last-Translator: Mazhenov Design\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"PO-Revision-Date: 2026-08-27 00:00:00+0000\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: lifterlms-advanced-quizzes.php
+msgid "LifterLMS Advanced Quizzes"
+msgstr "VibeLMS: расширенные тесты"
+
+#: lifterlms-advanced-quizzes.php
+msgid "Add advanced question types like essays, uploads, and more to LifterLMS quizzes"
+msgstr "Добавляет в тесты VibeLMS расширенные типы вопросов: эссе, загрузку файлов и другие возможности"
+
+#: lifterlms-advanced-quizzes.php
+msgid "LifterLMS"
+msgstr "Mazhenov Design"
+
+#: includes/admin/class-llms-aq-reporting-tables.php:53
+msgid "Awaiting Review"
+msgstr "На проверке"
+
+#: includes/admin/views/question-blank.php:18
+#: includes/admin/views/question-scale.php:46
+msgid "Correct Answer"
+msgstr "Правильный ответ"
+
+#: includes/admin/views/question-blank.php:24
+msgid "Separate multiple blanks with a pipe '|' character"
+msgstr "Разделяйте несколько пропусков символом «|»"
+
+#: includes/admin/views/question-blank.php:31
+msgid "Answers are case-sensitive"
+msgstr "Ответы чувствительны к регистру"
+
+#: includes/admin/views/question-blank.php:33
+msgid "Answers are not case-sensitive"
+msgstr "Ответы не чувствительны к регистру"
+
+#: includes/admin/views/question-code.php:20
+msgid "Language / Syntax"
+msgstr "Язык / синтаксис"
+
+#: includes/admin/views/question-long-answer.php:19
+msgid "Word Count (Minimum)"
+msgstr "Количество слов (минимум)"
+
+#: includes/admin/views/question-long-answer.php:35
+msgid "Word Count (Maximum)"
+msgstr "Количество слов (максимум)"
+
+#: includes/admin/views/question-match.php:14
+msgid "Text to Text"
+msgstr "Текст — текст"
+
+#: includes/admin/views/question-match.php:15
+msgid "Text to Image"
+msgstr "Текст — изображение"
+
+#: includes/admin/views/question-match.php:16
+msgid "Image to Image"
+msgstr "Изображение — изображение"
+
+#: includes/admin/views/question-match.php:27
+msgid "Matching Type"
+msgstr "Тип сопоставления"
+
+#: includes/admin/views/question-scale.php:17
+msgid "Minimum Value"
+msgstr "Минимальное значение"
+
+#: includes/admin/views/question-scale.php:24
+msgid "Minimum Label"
+msgstr "Подпись минимума"
+
+#: includes/admin/views/question-scale.php:29
+msgid "Maximum Value"
+msgstr "Максимальное значение"
+
+#: includes/admin/views/question-scale.php:36
+msgid "Maximum Label"
+msgstr "Подпись максимума"
+
+#: includes/admin/views/question-upload.php:19
+msgid "Restrict File Types"
+msgstr "Ограничить типы файлов"
+
+#: includes/class-llms-aq-ajax.php:76
+msgid "%1$s answer by %2$s"
+msgstr "Ответ «%1$s» от %2$s"
+
+#: includes/class-llms-aq-ajax.php:114
+msgid "Missing required parameter: \"%s\""
+msgstr "Отсутствует обязательный параметр: «%s»"
+
+#: includes/class-llms-aq-ajax.php:120
+msgid "Invalid value submitted for parameter: \"%s\""
+msgstr "Недопустимое значение параметра: «%s»"
+
+#: includes/class-llms-aq-ajax.php:172
+msgid "Invalid user."
+msgstr "Неверный пользователь."
+
+#: includes/class-llms-aq-ajax.php:181
+msgid "Invalid quiz attempt."
+msgstr "Неверная попытка пройти тест."
+
+#: includes/class-llms-aq-ajax.php:187
+msgid "Invalid question."
+msgstr "Неверный вопрос."
+
+#: includes/class-llms-aq-ajax.php:191
+msgid "Invalid filetype."
+msgstr "Недопустимый тип файла."
+
+#: includes/class-llms-aq-ajax.php:200
+msgid "Invalid attempt."
+msgstr "Неверная попытка."
+
+#: includes/class-llms-aq-ajax.php:212
+msgid "Success"
+msgstr "Успешно"
+
+#: includes/class-llms-aq-question-bank.php:339
+msgid "Include in all quiz variations"
+msgstr "Включить во все варианты теста"
+
+#: includes/class-llms-aq-question-types.php:176
+msgid "Enter your question... (3 or more underscores make a blank)"
+msgstr "Введите вопрос... (три и более символа подчёркивания создают пропуск)"
+
+#: includes/class-llms-aq-question-types.php:305
+msgid "Question #%d Upload"
+msgstr "Загрузка файла для вопроса №%d"
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:114
+msgid "Attempt #%1$d for Quiz \"%2$s\" by %3$s"
+msgstr "Попытка №%1$d пройти тест «%2$s» от %3$s"
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:124
+msgid "Select a passed quiz"
+msgstr "Выберите пройденный тест"
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:128
+msgid "Send yourself a test notification using information from the selected quiz."
+msgstr "Отправьте себе тестовое уведомление, используя данные выбранного теста."
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:130
+msgid "Send a Test"
+msgstr "Отправить тестовое уведомление"
+
+#: includes/notifications/class-llms-aq-notification-controller-quiz-awaiting-review.php:180
+msgid "Quizzes: Quiz Awaiting Review"
+msgstr "Тесты: тест ожидает проверки"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:38
+msgid "Your quiz attempt is awaiting review by your instructor."
+msgstr "Ваша попытка пройти тест ожидает проверки преподавателем."
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:62
+msgid "%1$s quiz attempt for \"%2$s\" is awaiting your review"
+msgstr "Попытка пройти тест пользователем «%1$s» для «%2$s» ожидает вашей проверки"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:74
+msgid "Quiz Details"
+msgstr "Сведения о тесте"
+
+#: includes/notifications/class-llms-aq-notification-view-quiz-awaiting-review.php:76
+msgid "Quiz Submitted"
+msgstr "Тест отправлен"
+
+#: templates/quiz/questions/content-upload.php:26
+msgid "Select or drop a file..."
+msgstr "Выберите файл или перетащите его сюда…"

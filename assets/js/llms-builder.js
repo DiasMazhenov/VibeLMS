@@ -1957,7 +1957,7 @@ define( 'jquery',[],function() {
 		// between saves.
 		startTracking: function() {
 			this._unsavedConfig = _.extend({}, {
-				prompt: 'You have unsaved changes!',
+				prompt: window.LLMS && LLMS.l10n ? LLMS.l10n.translate( 'You have unsaved changes!' ) : 'You have unsaved changes!',
 				unloadRouterPrompt: false,
 				unloadWindowPrompt: false
 			}, this.unsaved || {});
@@ -4902,7 +4902,7 @@ define( 'Models/Course',[ 'Collections/Sections', 'Models/_Relationships', 'Mode
 			return {
 				edit_url: '',
 				sections: [],
-				title: 'New Course',
+				title: LLMS.l10n.translate( 'New Course' ),
 				type: 'course',
 				view_url: '',
 			}

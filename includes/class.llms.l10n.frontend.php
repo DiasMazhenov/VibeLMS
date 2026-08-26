@@ -194,6 +194,10 @@ class LLMS_L10n_JS {
 			'Question Bank' => esc_html__( 'Question Bank', 'lifterlms' ),
 			'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)' => esc_html__( 'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)', 'lifterlms' ),
 			'Get LifterLMS Advanced Quizzes' => esc_html__( 'Get LifterLMS Advanced Quizzes', 'lifterlms' ),
+			'Enter the total number of questions to be included in all quiz variations.' => esc_html__( 'Enter the total number of questions to be included in all quiz variations.', 'lifterlms' ),
+			'Number of questions per type' => esc_html__( 'Number of questions per type', 'lifterlms' ),
+			'Select the minimum number of questions for each type to be included in all quiz variations. The total number should not be greater than the total number of questions to be included in all variations. 0 stays for unlimited.' => esc_html__( 'Select the minimum number of questions for each type to be included in all quiz variations. The total number should not be greater than the total number of questions to be included in all variations. 0 stays for unlimited.', 'lifterlms' ),
+			'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions.' => esc_html__( 'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions.', 'lifterlms' ),
 
 			/**
 			 * File: assets/js/builder/Views/_Detachable.js.
@@ -358,6 +362,18 @@ class LLMS_L10n_JS {
 			'Question Bank' => esc_html__( 'Question Bank', 'lifterlms' ),
 			'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)' => esc_html__( 'A question bank helps prevent cheating and reinforces learning by allowing instructors to create assessments with randomized questions pulled from a bank of questions. (Available in Advanced Quizzes addon)', 'lifterlms' ),
 			'Get LifterLMS Advanced Quizzes' => esc_html__( 'Get LifterLMS Advanced Quizzes', 'lifterlms' ),
+			'You can only generate 50 rows at a time' => esc_html__( 'You can only generate 50 rows at a time', 'lifterlms' ),
+			'Please save before adding any more codes, limit is 50 at a time' => esc_html__( 'Please save before adding any more codes, limit is 50 at a time', 'lifterlms' ),
+			'Please make sure that there are no duplicate voucher codes.' => esc_html__( 'Please make sure that there are no duplicate voucher codes.', 'lifterlms' ),
+			'Please select course or membership before saving.' => esc_html__( 'Please select course or membership before saving.', 'lifterlms' ),
+			'If you leave this page you will lose your unsaved changes.' => esc_html__( 'If you leave this page you will lose your unsaved changes.', 'lifterlms' ),
+			'Code' => esc_html__( 'Code', 'lifterlms' ),
+			'Uses' => esc_html__( 'Uses', 'lifterlms' ),
+			'Choose Achievement Image' => esc_html__( 'Choose Achievement Image', 'lifterlms' ),
+			'Choose Achievement' => esc_html__( 'Choose Achievement', 'lifterlms' ),
+			'Choose Certificate Image' => esc_html__( 'Choose Certificate Image', 'lifterlms' ),
+			'Choose Certificate' => esc_html__( 'Choose Certificate', 'lifterlms' ),
+			'You have unsaved changes!' => esc_html__( 'You have unsaved changes!', 'lifterlms' ),
 			'New Quiz' => esc_html__( 'New Quiz', 'lifterlms' ),
 			'quizzes' => esc_html__( 'quizzes', 'lifterlms' ),
 			'quiz' => esc_html__( 'quiz', 'lifterlms' ),
@@ -543,6 +559,7 @@ class LLMS_L10n_JS {
 			'Medium' => esc_html__( 'Medium', 'lifterlms' ),
 			'Strong' => esc_html__( 'Strong', 'lifterlms' ),
 			'Mismatch' => esc_html__( 'Mismatch', 'lifterlms' ),
+			'Hide Password' => esc_html__( 'Hide Password', 'lifterlms' ),
 			'Members Only Pricing' => esc_html__( 'Members Only Pricing', 'lifterlms' ),
 			'Are you sure you want to cancel your subscription?' => esc_html__( 'Are you sure you want to cancel your subscription?', 'lifterlms' ),
 
@@ -570,6 +587,15 @@ class LLMS_L10n_JS {
 			'Copy this code and paste it into the desired area' => esc_html__( 'Copy this code and paste it into the desired area', 'lifterlms' ),
 			'Edit' => esc_html__( 'Edit', 'lifterlms' ),
 			'View' => esc_html__( 'View', 'lifterlms' ),
+			'Operation timed out, please try again' => esc_html__( 'Operation timed out, please try again', 'lifterlms' ),
+			'Currently protected by:' => esc_html__( 'Currently protected by:', 'lifterlms' ),
+			'Select Course or Membership' => esc_html__( 'Select Course or Membership', 'lifterlms' ),
+			'Select a Course or Membership to protect this %s:' => esc_html__( 'Select a Course or Membership to protect this %s:', 'lifterlms' ),
+			'Protect %s' => esc_html__( 'Protect %s', 'lifterlms' ),
+			'image' => esc_html__( 'image', 'lifterlms' ),
+			'audio' => esc_html__( 'audio', 'lifterlms' ),
+			'video' => esc_html__( 'video', 'lifterlms' ),
+			'file' => esc_html__( 'file', 'lifterlms' ),
 
 		) );
 		// phpcs:enable

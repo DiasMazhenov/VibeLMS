@@ -87,12 +87,12 @@ class LLMS_Admin_Tool_Limited_Billing_Order_Locator extends LLMS_Abstract_Admin_
 		array_unshift(
 			$csv,
 			array(
-				'Order ID',
-				'Expected Payments',
-				'Total Payments',
-				'Successful Payments',
-				'Refunded Payments',
-				'Edit Link',
+				__( 'Order ID', 'lifterlms' ),
+				__( 'Expected Payments', 'lifterlms' ),
+				__( 'Total Payments', 'lifterlms' ),
+				__( 'Successful Payments', 'lifterlms' ),
+				__( 'Refunded Payments', 'lifterlms' ),
+				__( 'Edit Link', 'lifterlms' ),
 			)
 		);
 

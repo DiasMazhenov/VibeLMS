@@ -31,7 +31,7 @@ class LLMS_Post_Handler {
 	public static function create( $type = 'post', $title = '', $excerpt = '' ) {
 
 		if ( empty( $title ) ) {
-			$title = 'Section 1';
+			$title = __( 'Section 1', 'lifterlms' );
 		}
 
 		// Create section post.
@@ -122,7 +122,7 @@ class LLMS_Post_Handler {
 		$sections      = $course->get_sections( 'posts' );
 		$section_order = count( $sections ) + 1;
 
-		$title = isset( $title ) ? $title : 'New Section';
+		$title = isset( $title ) ? $title : __( 'New Section', 'lifterlms' );
 
 		$post_id = self::create( 'section', $title );
 
@@ -161,7 +161,7 @@ class LLMS_Post_Handler {
 		$section      = new LLMS_Section( $section_id );
 		$lesson_order = $section->get_next_available_lesson_order();
 
-		$title = isset( $title ) ? $title : 'New Lesson';
+		$title = isset( $title ) ? $title : __( 'New Lesson', 'lifterlms' );
 
 		$post_id = self::create( 'lesson', $title, $excerpt );
 
