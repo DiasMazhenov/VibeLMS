@@ -42,7 +42,8 @@ Implemented:
 - `vibelms_student` and `vibelms_observer` roles with restricted capabilities;
 - Russian admin interface and VibeLMS branding;
 - bundled Advanced Quizzes with question bank and advanced question types;
-- Elementor widgets for courses and employee identification;
+- Elementor widgets for courses, lessons, tests, test results, certificates, profiles and access groups, with manual course selection;
+- standalone test library and constructor under **VibeLMS → Тесты**, using the existing LifterLMS quiz/question models;
 - configurable assessment rule, identity form, protected attempt journal and CSV export;
 - optional automatic certificate award after a successful assessment;
 - complete VibeLMS transfer archive for settings, courses, users, tests, progress, reports and local media;
@@ -68,10 +69,10 @@ The GitHub tree includes the runtime Composer dependencies required by WordPress
 
 ```bash
 composer install --no-dev --no-scripts --no-interaction --prefer-dist
-VIBELMS_PACKAGE_VERSION=0.0.18 ./scripts/build-installable-package.sh
+VIBELMS_PACKAGE_VERSION=0.0.19 ./scripts/build-installable-package.sh
 ```
 
-The resulting `dist/vibelms-0.0.18.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, configure the assessment rule under **VibeLMS → Настройки → Общие**, test the employee identity widget, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
+The resulting `dist/vibelms-0.0.19.zip` can be uploaded in **Plugins → Add New → Upload Plugin** on a staging WordPress site. Advanced Quizzes is bundled into VibeLMS, so a separate paid add-on is not required. After activation, create a test under **VibeLMS → Тесты**, attach it to a lesson, and insert it with the Elementor widget **Тест**. Configure the assessment rule under **VibeLMS → Настройки → Общие**, review **Журнал тестирования**, and check **VibeLMS → Статус → Логи** when `VIBELMS_DEBUG` is enabled.
 
 
 ### Перенос между сайтами

@@ -7,22 +7,24 @@ class LLMS_Elementor_Widget_Course_Meta_Info extends LLMS_Elementor_Widget_Base 
 	}
 
 	public function get_title() {
-		return __( 'Course Meta Information', 'lifterlms' );
+		return __( 'Информация о курсе', 'lifterlms' );
 	}
 
 	protected function _register_controls() {
 		$this->start_controls_section(
 			'content_section',
 			array(
-				'label' => __( 'Course Meta Information', 'lifterlms' ),
+				'label' => __( 'Информация о курсе', 'lifterlms' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			)
 		);
 
+		$this->add_course_selector_control();
+
 		$this->add_control(
 			'description',
 			array(
-				'label'     => esc_html__( 'Show current course meta information.', 'lifterlms' ),
+				'label'     => esc_html__( 'Показывает метаинформацию текущего курса.', 'lifterlms' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			)
@@ -34,8 +36,6 @@ class LLMS_Elementor_Widget_Course_Meta_Info extends LLMS_Elementor_Widget_Base 
 	}
 
 	protected function render() {
-		$settings = $this->get_settings_for_display();
-
-		echo do_shortcode( '[lifterlms_course_meta_info]' );
+		echo $this->render_course_shortcode( 'lifterlms_course_meta_info' );
 	}
 }

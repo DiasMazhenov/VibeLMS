@@ -1,6 +1,19 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.19 - 2026-08-26
+---------------------------
+
+##### New Features
+
++ Added course selection to reusable Elementor course widgets and a VibeLMS test widget.
++ Added a standalone **VibeLMS → Тесты** constructor for reusable quizzes and multiple-choice questions.
++ Added universal Elementor widgets for course cards/catalogs, lesson lists, quiz results, certificates, employee profiles, student dashboard and access groups.
+
+##### Compatibility
+
++ Existing LLMS quiz, question, lesson and Elementor document identifiers remain unchanged.
+
 v10.2.0 - 2026-08-24
 --------------------
 

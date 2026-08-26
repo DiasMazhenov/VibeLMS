@@ -7,22 +7,24 @@ class LLMS_Elementor_Widget_Course_Instructors extends LLMS_Elementor_Widget_Bas
 	}
 
 	public function get_title() {
-		return __( 'Course Instructors', 'lifterlms' );
+		return __( 'Преподаватели курса', 'lifterlms' );
 	}
 
 	protected function _register_controls() {
 		$this->start_controls_section(
 			'content_section',
 			array(
-				'label' => __( 'Course Instructors', 'lifterlms' ),
+				'label' => __( 'Преподаватели курса', 'lifterlms' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			)
 		);
 
+		$this->add_course_selector_control();
+
 		$this->add_control(
 			'description',
 			array(
-				'label'     => esc_html__( 'Show current course instructors.', 'lifterlms' ),
+				'label'     => esc_html__( 'Показывает преподавателей текущего курса.', 'lifterlms' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			)
@@ -34,8 +36,6 @@ class LLMS_Elementor_Widget_Course_Instructors extends LLMS_Elementor_Widget_Bas
 	}
 
 	protected function render() {
-		$settings = $this->get_settings_for_display();
-
-		echo do_shortcode( '[lifterlms_course_instructors]' );
+		echo $this->render_course_shortcode( 'lifterlms_course_instructors' );
 	}
 }

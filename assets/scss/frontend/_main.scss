@@ -71,6 +71,89 @@
   text-align: center;
 }
 
+// VibeLMS Elementor widgets.
+.vibelms-elementor-context-notice {
+  border: 1px dashed $color-blue;
+  border-radius: 6px;
+  color: $color-blue;
+  padding: 16px;
+  text-align: center;
+}
+
+.vibelms-quiz-builder-widget .llms-quiz-wrapper,
+.vibelms-quiz-widget .llms-quiz-wrapper {
+	margin: 0;
+}
+
+.vibelms-course-card {
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.vibelms-course-card__image,
+.vibelms-course-card__image img {
+  display: block;
+  width: 100%;
+}
+
+.vibelms-course-card__image img {
+  height: auto;
+}
+
+.vibelms-course-card__content {
+  padding: 20px;
+}
+
+.vibelms-course-card__title {
+  margin-top: 0;
+}
+
+.vibelms-course-card__link {
+  display: inline-block;
+}
+
+.vibelms-lesson-list__items {
+  margin: 0;
+  padding-right: 20px;
+}
+
+.vibelms-quiz-results__table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.vibelms-quiz-results__table th,
+.vibelms-quiz-results__table td {
+  border-bottom: 1px solid #dedede;
+  padding: 10px;
+  text-align: right;
+}
+
+.vibelms-student-profile {
+  margin: 0;
+}
+
+.vibelms-student-profile__row {
+  border-bottom: 1px solid #dedede;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.vibelms-student-profile__row dt,
+.vibelms-student-profile__row dd {
+  margin: 0;
+}
+
+@media screen and (max-width: $break-medium) {
+  .vibelms-student-profile__row {
+    display: block;
+  }
+}
+
 #main-content .llms-payment-options p {
   margin: 0;
   font-size: 16px;

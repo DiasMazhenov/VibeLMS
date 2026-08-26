@@ -7,22 +7,24 @@ class LLMS_Elementor_Widget_Course_Syllabus extends LLMS_Elementor_Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'Course Syllabus', 'lifterlms' );
+		return __( 'Содержание курса', 'lifterlms' );
 	}
 
 	protected function _register_controls() {
 		$this->start_controls_section(
 			'content_section',
 			array(
-				'label' => __( 'Course Syllabus', 'lifterlms' ),
+				'label' => __( 'Содержание курса', 'lifterlms' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			)
 		);
 
+		$this->add_course_selector_control();
+
 		$this->add_control(
 			'description',
 			array(
-				'label'     => esc_html__( 'Show course syllabus for the current course.', 'lifterlms' ),
+				'label'     => esc_html__( 'Показывает содержание текущего курса.', 'lifterlms' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			)
@@ -34,8 +36,6 @@ class LLMS_Elementor_Widget_Course_Syllabus extends LLMS_Elementor_Widget_Base {
 	}
 
 	protected function render() {
-		$settings = $this->get_settings_for_display();
-
-		echo do_shortcode( '[lifterlms_course_syllabus]' );
+		echo $this->render_course_shortcode( 'lifterlms_course_syllabus' );
 	}
 }

@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.18`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.19`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -56,6 +56,10 @@ The Russian catalog now translates the True/False labels as `Верно`, `Не�
 
 The Advanced Questions buttons are native VibeLMS functionality. Their core definitions now set `upgrade` to `false` directly, so the course builder cannot render them as disabled premium upsells even if a stale cache or delayed add-on initialization is present.
 
+The Elementor integration now exposes a reusable course selector on every course-specific widget, while preserving automatic context on course, lesson and quiz templates. The universal widget set includes course cards/catalogs, lesson lists, quiz rendering, quiz results, certificates, employee profiles, student dashboard and access groups. The `Тест` widget renders a selected quiz through the existing LifterLMS content pipeline and supports a selected course fallback.
+
+VibeLMS now has a separate **VibeLMS → Тесты** constructor. It creates and edits reusable quizzes, common multiple-choice questions and answers, passing score, attempts, time limit, results and optional lesson attachment using the existing LLMS models. A standard playable attempt requires attaching the quiz to a lesson; the Elementor widget can select the quiz directly for a reusable layout. Advanced question types remain editable in the full course builder, so the standalone screen does not overwrite them.
+
 ## Repository
 
 - Local path: `/Users/diasmazhenov/vibecode/VibeLMS`
@@ -68,7 +72,7 @@ The Advanced Questions buttons are native VibeLMS functionality. Their core defi
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint for the transfer module and main plugin, shell syntax, `git diff --check`, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. The Russian translation catalogs pass `msgfmt --check`. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.18.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.19.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 

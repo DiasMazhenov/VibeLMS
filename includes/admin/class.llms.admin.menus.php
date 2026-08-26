@@ -23,6 +23,13 @@ defined( 'ABSPATH' ) || exit;
 class LLMS_Admin_Menus {
 
 	/**
+	 * Standalone VibeLMS quiz builder.
+	 *
+	 * @var LLMS_Admin_Quiz_Builder
+	 */
+	private $quiz_builder;
+
+	/**
 	 * Constructor
 	 *
 	 * @since 1.0.0
@@ -31,6 +38,7 @@ class LLMS_Admin_Menus {
 	 * @return void
 	 */
 	public function __construct() {
+		$this->quiz_builder = new LLMS_Admin_Quiz_Builder();
 
 		add_action( 'admin_init', array( $this, 'status_page_actions' ) );
 		add_action( 'admin_init', array( $this, 'builder_page_actions' ) );
@@ -91,7 +99,7 @@ class LLMS_Admin_Menus {
 		if ( isset( $submenu['lifterlms'] ) ) {
 
 			// Our desired order.
-			$order = array( 'llms-dashboard', 'llms-settings', 'llms-reporting', 'edit.php?post_type=llms_form' );
+			$order = array( 'llms-dashboard', 'llms-quiz-builder', 'llms-settings', 'llms-reporting', 'edit.php?post_type=llms_form' );
 
 			// Temporary array to hold our submenu items.
 			$new_submenu = array();
@@ -201,6 +209,8 @@ class LLMS_Admin_Menus {
 		add_menu_page( 'VibeLMS', 'VibeLMS', 'read', 'lifterlms', '__return_empty_string', 'dashicons-welcome-learn-more', 51 );
 
 		add_submenu_page( 'lifterlms', 'Панель управления VibeLMS', 'Панель управления', 'manage_lifterlms', 'llms-dashboard', array( $this, 'dashboard_page_init' ) );
+
+		add_submenu_page( 'lifterlms', 'Конструктор тестов VibeLMS', 'Тесты', 'edit_courses', 'llms-quiz-builder', array( $this, 'quiz_builder_page_init' ) );
 
 		add_submenu_page( 'lifterlms', 'Настройки VibeLMS', 'Настройки', 'manage_lifterlms', 'llms-settings', array( $this, 'settings_page_init' ) );
 
@@ -329,6 +339,15 @@ class LLMS_Admin_Menus {
 	public function dashboard_page_init() {
 		LLMS_Admin_Dashboard::register_meta_boxes();
 		LLMS_Admin_Dashboard::output();
+	}
+
+	/**
+	 * Output the standalone VibeLMS quiz builder.
+	 *
+	 * @return void
+	 */
+	public function quiz_builder_page_init() {
+		$this->quiz_builder->output();
 	}
 
 	/**

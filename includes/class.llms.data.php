@@ -49,6 +49,10 @@ class LLMS_Data {
 		if ( 'system_report' === $dataset ) {
 			// Constants.
 			$data['constants'] = self::get_constants_data();
+
+			if ( class_exists( 'LLMS_Elementor_Widgets' ) && method_exists( 'LLMS_Elementor_Widgets', 'get_system_report' ) ) {
+				$data['vibelms_elementor'] = LLMS_Elementor_Widgets::get_system_report();
+			}
 		}
 
 		// Gateways.
