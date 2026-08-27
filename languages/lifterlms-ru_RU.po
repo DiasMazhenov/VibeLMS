@@ -18239,6 +18239,10 @@ msgstr "Ограничение по времени: %s"
 msgid "Remaining Attempts: %s"
 msgstr "Осталось попыток: %s"
 
+#: templates/quiz/meta-information.php:43
+msgid "Completed Attempts: %s"
+msgstr "Выполнено попыток: %s"
+
 #: templates/quiz/meta-information.php:34
 msgid "Minimum Passing Grade: %s"
 msgstr "Минимальный проходной балл: %s"

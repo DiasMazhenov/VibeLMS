@@ -4,7 +4,7 @@
  *
  * @package VibeLMS/Functions
  * @since 0.0.01
- * @version 0.0.40
+ * @version 0.0.41
  */
 
 defined( 'ABSPATH' ) || exit;

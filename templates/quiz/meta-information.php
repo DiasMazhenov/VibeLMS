@@ -25,8 +25,10 @@ if ( ! $quiz ) {
 	return;
 }
 $passing_percent = $quiz->get( 'passing_percent' );
+$completed_attempts = $student->quizzes()->count_attempts_by_quiz( $quiz->get( 'id' ) );
 ?>
 
+<section class="llms-quiz-meta-information">
 <h2 class="llms-quiz-meta-title"><?php esc_html_e( 'Quiz Information', 'lifterlms' ); ?></h2>
 <ul class="llms-quiz-meta-info">
 	<?php if ( $passing_percent ) : ?>
@@ -39,6 +41,10 @@ $passing_percent = $quiz->get( 'passing_percent' );
 		<?php printf( esc_html__( 'Remaining Attempts: %s', 'lifterlms' ), '<span class="llms-attempts">' . esc_html( $student->quizzes()->get_attempts_remaining_for_quiz( $quiz->get( 'id' ) ) ) . '</span>' ); ?>
 	</li>
 
+	<li class="llms-quiz-meta-item llms-completed-attempts">
+		<?php printf( esc_html__( 'Completed Attempts: %s', 'lifterlms' ), '<span class="llms-completed-attempts">' . esc_html( $completed_attempts ) . '</span>' ); ?>
+	</li>
+
 	<li class="llms-quiz-meta-item llms-question-count">
 		<?php printf( esc_html__( 'Questions: %s', 'lifterlms' ), '<span class="llms-question-count">' . esc_html( $quiz->get_questions_count() ) . '</span>' ); ?>
 	</li>
@@ -49,3 +55,4 @@ $passing_percent = $quiz->get( 'passing_percent' );
 	</li>
 	<?php endif; ?>
 </ul>
+</section>
