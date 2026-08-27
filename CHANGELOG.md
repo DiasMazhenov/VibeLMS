@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.45 - 2026-08-28
+---------------------------
+
+##### Fixes
+
++ Fixed public Elementor rendering for VibeLMS courses, lessons and tests. Elementor content now passes through the normal LifterLMS access and template pipeline, with the previous post content retained as a fallback.
++ Added opt-in diagnostic logging when Elementor content rendering throws an exception.
+
 VibeLMS 0.0.44 - 2026-08-28
 ---------------------------
 

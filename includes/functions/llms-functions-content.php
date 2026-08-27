@@ -33,6 +33,42 @@ if ( ! function_exists( 'llms_get_post_content' ) ) {
 
 		$restrictions = llms_page_restricted( $post->ID );
 
+		// Elementor stores the visual content in post meta, not post_content.
+		// Render it through the shared content pipeline so LMS templates keep
+		// their access checks and before/after hooks.
+		if ( ! $restrictions['is_restricted'] &&
+			in_array( $post->post_type, array( 'course', 'lesson', 'llms_quiz' ), true ) &&
+			function_exists( 'llms_is_elementor_post' ) &&
+			llms_is_elementor_post( $post->ID ) &&
+			class_exists( 'Elementor\\Plugin' ) ) {
+			$elementor = \Elementor\Plugin::instance();
+			$frontend   = $elementor ? $elementor->frontend : false;
+			static $rendering_elementor_posts = array();
+
+			if ( $frontend && method_exists( $frontend, 'get_builder_content_for_display' ) && empty( $rendering_elementor_posts[ $post->ID ] ) ) {
+				$rendering_elementor_posts[ $post->ID ] = true;
+				try {
+					$elementor_content = $frontend->get_builder_content_for_display( $post->ID, true );
+					if ( is_string( $elementor_content ) && '' !== trim( $elementor_content ) ) {
+						$content = $elementor_content;
+					}
+				} catch ( Throwable $error ) {
+					if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+						llms_vibelms_diagnostics_log(
+							'error',
+							'Elementor content rendering failed',
+							array(
+								'post_id' => $post->ID,
+								'error'   => $error->getMessage(),
+							)
+						);
+					}
+				} finally {
+					unset( $rendering_elementor_posts[ $post->ID ] );
+				}
+			}
+		}
+
 		if ( in_array( $post->post_type, array( 'course', 'llms_membership', 'lesson', 'llms_quiz' ), true ) ) {
 
 			$post_type       = str_replace( 'llms_', '', $post->post_type );
