@@ -87,6 +87,7 @@ VibeLMS now has a separate **VibeLMS → Тесты** constructor. It creates an
 - Upstream reference: `https://github.com/gocodebox/lifterlms`
 - Target repository: `https://github.com/DiasMazhenov/VibeLMS`
 - The local Git history contains the VibeLMS feature commits on `main`; the original LifterLMS repository is retained as `upstream`.
+- A local code-only Graphify index is available in `graphify-out/` for architecture navigation: 17,540 nodes and 28,568 graph edges after clustering. It is intentionally ignored and must not be included in plugin packages or Git commits; the graph is structural, so inferred edges and bundled/vendor code should be verified against source.
 
 ## Checks
 

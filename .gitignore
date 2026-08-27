@@ -40,3 +40,6 @@ phpunit.xml
 /artifacts/
 /playwright-report/
 /test-results/
+
+# Local Graphify architecture index; never ship analysis artifacts in the plugin.
+/graphify-out/
