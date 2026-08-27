@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.34 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Links duplicate-safe certificate awards to the journal through the standard LifterLMS user-postmeta record, so CSV exports retain the certificate ID.
+
 VibeLMS 0.0.33 - 2026-08-27
 ---------------------------
 

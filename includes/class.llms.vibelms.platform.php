@@ -538,6 +538,7 @@ class LLMS_VibeLMS_Platform {
 
 		$result = LLMS_Engagement_Handler::handle_certificate( array( $student_id, $template_id, $quiz_id, 0 ) );
 		$diagnostic_context['template_id'] = $template_id;
+		$certificate_id = absint( llms_get_user_postmeta( $student_id, $quiz_id, '_certificate_earned', true ) );
 		if ( is_array( $result ) ) {
 			$diagnostic_context['errors'] = array();
 			foreach ( $result as $error ) {
@@ -548,13 +549,19 @@ class LLMS_VibeLMS_Platform {
 					);
 				}
 			}
-			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
-				llms_vibelms_diagnostics_log( 'error', 'Certificate was not awarded: engagement handler returned errors', $diagnostic_context );
+			if ( ! $certificate_id ) {
+				if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+					llms_vibelms_diagnostics_log( 'error', 'Certificate was not awarded: engagement handler returned errors', $diagnostic_context );
+				}
+				return;
 			}
-			return;
 		}
 
-		if ( ! $result instanceof LLMS_User_Certificate ) {
+		if ( ! $certificate_id && $result instanceof LLMS_User_Certificate ) {
+			$certificate_id = absint( $result->get( 'id' ) );
+		}
+
+		if ( ! $certificate_id ) {
 			$diagnostic_context['result_type'] = is_object( $result ) ? get_class( $result ) : gettype( $result );
 			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
 				llms_vibelms_diagnostics_log( 'error', 'Certificate was not awarded: unexpected engagement result', $diagnostic_context );
