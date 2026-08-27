@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.27 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Made dashboard postbox loading independent of the WordPress-generated screen prefix by matching the `llms-dashboard` page query as well as known screen IDs.
+
 VibeLMS 0.0.26 - 2026-08-27
 ---------------------------
 

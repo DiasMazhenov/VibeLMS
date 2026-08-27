@@ -392,7 +392,7 @@ class LLMS_Admin_Assets {
 
 		} elseif ( 'lifterlms_page_llms-add-ons' === $screen->id ) {
 			llms()->assets->enqueue_script( 'llms-addons' );
-		} elseif ( in_array( $screen->id, array( 'lifterlms_page_llms-dashboard', 'toplevel_page_llms-dashboard', 'lifterlms_page_llms-resources' ), true ) ) {
+		} elseif ( 'llms-dashboard' === llms_filter_input( INPUT_GET, 'page' ) || in_array( $screen->id, array( 'lifterlms_page_llms-dashboard', 'toplevel_page_llms-dashboard', 'vibelms_page_llms-dashboard', 'lifterlms_page_llms-resources' ), true ) ) {
 			wp_enqueue_script( 'postbox' );
 		}
 
