@@ -4,7 +4,7 @@
  *
  * @package VibeLMS/Functions
  * @since 0.0.01
- * @version 0.0.07
+ * @version 0.0.31
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -70,9 +70,12 @@ function llms_vibelms_roles_install() {
 	if ( $administrator ) {
 		$administrator->add_cap( 'vibelms_view_reports' );
 		$administrator->add_cap( 'vibelms_export_reports' );
+		// Keep the compatible LifterLMS report links usable for administrators.
+		$administrator->add_cap( 'view_lifterlms_reports' );
+		$administrator->add_cap( 'view_others_lifterlms_reports' );
 	}
 
-	update_option( 'vibelms_roles_version', '3', false );
+	update_option( 'vibelms_roles_version', '4', false );
 }
 
 /**
@@ -81,7 +84,7 @@ function llms_vibelms_roles_install() {
  * @return void
  */
 function llms_vibelms_roles_maybe_install() {
-	if ( '3' !== get_option( 'vibelms_roles_version' ) ) {
+	if ( '4' !== get_option( 'vibelms_roles_version' ) ) {
 		llms_vibelms_roles_install();
 	}
 }

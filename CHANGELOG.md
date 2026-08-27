@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.31 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Restored compatible administrator report capabilities so dashboard report links do not open a permission-denied screen after an update.
+
 VibeLMS 0.0.30 - 2026-08-27
 ---------------------------
 
