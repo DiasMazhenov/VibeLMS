@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.40 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Bumped the core asset URL version with the public VibeLMS version so updated Elementor and builder JavaScript cannot remain hidden behind the old internal LifterLMS cache key.
+
 VibeLMS 0.0.39 - 2026-08-27
 ---------------------------
 

@@ -141,9 +141,10 @@ final class LifterLMS {
 			define( 'LLMS_ASSETS_SUFFIX', $script_debug ? '' : '.min' );
 		}
 
-		// If debugging, use time for asset version otherwise use plugin version.
+		// If debugging, use time for asset version otherwise use the public VibeLMS version.
 		if ( ! defined( 'LLMS_ASSETS_VERSION' ) ) {
-			define( 'LLMS_ASSETS_VERSION', ( $script_debug || $wp_debug ) ? time() : $this->version );
+			$asset_version = defined( 'VIBELMS_VERSION' ) ? VIBELMS_VERSION : $this->version;
+			define( 'LLMS_ASSETS_VERSION', ( $script_debug || $wp_debug ) ? time() : $asset_version );
 		}
 
 		$allowed_atts = array(
