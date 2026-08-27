@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.26 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Fixed the dashboard postbox controls by loading WordPress's `postbox` script for the actual VibeLMS dashboard screen ID.
++ Fixed dashboard date localization by using WordPress `wp_date()` instead of PHP `date()`.
+
 VibeLMS 0.0.25 - 2026-08-27
 ---------------------------
 

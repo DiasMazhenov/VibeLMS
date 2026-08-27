@@ -4,7 +4,9 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.25`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.26`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+
+The 0.0.26 maintenance pass fixes two live dashboard defects found during staging acceptance: the actual `toplevel_page_llms-dashboard` screen now loads WordPress's `postbox` dependency before calling `postboxes.add_postbox_toggles()`, and the activity date range uses WordPress `wp_date()` so localized month names follow the site locale instead of PHP's English `date()` output.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -30,7 +32,7 @@ VibeLMS remains a reusable LMS engine for different projects. Project-specific b
 
 The dashboard analytics enqueue now supports both the legacy LifterLMS screen base and the `toplevel_page_llms-dashboard` screen produced by the VibeLMS menu. The official WordPress.org Russian translation package is included in `languages/` as `lifterlms-ru_RU.po/.mo` plus JavaScript JSON catalogs, and custom VibeLMS admin labels are Russian.
 
-The dashboard analytics path now also recognizes the `page=llms-dashboard` query directly. Widget AJAX starts before Google Charts initialization, and the optional student filter/Google Charts APIs are guarded so a missing optional script cannot leave the metric cards stuck in the loading state. The customized analytics asset uses `VIBELMS_VERSION` for cache busting instead of the unchanged internal LifterLMS version.
+The dashboard analytics path now also recognizes the `page=llms-dashboard` query directly. Widget AJAX starts before Google Charts initialization, and the optional student filter/Google Charts APIs are guarded so a missing optional script cannot leave the metric cards stuck in the loading state. The dashboard's postbox dependency and localized activity dates are fixed for the current VibeLMS screen. The customized analytics asset uses `VIBELMS_VERSION` for cache busting instead of the unchanged internal LifterLMS version.
 
 The universal VibeLMS platform layer stores employee identity fields (`company`, `employee_name`, `region`, `station`) in user meta and exposes them through `[vibelms_student_identity]`. When the optional setting is enabled, quiz access requires these fields. The same form is available as an Elementor widget. The standard registration and guest checkout forms also require a project-extensible learning-language selector (Russian/Kazakh by default), store `vibelms_language`, and can automatically enroll the new participant into the administrator-selected language access group. The language is visible in the protected journal and CSV export.
 
@@ -74,7 +76,7 @@ VibeLMS now has a separate **VibeLMS → Тесты** constructor. It creates an
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint for all changed PHP files, shell syntax, `git diff --check`, the language registration/enrollment contract check, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax, the rebuilt course-builder bundle and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. Both Russian translation catalogs pass `msgfmt --check`; the Advanced Quizzes catalog is loaded from the bundled `languages/` directory. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.25.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.26.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 
