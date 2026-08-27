@@ -1,6 +1,16 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.29 - 2026-08-27
+---------------------------
+
+##### Enhancements
+
++ Added native, language-aware VibeLMS materials for slides, videos and documents.
++ Added authenticated document downloads, a language switcher and reusable frontend header/footer shortcodes.
++ Added Elementor widgets for materials, the VibeLMS header and the VibeLMS footer, all with shared style controls.
++ Included materials and related settings in the full transfer archive.
+
 VibeLMS 0.0.28 - 2026-08-27
 ---------------------------
 

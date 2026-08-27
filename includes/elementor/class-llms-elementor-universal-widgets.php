@@ -483,3 +483,38 @@ class LLMS_Elementor_Widget_Access_Groups extends LLMS_Elementor_Widget_Base {
 		);
 	}
 }
+
+class LLMS_Elementor_Widget_Materials extends LLMS_Elementor_Widget_Base {
+
+	public function get_name() { return 'vibelms_materials'; }
+
+	public function get_title() { return __( 'Учебные материалы', 'lifterlms' ); }
+
+	protected function _register_controls() {
+		$this->start_controls_section( 'content_section', array( 'label' => __( 'Учебные материалы', 'lifterlms' ), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT ) );
+		$this->add_control( 'material_type', array( 'label' => __( 'Показывать', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::SELECT, 'options' => array( 'all' => __( 'Все материалы', 'lifterlms' ), 'slide' => __( 'Слайды', 'lifterlms' ), 'video' => __( 'Видео', 'lifterlms' ), 'document' => __( 'Документы', 'lifterlms' ) ), 'default' => 'all' ) );
+		$this->add_control( 'material_language', array( 'label' => __( 'Язык', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::SELECT, 'options' => array( 'current' => __( 'Текущий язык', 'lifterlms' ), 'ru' => __( 'Русский', 'lifterlms' ), 'kz' => __( 'Казахский', 'lifterlms' ) ), 'default' => 'current' ) );
+		$this->add_control( 'limit', array( 'label' => __( 'Количество материалов', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::NUMBER, 'min' => 0, 'max' => 100, 'default' => 0 ) );
+		$this->end_controls_section();
+		$this->add_common_style_controls();
+	}
+
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		echo $this->render_shortcode( 'vibelms_materials', array( 'type' => sanitize_key( $settings['material_type'] ?? 'all' ), 'language' => sanitize_key( $settings['material_language'] ?? 'current' ), 'limit' => absint( $settings['limit'] ?? 0 ) ) );
+	}
+}
+
+class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
+	public function get_name() { return 'vibelms_site_header'; }
+	public function get_title() { return __( 'Шапка VibeLMS', 'lifterlms' ); }
+	protected function _register_controls() { $this->start_controls_section( 'content_section', array( 'label' => __( 'Шапка VibeLMS', 'lifterlms' ), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT ) ); $this->add_control( 'description', array( 'label' => __( 'Логотип, навигация, язык и профиль пользователя.', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::HEADING ) ); $this->end_controls_section(); $this->add_common_style_controls(); }
+	protected function render() { echo do_shortcode( '[vibelms_header]' ); }
+}
+
+class LLMS_Elementor_Widget_Site_Footer extends LLMS_Elementor_Widget_Base {
+	public function get_name() { return 'vibelms_site_footer'; }
+	public function get_title() { return __( 'Подвал VibeLMS', 'lifterlms' ); }
+	protected function _register_controls() { $this->start_controls_section( 'content_section', array( 'label' => __( 'Подвал VibeLMS', 'lifterlms' ), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT ) ); $this->add_control( 'description', array( 'label' => __( 'Копирайт, поддержка и ссылка разработчика.', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::HEADING ) ); $this->end_controls_section(); $this->add_common_style_controls(); }
+	protected function render() { echo do_shortcode( '[vibelms_footer]' ); }
+}

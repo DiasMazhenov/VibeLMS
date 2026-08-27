@@ -42,6 +42,8 @@ class LLMS_VibeLMS_Transfer {
 		'vibelms_passing_score_percent',
 		'vibelms_require_identity',
 		'vibelms_certificate_template_id',
+		'vibelms_support_url',
+		'vibelms_footer_text',
 	);
 
 	/**
@@ -185,7 +187,7 @@ class LLMS_VibeLMS_Transfer {
 		</div>
 		<table class="widefat striped" style="max-width:700px;margin:16px 0;">
 			<tbody>
-				<?php foreach ( array( 'courses' => 'Курсы', 'memberships' => 'Группы доступа', 'certificates' => 'Сертификаты', 'users' => 'Пользователи', 'media' => 'Медиафайлы', 'quiz_attempts' => 'Попытки тестов' ) as $key => $label ) : ?>
+				<?php foreach ( array( 'courses' => 'Курсы', 'memberships' => 'Группы доступа', 'certificates' => 'Сертификаты', 'materials' => 'Материалы', 'users' => 'Пользователи', 'media' => 'Медиафайлы', 'quiz_attempts' => 'Попытки тестов' ) as $key => $label ) : ?>
 					<tr><td><?php echo esc_html( $label ); ?></td><td><strong><?php echo esc_html( absint( isset( $counts[ $key ] ) ? $counts[ $key ] : 0 ) ); ?></strong></td></tr>
 				<?php endforeach; ?>
 				<tr><td><?php esc_html_e( 'Пользователи будут переиспользованы', 'lifterlms' ); ?></td><td><strong><?php echo esc_html( absint( isset( $preview['users_reused'] ) ? $preview['users_reused'] : 0 ) ); ?></strong></td></tr>
@@ -516,6 +518,16 @@ class LLMS_VibeLMS_Transfer {
 				$this->import_media( $zip, $data['media'], $job['maps']['media'], $job['stats'], $job['errors'], $offset, $batch_size );
 				$job['offset'] += min( $batch_size, max( 0, count( $data['media'] ) - $offset ) );
 				if ( $job['offset'] >= count( $data['media'] ) ) {
+					$job['stage']  = 'materials';
+					$job['offset'] = 0;
+				}
+				break;
+
+			case 'materials':
+				$batch = array_slice( $data['materials'], $offset, $batch_size );
+				$this->import_materials( $batch, $job['maps'], $data['media'], $job['stats'], $job['errors'] );
+				$job['offset'] += count( $batch );
+				if ( $job['offset'] >= count( $data['materials'] ) ) {
 					$job['stage']  = 'courses';
 					$job['offset'] = 0;
 				}
@@ -631,6 +643,8 @@ class LLMS_VibeLMS_Transfer {
 				return new WP_Error( 'vibelms_transfer_invalid_data', sprintf( __( 'Файл %s имеет неверную структуру.', 'lifterlms' ), $name . '.json' ) );
 			}
 		}
+		$materials = $this->read_archive_json( $zip, 'materials.json' );
+		$data['materials'] = is_wp_error( $materials ) ? array() : ( is_array( $materials ) ? $materials : array() );
 		return array( 'manifest' => $manifest, 'data' => $data );
 	}
 
@@ -649,6 +663,7 @@ class LLMS_VibeLMS_Transfer {
 			'courses'          => count( $data['courses'] ),
 			'memberships'      => count( $data['memberships'] ),
 			'certificates'     => count( $data['certificates'] ),
+			'materials'        => count( isset( $data['materials'] ) ? $data['materials'] : array() ),
 			'users'            => count( $data['users'] ),
 			'media'            => count( $data['media'] ),
 			'quiz_attempts'    => count( $data['quiz_attempts'] ),
@@ -702,7 +717,7 @@ class LLMS_VibeLMS_Transfer {
 		}
 		$ids = get_posts(
 			array(
-				'post_type'      => array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate', 'attachment' ),
+			'post_type'      => array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate', 'vibelms_material', 'attachment' ),
 				'post_status'    => 'any',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
@@ -734,7 +749,14 @@ class LLMS_VibeLMS_Transfer {
 		foreach ( isset( $data['certificates'] ) && is_array( $data['certificates'] ) ? $data['certificates'] : array() as $certificate ) {
 			$this->collect_numeric_ids( isset( $certificate['id'] ) ? $certificate['id'] : 0, $post_ids );
 		}
-		$post_types = array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate' );
+		foreach ( isset( $data['materials'] ) && is_array( $data['materials'] ) ? $data['materials'] : array() as $material ) {
+			$this->collect_numeric_ids( isset( $material['id'] ) ? $material['id'] : 0, $post_ids );
+			$meta = isset( $material['meta'][ '_vibelms_material_attachment_id' ] ) ? $material['meta'][ '_vibelms_material_attachment_id' ] : array();
+			foreach ( (array) $meta as $value ) {
+				$this->collect_numeric_ids( $value, $post_ids );
+			}
+		}
+		$post_types = array( 'course', 'section', 'lesson', 'llms_quiz', 'llms_question', 'llms_membership', 'llms_certificate', 'vibelms_material' );
 		foreach ( array_unique( array_filter( array_map( 'absint', $post_ids ) ) ) as $source_id ) {
 			$found = get_posts(
 				array(
@@ -866,10 +888,11 @@ class LLMS_VibeLMS_Transfer {
 	 * @return array
 	 */
 	private function job_progress( $job ) {
-		$stages = array( 'users', 'media', 'courses', 'memberships', 'certificates', 'settings', 'enrollments', 'quiz_attempts', 'vibelms_attempts', 'finalize' );
+		$stages = array( 'users', 'media', 'materials', 'courses', 'memberships', 'certificates', 'settings', 'enrollments', 'quiz_attempts', 'vibelms_attempts', 'finalize' );
 		$labels = array(
 			'users'            => __( 'Импорт пользователей', 'lifterlms' ),
 			'media'            => __( 'Импорт медиафайлов', 'lifterlms' ),
+			'materials'        => __( 'Импорт материалов', 'lifterlms' ),
 			'courses'          => __( 'Импорт курсов, уроков и тестов', 'lifterlms' ),
 			'memberships'      => __( 'Импорт групп доступа', 'lifterlms' ),
 			'certificates'     => __( 'Импорт сертификатов', 'lifterlms' ),
@@ -934,8 +957,15 @@ class LLMS_VibeLMS_Transfer {
 		}
 
 		$certificates = $this->export_certificate_templates();
+		$materials = $this->export_materials();
 		foreach ( $certificates as $certificate ) {
 			$this->collect_numeric_ids( $certificate['id'], $content_ids );
+		}
+		foreach ( $materials as $material ) {
+			$this->collect_numeric_ids( $material['id'], $content_ids );
+			foreach ( isset( $material['meta'][ '_vibelms_material_attachment_id' ] ) ? (array) $material['meta'][ '_vibelms_material_attachment_id' ] : array() as $attachment_id ) {
+				$this->collect_numeric_ids( $attachment_id, $content_ids );
+			}
 		}
 		$content_ids = array_values( array_unique( array_filter( array_map( 'absint', $content_ids ) ) ) );
 
@@ -943,7 +973,7 @@ class LLMS_VibeLMS_Transfer {
 		$this->collect_database_user_ids( $content_ids, $user_ids );
 		$users    = $this->export_users( $user_ids );
 		$user_ids = array_values( array_unique( array_merge( $user_ids, wp_list_pluck( $users, 'id' ) ) ) );
-		$media    = $this->export_media( $content_ids, array_merge( $courses, $memberships ) );
+		$media    = $this->export_media( $content_ids, array_merge( $courses, $memberships, $materials ) );
 
 		$settings = array();
 		foreach ( $this->option_names as $option_name ) {
@@ -963,6 +993,7 @@ class LLMS_VibeLMS_Transfer {
 				'courses'      => count( $courses ),
 				'memberships'  => count( $memberships ),
 				'certificates' => count( $certificates ),
+				'materials'    => count( $materials ),
 				'users'        => count( $users ),
 				'media'        => count( $media ),
 			),
@@ -974,6 +1005,7 @@ class LLMS_VibeLMS_Transfer {
 			'courses.json'         => $this->json( $courses ),
 			'memberships.json'     => $this->json( $memberships ),
 			'certificates.json'    => $this->json( $certificates ),
+			'materials.json'       => $this->json( $materials ),
 			'users.json'           => $this->json( $users ),
 			'enrollments.json'     => $this->json( $this->export_enrollments( $user_ids, $content_ids ) ),
 			'quiz_attempts.json'   => $this->json( $this->export_quiz_attempts( $user_ids, $content_ids ) ),
@@ -982,6 +1014,24 @@ class LLMS_VibeLMS_Transfer {
 		);
 
 		return array( 'files' => $files, 'media' => $media );
+	}
+
+	/**
+	 * Export native VibeLMS materials as ordinary WordPress posts.
+	 *
+	 * @return array[]
+	 */
+	private function export_materials() {
+		$items = array();
+		foreach ( get_posts( array( 'post_type' => 'vibelms_material', 'post_status' => 'any', 'numberposts' => -1, 'orderby' => 'ID', 'order' => 'ASC' ) ) as $post ) {
+			$items[] = array(
+				'id' => absint( $post->ID ),
+				'post' => $this->export_post_fields( $post ),
+				'meta' => $this->export_post_meta( $post->ID ),
+				'taxonomies' => $this->export_post_terms( $post->ID ),
+			);
+		}
+		return $items;
 	}
 
 	/**
@@ -1779,6 +1829,52 @@ class LLMS_VibeLMS_Transfer {
 	}
 
 	/**
+	 * Import native VibeLMS materials after their media is available.
+	 *
+	 * @param array[] $materials Materials.
+	 * @param array   $maps      ID maps by reference.
+	 * @param array[] $media     Media records.
+	 * @param array   $stats     Stats by reference.
+	 * @param array   $errors    Errors by reference.
+	 * @return void
+	 */
+	private function import_materials( $materials, &$maps, $media, &$stats, &$errors ) {
+		foreach ( is_array( $materials ) ? $materials : array() as $raw ) {
+			$source_id = absint( isset( $raw['id'] ) ? $raw['id'] : 0 );
+			$post_data = isset( $raw['post'] ) && is_array( $raw['post'] ) ? $raw['post'] : array();
+			if ( ! $source_id || empty( $post_data ) ) {
+				continue;
+			}
+			if ( 'skip' === $this->duplicate_mode && isset( $maps['posts'][ $source_id ] ) ) {
+				$stats['materials_skipped'] = isset( $stats['materials_skipped'] ) ? $stats['materials_skipped'] + 1 : 1;
+				continue;
+			}
+			$post_data['post_type'] = 'vibelms_material';
+			$post_data['post_content'] = $this->replace_media_urls( isset( $post_data['post_content'] ) ? $post_data['post_content'] : '', $media );
+			$post_data['post_excerpt'] = $this->replace_media_urls( isset( $post_data['post_excerpt'] ) ? $post_data['post_excerpt'] : '', $media );
+			$post_data['post_author'] = $this->resolve_author_id( isset( $post_data['post_author'] ) ? $post_data['post_author'] : 0, $maps['users'] );
+			$post_id = wp_insert_post( $post_data, true );
+			if ( is_wp_error( $post_id ) ) {
+				$this->add_error( $errors, $post_id->get_error_message() );
+				continue;
+			}
+			$meta = isset( $raw['meta'] ) && is_array( $raw['meta'] ) ? $raw['meta'] : array();
+			$attachment_key = '_vibelms_material_attachment_id';
+			if ( isset( $meta[ $attachment_key ] ) ) {
+				foreach ( (array) $meta[ $attachment_key ] as &$attachment_id ) {
+					$source_media_id = absint( $attachment_id );
+					$attachment_id = isset( $maps['media'][ $source_media_id ] ) ? $maps['media'][ $source_media_id ] : 0;
+				}
+				unset( $attachment_id );
+			}
+			$this->import_post_meta( $post_id, $meta, $maps );
+			$this->import_post_terms( $post_id, isset( $raw['taxonomies'] ) ? $raw['taxonomies'] : array() );
+			$maps['posts'][ $source_id ] = absint( $post_id );
+			$stats['materials'] = isset( $stats['materials'] ) ? $stats['materials'] + 1 : 1;
+		}
+	}
+
+	/**
 	 * Import a generated model post using WordPress APIs.
 	 *
 	 * @param array $raw  Model array.
@@ -2254,6 +2350,8 @@ class LLMS_VibeLMS_Transfer {
 			'memberships_skipped' => __( 'групп пропущено', 'lifterlms' ),
 			'certificates'        => __( 'сертификатов', 'lifterlms' ),
 			'certificates_skipped' => __( 'сертификатов пропущено', 'lifterlms' ),
+			'materials'           => __( 'материалов', 'lifterlms' ),
+			'materials_skipped'   => __( 'материалов пропущено', 'lifterlms' ),
 			'users_created'       => __( 'пользователей создано', 'lifterlms' ),
 			'users_reused'        => __( 'пользователей переиспользовано', 'lifterlms' ),
 			'media'               => __( 'медиафайлов', 'lifterlms' ),
