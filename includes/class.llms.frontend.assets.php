@@ -204,6 +204,9 @@ class LLMS_Frontend_Assets {
 
 		if ( is_singular( 'llms_quiz' ) ) {
 			llms()->assets->enqueue_script( 'llms-quiz' );
+			if ( defined( 'VIBELMS_VERSION' ) && isset( wp_scripts()->registered['llms-quiz'] ) ) {
+				wp_scripts()->registered['llms-quiz']->ver = VIBELMS_VERSION;
+			}
 		}
 
 		llms()->assets->register_script( 'llms-favorites' );

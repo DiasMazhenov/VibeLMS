@@ -117,6 +117,7 @@
 
 			var self = this;
 			this.restart_url = window.location.href;
+			this.add_restart_link_to_server_error();
 
 			// Start quiz.
 			$( '#llms_start_quiz' ).on( 'click', function( e ) {
@@ -167,6 +168,30 @@
 			this.register_validator( 'picture_choice', this.validate_choice );
 			this.register_validator( 'true_false', this.validate_choice );
 
+		},
+
+		/**
+		 * Add recovery to an error rendered by the server before the quiz UI loads.
+		 *
+		 * @return {Void}
+		 */
+		add_restart_link_to_server_error: function() {
+			var self = this,
+				message = LLMS.l10n.translate( 'There was an error recording your answer. Please return to the lesson and begin again.' );
+
+			$( 'p' ).filter( function() {
+				return $( this ).text().trim() === message;
+			} ).each( function() {
+				var $error = $( this );
+				if ( $error.find( 'a.llms-quiz-restart' ).length ) {
+					return;
+				}
+				$error.append( ' ' ).append(
+					$( '<a class="button llms-button-action llms-quiz-restart"></a>' )
+						.attr( 'href', self.get_restart_url() )
+						.text( LLMS.l10n.translate( 'Start Over' ) )
+				);
+			} );
 		},
 
 		/**

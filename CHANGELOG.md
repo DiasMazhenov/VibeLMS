@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.43 - 2026-08-28
+---------------------------
+
+##### Fixes
+
++ Added a restart link when the quiz error is rendered before the interactive quiz UI.
++ Quiz assets now use the public VibeLMS version for reliable cache invalidation.
+
 VibeLMS 0.0.42 - 2026-08-28
 ---------------------------
 
