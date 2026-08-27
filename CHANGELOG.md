@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.33 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Fixed certificate award processing by reading the generated certificate ID through the shared model API.
+
 VibeLMS 0.0.32 - 2026-08-27
 ---------------------------
 
