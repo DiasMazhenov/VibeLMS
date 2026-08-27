@@ -3,7 +3,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-package_version="${VIBELMS_PACKAGE_VERSION:-0.0.27}"
+package_version="${VIBELMS_PACKAGE_VERSION:-0.0.28}"
 work_dir="$(mktemp -d)"
 package_dir="${work_dir}/vibelms"
 output_dir="${repo_root}/dist"

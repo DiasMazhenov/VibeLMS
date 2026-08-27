@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.28 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Deferred dashboard postbox initialization until the WordPress window load event and guarded the global API, preventing a false `postboxes is not defined` error when the core script is printed in the footer.
+
 VibeLMS 0.0.27 - 2026-08-27
 ---------------------------
 

@@ -70,12 +70,20 @@ defined( 'ABSPATH' ) || exit;
 		</form>
 		<script type="text/javascript">
 			//<![CDATA[
-			jQuery(document).ready( function($) {
-				// close postboxes that should be closed
-				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-				// postboxes setup
-				postboxes.add_postbox_toggles('toplevel_page_llms-dashboard');
-			});
+			(function($) {
+				function initVibeLMSPostboxes() {
+					$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+					if ( window.postboxes && 'function' === typeof window.postboxes.add_postbox_toggles ) {
+						window.postboxes.add_postbox_toggles('toplevel_page_llms-dashboard');
+					}
+				}
+
+				if ( 'complete' === document.readyState ) {
+					initVibeLMSPostboxes();
+				} else {
+					$(window).one('load', initVibeLMSPostboxes);
+				}
+			})(jQuery);
 			//]]>
 		</script>
 
