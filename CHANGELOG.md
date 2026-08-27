@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.36 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Prevented the certificate page copy-link script from calling `addEventListener` when sharing is disabled and the button is absent.
+
 VibeLMS 0.0.35 - 2026-08-27
 ---------------------------
 
