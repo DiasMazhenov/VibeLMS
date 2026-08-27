@@ -570,7 +570,6 @@ class LLMS_VibeLMS_Platform {
 		}
 
 		global $wpdb;
-		$certificate_id = absint( $result->get( 'id' ) );
 		$updated        = $wpdb->update( $this->get_table_name(), array( 'certificate_id' => $certificate_id ), array( 'attempt_id' => absint( $attempt->get_id() ) ), array( '%d' ), array( '%d' ) );
 		if ( false === $updated ) {
 			$diagnostic_context['certificate_id'] = $certificate_id;

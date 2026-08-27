@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.35 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Fixed duplicate-safe certificate linking so the journal keeps the existing certificate ID without calling model methods on the handler's error array.
+
 VibeLMS 0.0.34 - 2026-08-27
 ---------------------------
 
