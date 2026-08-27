@@ -27,6 +27,8 @@ class LLMS_VibeLMS_Platform {
 
 	const ADMIN_MODE_OPTION = 'vibelms_admin_mode';
 
+	const DASHBOARD_METRICS_OPTION = 'vibelms_dashboard_metrics';
+
 	const LANGUAGE_META_KEY = 'vibelms_language';
 
 	const LANGUAGE_GROUP_OPTION_PREFIX = 'vibelms_language_group_';
@@ -86,6 +88,20 @@ class LLMS_VibeLMS_Platform {
 		}
 
 		return $result ? $result : $default;
+	}
+
+	/**
+	 * Return the built-in dashboard metrics available for configuration.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function get_dashboard_metrics() {
+		return array(
+			'enrollments'       => __( 'Зачисления', 'lifterlms' ),
+			'registrations'     => __( 'Регистрации', 'lifterlms' ),
+			'sold'              => __( 'Чистые продажи', 'lifterlms' ),
+			'lessoncompletions' => __( 'Завершённые уроки', 'lifterlms' ),
+		);
 	}
 
 	/**
@@ -268,6 +284,30 @@ class LLMS_VibeLMS_Platform {
 	 * @return array
 	 */
 	public function add_settings( $settings ) {
+		$settings[] = array(
+			'id'   => 'vibelms_dashboard_settings',
+			'type' => 'sectionstart',
+		);
+		$settings[] = array(
+			'desc'    => __( 'Выберите карточки, которые должны отображаться на панели управления VibeLMS. Если отключить все карточки, будут показаны все доступные метрики.', 'lifterlms' ),
+			'id'      => 'vibelms_dashboard_settings_title',
+			'title'   => __( 'Настройки дашборда', 'lifterlms' ),
+			'type'    => 'title',
+		);
+		foreach ( self::get_dashboard_metrics() as $metric => $label ) {
+			$settings[] = array(
+				'desc'    => sprintf( __( 'Показывать метрику «%s» на дашборде.', 'lifterlms' ), $label ),
+				'default' => 'yes',
+				'id'      => self::DASHBOARD_METRICS_OPTION . '[' . $metric . ']',
+				'title'   => $label,
+				'type'    => 'checkbox',
+			);
+		}
+		$settings[] = array(
+			'id'   => 'vibelms_dashboard_settings',
+			'type' => 'sectionend',
+		);
+
 		$settings[] = array(
 			'id'   => 'vibelms_assessment_settings',
 			'type' => 'sectionstart',

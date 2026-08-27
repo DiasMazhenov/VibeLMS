@@ -108,7 +108,7 @@ class LLMS_Admin_Dashboard_Widget {
 	 * @return array $widget_data Array of data that will feed the dashboard widget.
 	 */
 	public static function get_dashboard_widget_data() {
-		return apply_filters(
+		$widget_data = apply_filters(
 			/**
 			 * Filters the dashboard widget data.
 			 *
@@ -148,6 +148,22 @@ class LLMS_Admin_Dashboard_Widget {
 				),
 			)
 		);
+		$visibility = get_option( LLMS_VibeLMS_Platform::DASHBOARD_METRICS_OPTION, array() );
+
+		if ( ! is_array( $visibility ) || empty( $visibility ) ) {
+			return $widget_data;
+		}
+
+		$visible = array_filter(
+			$widget_data,
+			function ( $widget, $id ) use ( $visibility ) {
+				return ! array_key_exists( $id, $visibility ) || 'yes' === $visibility[ $id ];
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
+
+		// Keep the dashboard useful if an administrator unchecks every built-in metric.
+		return $visible ? $visible : $widget_data;
 	}
 }
 return new LLMS_Admin_Dashboard_Widget();

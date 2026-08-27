@@ -1,6 +1,15 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.37 - 2026-08-27
+---------------------------
+
+##### Added
+
++ Added dashboard settings for showing or hiding built-in metric cards.
++ Added 7/30/90-day, current-month and custom date filters to the VibeLMS dashboard.
++ Added responsive metric-card layout so hidden cards do not leave empty columns.
+
 VibeLMS 0.0.36 - 2026-08-27
 ---------------------------
 

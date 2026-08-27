@@ -192,6 +192,14 @@ class LLMS_Admin_Reporting {
 				$dates['start'] = date( 'Y-m-d', strtotime( '-7 days', $now ) );
 				break;
 
+			case 'last-30-days':
+				$dates['start'] = date( 'Y-m-d', strtotime( '-30 days', $now ) );
+				break;
+
+			case 'last-90-days':
+				$dates['start'] = date( 'Y-m-d', strtotime( '-90 days', $now ) );
+				break;
+
 			case 'custom':
 				$dates['start'] = self::get_date_start();
 				$dates['end']   = self::get_date_end();

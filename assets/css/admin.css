@@ -4499,12 +4499,81 @@ body:not(.admin-color-fresh) .llms-award-engagement-submitbox .llms-mb-list.post
 .wrap.llms-dashboard #poststuff h2 {
   padding: 12px 20px;
 }
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  margin: 0 0 18px;
+  padding: 14px 18px;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form {
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 10px;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form label {
+  font-weight: 600;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form select,
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form input[type=date] {
+  min-height: 36px;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-custom-dates {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 8px;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-custom-dates[hidden] {
+  display: none;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .llms-widget-row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.wrap.llms-dashboard .llms-dashboard-activity .llms-widget-row:before, .wrap.llms-dashboard .llms-dashboard-activity .llms-widget-row:after {
+  display: none;
+}
+.wrap.llms-dashboard .llms-dashboard-activity .llms-widget-row .llms-widget-1-4 {
+  float: none;
+  padding: 0;
+  width: auto;
+}
 .wrap.llms-dashboard .llms-dashboard-activity h2 {
   font-size: 20px;
   font-weight: 700;
   line-height: 1.5;
   margin-top: 0;
   text-align: center;
+}
+@media only screen and (max-width: 600px) {
+  .wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form,
+  .wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-custom-dates {
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form select,
+  .wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form input[type=date],
+  .wrap.llms-dashboard .llms-dashboard-activity .vibelms-dashboard-period-form button {
+    width: 100%;
+  }
 }
 .wrap.llms-dashboard .postbox {
   background-color: #FFF;

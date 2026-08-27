@@ -18,6 +18,63 @@ defined( 'ABSPATH' ) || exit;
 class LLMS_Admin_Dashboard {
 
 	/**
+	 * Return the dashboard activity period from the current request.
+	 *
+	 * @return array{range:string,dates:array<string,string>,ranges:array<string,string>}
+	 */
+	public static function get_activity_period() {
+		$ranges = array(
+			'last-7-days'  => __( 'Последние 7 дней', 'lifterlms' ),
+			'last-30-days' => __( 'Последние 30 дней', 'lifterlms' ),
+			'last-90-days' => __( 'Последние 90 дней', 'lifterlms' ),
+			'this-month'   => __( 'Текущий месяц', 'lifterlms' ),
+			'custom'       => __( 'Произвольный период', 'lifterlms' ),
+		);
+		$range = LLMS_Admin_Reporting::get_current_range();
+
+		if ( ! isset( $ranges[ $range ] ) ) {
+			$range = 'last-7-days';
+		}
+
+		$dates = LLMS_Admin_Reporting::get_dates( $range );
+		if ( 'custom' === $range && ( ! self::is_valid_date( $dates['start'] ) || ! self::is_valid_date( $dates['end'] ) || $dates['start'] > $dates['end'] ) ) {
+			$range = 'last-7-days';
+			$dates = LLMS_Admin_Reporting::get_dates( $range );
+		}
+
+		return array(
+			'range'  => $range,
+			'dates'  => $dates,
+			'ranges' => $ranges,
+		);
+	}
+
+	/**
+	 * Format a dashboard date using the WordPress site locale and timezone.
+	 *
+	 * @param string $date Date in Y-m-d format.
+	 * @return string
+	 */
+	public static function format_activity_date( $date ) {
+		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
+
+		return $date_object ? wp_date( get_option( 'date_format' ), $date_object->getTimestamp(), wp_timezone() ) : $date;
+	}
+
+	/**
+	 * Validate an ISO date without accepting PHP's date normalization.
+	 *
+	 * @param string $date Date to validate.
+	 * @return bool
+	 */
+	private static function is_valid_date( $date ) {
+		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
+		$errors      = DateTimeImmutable::getLastErrors();
+
+		return $date_object && ( false === $errors || ( 0 === $errors['warning_count'] && 0 === $errors['error_count'] ) ) && $date_object->format( 'Y-m-d' ) === $date;
+	}
+
+	/**
 	 * Retrieve an instance of the WP_Screen for the dashboard screen.
 	 *
 	 * @since 7.1.0

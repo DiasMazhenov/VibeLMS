@@ -11,6 +11,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$activity_period = LLMS_Admin_Dashboard::get_activity_period();
+$current_range   = $activity_period['range'];
+$activity_dates  = $activity_period['dates'];
+
 ?>
 <div class="wrap lifterlms lifterlms-settings llms-dashboard">
 
@@ -25,7 +29,25 @@ defined( 'ABSPATH' ) || exit;
 		<hr class="wp-header-end">
 
 		<div class="llms-dashboard-activity">
-			<h2><?php printf( esc_html__( 'Recent Activity: %1$1s to %2$2s', 'lifterlms' ), esc_html( wp_date( get_option( 'date_format' ), current_time( 'timestamp' ) - WEEK_IN_SECONDS ) ), esc_html( wp_date( get_option( 'date_format' ), current_time( 'timestamp' ) ) ) ); ?></h2>
+			<div class="vibelms-dashboard-period">
+				<form action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" method="get" class="vibelms-dashboard-period-form">
+					<input type="hidden" name="page" value="llms-dashboard">
+					<label for="vibelms-dashboard-range"><?php esc_html_e( 'Период', 'lifterlms' ); ?></label>
+					<select id="vibelms-dashboard-range" name="range">
+						<?php foreach ( $activity_period['ranges'] as $range => $label ) : ?>
+							<option value="<?php echo esc_attr( $range ); ?>" <?php selected( $current_range, $range ); ?>><?php echo esc_html( $label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<div class="vibelms-dashboard-custom-dates"<?php echo 'custom' === $current_range ? '' : ' hidden'; ?>>
+						<label for="vibelms-dashboard-date-start"><?php esc_html_e( 'С', 'lifterlms' ); ?></label>
+						<input id="vibelms-dashboard-date-start" type="date" name="date_start" value="<?php echo esc_attr( $activity_dates['start'] ); ?>">
+						<label for="vibelms-dashboard-date-end"><?php esc_html_e( 'по', 'lifterlms' ); ?></label>
+						<input id="vibelms-dashboard-date-end" type="date" name="date_end" value="<?php echo esc_attr( $activity_dates['end'] ); ?>">
+					</div>
+					<button class="button button-primary" type="submit"><?php esc_html_e( 'Показать', 'lifterlms' ); ?></button>
+				</form>
+			</div>
+			<h2><?php printf( esc_html__( 'Активность за период: с %1$s по %2$s', 'lifterlms' ), esc_html( LLMS_Admin_Dashboard::format_activity_date( $activity_dates['start'] ) ), esc_html( LLMS_Admin_Dashboard::format_activity_date( $activity_dates['end'] ) ) ); ?></h2>
 			<?php echo '<style type="text/css">#llms-charts-wrapper{display:none;}</style>'; ?>
 			<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in template.
@@ -35,13 +57,13 @@ defined( 'ABSPATH' ) || exit;
 						'json'        => wp_json_encode(
 							array(
 								'current_tab'         => 'settings',
-								'current_range'       => 'last-7-days',
+								'current_range'       => $current_range,
 								'current_students'    => array(),
 								'current_courses'     => array(),
 								'current_memberships' => array(),
 								'dates'               => array(
-									'start' => date( 'Y-m-d', current_time( 'timestamp' ) - WEEK_IN_SECONDS ),
-									'end'   => current_time( 'Y-m-d' ),
+									'start' => $activity_dates['start'],
+									'end'   => $activity_dates['end'],
 								),
 							)
 						),
@@ -71,6 +93,16 @@ defined( 'ABSPATH' ) || exit;
 		<script type="text/javascript">
 			//<![CDATA[
 			(function($) {
+				var dashboardRange = document.getElementById('vibelms-dashboard-range');
+				var customDates = document.querySelector('.vibelms-dashboard-custom-dates');
+				if (dashboardRange && customDates) {
+					var toggleCustomDates = function() {
+						customDates.hidden = 'custom' !== dashboardRange.value;
+					};
+					dashboardRange.addEventListener('change', toggleCustomDates);
+					toggleCustomDates();
+				}
+
 				function initVibeLMSPostboxes() {
 					$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 					if ( window.postboxes && 'function' === typeof window.postboxes.add_postbox_toggles ) {

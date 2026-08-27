@@ -25,12 +25,80 @@
 
 	.llms-dashboard-activity {
 
+		.vibelms-dashboard-period {
+			background: #fff;
+			border: 1px solid #dcdcde;
+			border-radius: 8px;
+			margin: 0 0 18px;
+			padding: 14px 18px;
+		}
+
+		.vibelms-dashboard-period-form {
+			align-items: flex-end;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+
+			label {
+				font-weight: 600;
+			}
+
+			select,
+			input[type="date"] {
+				min-height: 36px;
+			}
+		}
+
+		.vibelms-dashboard-custom-dates {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+
+			&[hidden] {
+				display: none;
+			}
+		}
+
+		.llms-widget-row {
+			display: grid;
+			gap: 18px;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+			&:before,
+			&:after {
+				display: none;
+			}
+
+			.llms-widget-1-4 {
+				float: none;
+				padding: 0;
+				width: auto;
+			}
+		}
+
 		h2 {
 			font-size: 20px;
 			font-weight: 700;
 			line-height: 1.5;
 			margin-top: 0;
 			text-align: center;
+		}
+	}
+
+	@media only screen and (max-width: 600px) {
+		.llms-dashboard-activity {
+			.vibelms-dashboard-period-form,
+			.vibelms-dashboard-custom-dates {
+				align-items: stretch;
+				flex-direction: column;
+			}
+
+			.vibelms-dashboard-period-form select,
+			.vibelms-dashboard-period-form input[type="date"],
+			.vibelms-dashboard-period-form button {
+				width: 100%;
+			}
 		}
 	}
 
