@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.32 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Added detailed opt-in diagnostics for certificate-template, engagement-handler, journal-linking and certificate-award failures.
+
 VibeLMS 0.0.31 - 2026-08-27
 ---------------------------
 

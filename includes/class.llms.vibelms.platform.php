@@ -516,18 +516,68 @@ class LLMS_VibeLMS_Platform {
 			return;
 		}
 
+		$diagnostic_context = array(
+			'student_id' => absint( $student_id ),
+			'quiz_id'    => absint( $quiz_id ),
+			'attempt_id' => absint( $attempt->get_id() ),
+		);
 		$template_id = absint( get_option( self::CERTIFICATE_TEMPLATE_OPTION, 0 ) );
-		if ( ! $template_id || ! class_exists( 'LLMS_Engagement_Handler' ) ) {
+		if ( ! $template_id ) {
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'warning', 'Certificate was not awarded: no template is configured', $diagnostic_context );
+			}
+			return;
+		}
+
+		if ( ! class_exists( 'LLMS_Engagement_Handler' ) ) {
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'critical', 'Certificate was not awarded: engagement handler is unavailable', $diagnostic_context );
+			}
 			return;
 		}
 
 		$result = LLMS_Engagement_Handler::handle_certificate( array( $student_id, $template_id, $quiz_id, 0 ) );
+		$diagnostic_context['template_id'] = $template_id;
+		if ( is_array( $result ) ) {
+			$diagnostic_context['errors'] = array();
+			foreach ( $result as $error ) {
+				if ( $error instanceof WP_Error ) {
+					$diagnostic_context['errors'][] = array(
+						'codes'    => $error->get_error_codes(),
+						'messages' => $error->get_error_messages(),
+					);
+				}
+			}
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'error', 'Certificate was not awarded: engagement handler returned errors', $diagnostic_context );
+			}
+			return;
+		}
+
 		if ( ! $result instanceof LLMS_User_Certificate ) {
+			$diagnostic_context['result_type'] = is_object( $result ) ? get_class( $result ) : gettype( $result );
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'error', 'Certificate was not awarded: unexpected engagement result', $diagnostic_context );
+			}
 			return;
 		}
 
 		global $wpdb;
-		$wpdb->update( $this->get_table_name(), array( 'certificate_id' => absint( $result->get_id() ) ), array( 'attempt_id' => absint( $attempt->get_id() ) ), array( '%d' ), array( '%d' ) );
+		$certificate_id = absint( $result->get_id() );
+		$updated        = $wpdb->update( $this->get_table_name(), array( 'certificate_id' => $certificate_id ), array( 'attempt_id' => absint( $attempt->get_id() ) ), array( '%d' ), array( '%d' ) );
+		if ( false === $updated ) {
+			$diagnostic_context['certificate_id'] = $certificate_id;
+			$diagnostic_context['db_error']       = $wpdb->last_error;
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log( 'error', 'Certificate was awarded but the journal was not updated', $diagnostic_context );
+			}
+			return;
+		}
+
+		$diagnostic_context['certificate_id'] = $certificate_id;
+		if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+			llms_vibelms_diagnostics_log( 'info', 'Certificate awarded and linked to the quiz attempt', $diagnostic_context );
+		}
 	}
 
 	/**
