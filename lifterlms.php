@@ -10,7 +10,7 @@
  * Plugin Name: VibeLMS
  * Plugin URI: https://mazhenov.kz
  * Description: VibeLMS learning platform foundation for a modern training portal.
- * Version: 0.0.24
+ * Version: 0.0.25
  * Author: Mazhenov Design
  * Author URI: https://mazhenov.kz
  * Text Domain: lifterlms
@@ -44,13 +44,14 @@ if ( ! defined( 'LLMS_PLUGIN_DIR' ) ) {
 }
 
 if ( ! defined( 'VIBELMS_VERSION' ) ) {
-	define( 'VIBELMS_VERSION', '0.0.24' );
+	define( 'VIBELMS_VERSION', '0.0.25' );
 }
 
 // Autoloader.
 require_once LLMS_PLUGIN_DIR . 'vendor/autoload.php';
 require_once LLMS_PLUGIN_DIR . 'includes/class-llms-loader.php';
 require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-branding.php';
+require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-admin-ux.php';
 require_once LLMS_PLUGIN_DIR . 'includes/functions/llms-functions-vibelms-roles.php';
 require_once LLMS_PLUGIN_DIR . 'includes/class.llms.vibelms.platform.php';
 require_once LLMS_PLUGIN_DIR . 'includes/class.llms.vibelms.transfer.php';

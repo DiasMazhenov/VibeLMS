@@ -11,6 +11,8 @@
 
 	.llms-inside-wrap {
 		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
 		padding: 0 10px;
 	}
 
@@ -26,7 +28,7 @@
 
 	.vibelms-brand-mark {
 		align-items: center;
-		background: linear-gradient(135deg, #466dd8, #7c4dff);
+		background: #466dd8;
 		border-radius: 12px;
 		color: #fff;
 		display: inline-flex;
@@ -59,6 +61,49 @@
 		font-size: 13px;
 		font-weight: 700;
 		padding: 6px 12px;
+	}
+
+	.llms-header-nav {
+		flex: 1 1 100%;
+
+		ul {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		&__link {
+			align-items: center;
+			border-radius: 6px;
+			color: #50575e;
+			display: inline-flex;
+			font-size: 13px;
+			font-weight: 600;
+			gap: 5px;
+			line-height: 1.2;
+			padding: 7px 9px;
+			text-decoration: none;
+
+			&:hover,
+			&:focus-visible {
+				background: #f0f3fa;
+				color: #1d2327;
+			}
+
+			&.is-active {
+				background: #466dd8;
+				color: #fff;
+			}
+		}
+
+		.dashicons {
+			font-size: 16px;
+			height: 16px;
+			width: 16px;
+		}
 	}
 }
 
@@ -343,6 +388,10 @@ a.llms-view-as {
 
 			.llms-meta {
 				column-gap: 10px;
+			}
+
+			.llms-header-nav {
+				width: 100%;
 			}
 		}
 	}

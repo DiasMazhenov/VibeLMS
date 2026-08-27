@@ -1,6 +1,15 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.25 - 2026-08-27
+---------------------------
+
+##### Enhancements
+
++ Added a simplified admin mode that hides optional legacy surfaces from the main menu while preserving direct URLs, data, capabilities and the existing course builder.
++ Added a unified responsive VibeLMS admin header with quick links to the dashboard, courses, tests, participants, access groups, journal, transfer and settings.
++ Added active navigation states, keyboard focus styling and a solid brand mark for a clearer, accessible admin experience.
+
 VibeLMS 0.0.24 - 2026-08-27
 ---------------------------
 

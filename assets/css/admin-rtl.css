@@ -2087,6 +2087,9 @@ ul.tabs li {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 16px;
   padding: 0 10px;
 }
 .llms-header .vibelms-brand {
@@ -2108,7 +2111,7 @@ ul.tabs li {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: linear-gradient(-135deg, #466dd8, #7c4dff);
+  background: #466dd8;
   border-radius: 12px;
   color: #fff;
   display: -webkit-inline-box;
@@ -2148,6 +2151,51 @@ ul.tabs li {
   font-size: 13px;
   font-weight: 700;
   padding: 6px 12px;
+}
+.llms-header .llms-header-nav {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+}
+.llms-header .llms-header-nav ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.llms-header .llms-header-nav__link {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 6px;
+  color: #50575e;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 5px;
+  line-height: 1.2;
+  padding: 7px 9px;
+  text-decoration: none;
+}
+.llms-header .llms-header-nav__link:hover, .llms-header .llms-header-nav__link:focus-visible {
+  background: #f0f3fa;
+  color: #1d2327;
+}
+.llms-header .llms-header-nav__link.is-active {
+  background: #466dd8;
+  color: #fff;
+}
+.llms-header .llms-header-nav .dashicons {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
 }
 
 .llms-subheader {
@@ -2441,6 +2489,9 @@ a.llms-view-as {
     -webkit-column-gap: 10px;
        -moz-column-gap: 10px;
             column-gap: 10px;
+  }
+  .llms-header .llms-inside-wrap .llms-header-nav {
+    width: 100%;
   }
 }
 .llms-basic-editor.ql-container .ql-editor {

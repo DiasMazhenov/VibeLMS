@@ -25,6 +25,8 @@ class LLMS_VibeLMS_Platform {
 
 	const CERTIFICATE_TEMPLATE_OPTION = 'vibelms_certificate_template_id';
 
+	const ADMIN_MODE_OPTION = 'vibelms_admin_mode';
+
 	const LANGUAGE_META_KEY = 'vibelms_language';
 
 	const LANGUAGE_GROUP_OPTION_PREFIX = 'vibelms_language_group_';
@@ -269,6 +271,17 @@ class LLMS_VibeLMS_Platform {
 		$settings[] = array(
 			'id'   => 'vibelms_assessment_settings',
 			'type' => 'sectionstart',
+		);
+		$settings[] = array(
+			'desc'    => __( 'Упрощённый режим скрывает редко используемые разделы. Данные, права доступа и конструктор курсов не изменяются.', 'lifterlms' ),
+			'default' => 'simple',
+			'id'      => self::ADMIN_MODE_OPTION,
+			'options' => array(
+				'simple'   => __( 'Упрощённый', 'lifterlms' ),
+				'advanced' => __( 'Расширенный', 'lifterlms' ),
+			),
+			'title'   => __( 'Режим интерфейса', 'lifterlms' ),
+			'type'    => 'select',
 		);
 		$settings[] = array(
 			'id'    => 'vibelms_assessment_settings_title',

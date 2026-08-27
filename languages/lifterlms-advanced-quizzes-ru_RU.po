@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: VibeLMS Advanced Quizzes 0.0.24\n"
+"Project-Id-Version: VibeLMS Advanced Quizzes 0.0.25\n"
 "Report-Msgid-Bugs-To: https://mazhenov.kz/\n"
 "Last-Translator: Mazhenov Design\n"
 "Language-Team: Russian\n"

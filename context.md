@@ -4,7 +4,7 @@
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
 
-The WordPress plugin metadata now presents the product as VibeLMS version `0.0.24`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata now presents the product as VibeLMS version `0.0.25`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The first project layer is opt-in diagnostics. It reuses the existing LifterLMS log system and writes structured events to the `vibelms-diagnostics` handle with redaction of common secrets. It records PHP warnings/notices, uncaught throwables and fatal shutdown errors when `VIBELMS_DEBUG` is enabled.
 
@@ -15,6 +15,8 @@ The repository now includes `scripts/build-installable-package.sh`, which create
 The runtime Composer `vendor/` directory is now tracked so the GitHub Push-to-Deploy integration receives the required `vendor/autoload.php`. It contains only production dependencies; development tools remain excluded.
 
 The admin interface now uses VibeLMS branding, shows the public VibeLMS version, hides the old license/support/add-ons/promotional dashboard blocks, and keeps only local content/report shortcuts. The dashboard uses one normal postbox column after the removed promotional side column; this prevents the empty WordPress side-sortables area from creating a large vertical gap. The remaining report shortcut is Russian. Compiled production CSS and JS are tracked because Push-to-Deploy does not execute npm; the missing `admin.css` was the cause of the unstyled dashboard and oversized logo. The customized admin stylesheet now uses `VIBELMS_VERSION` for cache busting.
+
+The admin experience now defaults to a reversible simplified mode. It hides optional legacy menu surfaces such as orders, coupons, engagements, forms, resources, add-ons and system status for non-administrators, without deleting data, changing capabilities or disabling direct URLs. **VibeLMS → Настройки → Общие → Режим интерфейса** switches between **Упрощённый** and **Расширенный** modes. Every VibeLMS admin screen except the existing `llms-course-builder` receives one responsive header with the brand, version, keyboard-visible focus states, active section and quick links to the dashboard, courses, tests, participants, access groups, journal, transfer and settings. Advanced question controls inside the existing course builder remain untouched to preserve compatibility.
 
 The old LifterLMS review-request module was removed from the VibeLMS load path, so the admin footer and review notice no longer contain LifterLMS promotional text or WordPress.org review links. The legacy Add-ons screen is also disabled in the reusable fork. Direct visits to legacy import, setup, resources and add-ons pages are redirected to VibeLMS screens, and the external HelpScout launcher is disabled.
 
@@ -66,13 +68,13 @@ VibeLMS now has a separate **VibeLMS → Тесты** constructor. It creates an
 - Main branch: `main`
 - Upstream reference: `https://github.com/gocodebox/lifterlms`
 - Target repository: `https://github.com/DiasMazhenov/VibeLMS`
-- The local Git history is a clean source snapshot plus the VibeLMS diagnostics commit; the original LifterLMS repository is retained as `upstream`.
+- The local Git history contains the VibeLMS feature commits on `main`; the original LifterLMS repository is retained as `upstream`.
 
 ## Checks
 
 - PHP syntax and PHPCS must pass for changed PHP files.
 - Current checks: PHP lint for all changed PHP files, shell syntax, `git diff --check`, the language registration/enrollment contract check, existing VibeLMS smoke checks, diagnostics and role-definition checks passed; PHPCS is unavailable because the tracked production `vendor/` intentionally excludes `vendor/bin/phpcs`. Legacy JS syntax, the rebuilt course-builder bundle and minified analytics syntax pass; `assets/css/admin.css`, `assets/js/llms.js` and their production variants are present. The analytics query fallback and optional-library guards are checked before release. Both Russian translation catalogs pass `msgfmt --check`; the Advanced Quizzes catalog is loaded from the bundled `languages/` directory. Full PHPUnit is currently blocked because `vendor/bin/phpunit` and the WordPress test library/database are not installed.
-- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.24.zip` (generated, ignored). It is for staging installation and is not committed to Git.
+- Local package artifact: `/Users/diasmazhenov/vibecode/VibeLMS/dist/vibelms-0.0.25.zip` (generated, ignored). It is for staging installation and is not committed to Git.
 - Targeted PHPUnit is blocked before test discovery because `tmp/tests/wordpress-tests-lib/includes/functions.php` is not installed. A WordPress test library and database are required to run it.
 - `composer.lock`, generated assets and `tmp/` stay untracked according to upstream rules. Runtime `vendor/` is tracked specifically for Push-to-Deploy; dev dependencies must not be installed before committing it.
 
