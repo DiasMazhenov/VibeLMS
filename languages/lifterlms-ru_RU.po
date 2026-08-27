@@ -24745,6 +24745,9 @@ msgstr "Благодарим за отзыв!"
 msgid "There was an error recording your answer. Please return to the lesson and begin again."
 msgstr "Произошла ошибка при записи вашего ответа. Вернитесь к уроку и начните заново."
 
+msgid "Start Over"
+msgstr "Начать заново"
+
 #: includes/class.llms.ajax.handler.php:507
 msgid "There was an error starting the quiz. Please return to the lesson and begin again."
 msgstr "Произошла ошибка и мы не смогли запустить тест. Вернитесь к материалам урока и попробуйте снова."

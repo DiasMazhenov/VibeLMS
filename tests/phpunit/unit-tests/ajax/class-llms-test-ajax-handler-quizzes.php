@@ -201,10 +201,8 @@ class LLMS_Test_AJAX_Handler_Quizzes extends LLMS_UnitTestCase {
 			)
 		);
 
-		// The status is "pass" so it won't be possible to answer the question again anyway (500 vs 400).
-		$this->assertIsWPError( $res );
-		$this->assertWPErrorCodeEquals( 500, $res );
-		$this->assertWPErrorMessageEquals( "There was an error recording your answer. Please return to the lesson and begin again.", $res );
+		// A repeated answer for a completed attempt is idempotent and returns its result.
+		$this->assertArrayHasKey( 'redirect', $res );
 
 		// Reset.
 		$this->quiz->set( 'limit_attempts', 'no' );

@@ -735,7 +735,57 @@ class LLMS_AJAX_Handler {
 
 		$student_quizzes = $student->quizzes();
 		$attempt         = $student_quizzes->get_attempt_by_key( $attempt_key );
-		if ( ! $attempt || 'incomplete' !== $attempt->get( 'status' ) || ( $attempt->get_quiz()->can_be_resumed() && ! $attempt->can_be_resumed() ) ) {
+		$attempt_quiz               = $attempt ? $attempt->get_quiz() : false;
+		$attempt_status             = $attempt ? $attempt->get( 'status' ) : 'not_found';
+		$quiz_can_be_resumed        = $attempt_quiz ? $attempt_quiz->can_be_resumed() : false;
+		$attempt_can_be_resumed     = $attempt ? $attempt->can_be_resumed() : false;
+		$completed_attempt_statuses = array( 'pass', 'fail', 'pending' );
+
+		if ( $attempt && $attempt_quiz && in_array( $attempt_status, $completed_attempt_statuses, true ) ) {
+			$access_check = self::verify_quiz_access( $student, $attempt->get( 'lesson_id' ) );
+			if ( is_wp_error( $access_check ) ) {
+				return $access_check;
+			}
+
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log(
+					'warning',
+					'Quiz answer received for completed attempt',
+					array(
+						'student_id'             => $student->get_id(),
+						'question_id'            => $question_id,
+						'quiz_id'                => absint( $attempt->get( 'quiz_id' ) ),
+						'attempt_id'             => absint( $attempt->get_id() ),
+						'attempt_status'         => $attempt_status,
+						'quiz_can_be_resumed'    => $quiz_can_be_resumed,
+						'attempt_can_be_resumed' => $attempt_can_be_resumed,
+					)
+				);
+			}
+
+			return array(
+				'redirect' => self::get_quiz_attempt_redirect_url( $attempt ),
+			);
+		}
+
+		if ( ! $attempt || ! $attempt_quiz || 'incomplete' !== $attempt_status || ( $quiz_can_be_resumed && ! $attempt_can_be_resumed ) ) {
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log(
+					'warning',
+					'Quiz answer rejected',
+					array(
+						'student_id'             => $student->get_id(),
+						'question_id'            => $question_id,
+						'question_type'          => sanitize_key( $request['question_type'] ),
+						'attempt_found'          => (bool) $attempt,
+						'attempt_status'         => $attempt_status,
+						'quiz_id'                => $attempt ? absint( $attempt->get( 'quiz_id' ) ) : 0,
+						'quiz_can_be_resumed'    => $quiz_can_be_resumed,
+						'attempt_can_be_resumed' => $attempt_can_be_resumed,
+					)
+				);
+			}
+
 			$err->add( 500, __( 'There was an error recording your answer. Please return to the lesson and begin again.', 'lifterlms' ) );
 			return $err;
 		}
@@ -846,10 +896,29 @@ class LLMS_AJAX_Handler {
 			}
 		}
 
+		// Do not run completion actions twice when unload and the final answer overlap.
+		if ( in_array( $attempt->get( 'status' ), array( 'pass', 'fail', 'pending' ), true ) ) {
+			return array(
+				'redirect' => self::get_quiz_attempt_redirect_url( $attempt ),
+			);
+		}
+
 		// Record the attempt's completion.
 		$attempt->end();
 
-		// Setup a redirect.
+		return array(
+			'redirect' => self::get_quiz_attempt_redirect_url( $attempt ),
+		);
+	}
+
+	/**
+	 * Build the result URL for a quiz attempt.
+	 *
+	 * @param LLMS_Quiz_Attempt $attempt Quiz attempt.
+	 * @return string
+	 */
+	private static function get_quiz_attempt_redirect_url( $attempt ) {
+
 		$url = add_query_arg(
 			array(
 				'attempt_key' => $attempt->get_key(),
@@ -857,17 +926,15 @@ class LLMS_AJAX_Handler {
 			get_permalink( $attempt->get( 'quiz_id' ) )
 		);
 
-		return array(
-			/**
-			 * Filter the quiz redirect URL on completion.
-			 *
-			 * @since Unknown
-			 *
-			 * @param string            $url     The quiz redirect URL on completion.
-			 * @param LLMS_Quiz_Attempt $attempt The quiz attempt.
-			 */
-			'redirect' => apply_filters( 'llms_quiz_complete_redirect', $url, $attempt ),
-		);
+		/**
+		 * Filter the quiz redirect URL on completion.
+		 *
+		 * @since Unknown
+		 *
+		 * @param string            $url     The quiz redirect URL on completion.
+		 * @param LLMS_Quiz_Attempt $attempt The quiz attempt.
+		 */
+		return apply_filters( 'llms_quiz_complete_redirect', $url, $attempt );
 	}
 
 	/**

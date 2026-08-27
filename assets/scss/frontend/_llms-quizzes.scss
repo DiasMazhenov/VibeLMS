@@ -233,6 +233,13 @@
 			text-decoration: none;
 		}
 
+		a.llms-quiz-restart {
+			color: #fefefe;
+			float: none;
+			font-size: 16px;
+			margin: 10px 10px 0 0;
+		}
+
 	}
 
 	.llms-quiz-counter {
@@ -502,4 +509,3 @@
 // .llms-question-count {
 //   margin-bottom: 20px;
 // }
-

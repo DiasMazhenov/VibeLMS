@@ -530,6 +530,7 @@ class LLMS_L10n_JS {
 			'Grading Quiz...' => esc_html__( 'Grading Quiz...', 'lifterlms' ),
 			'Loading Question...' => esc_html__( 'Loading Question...', 'lifterlms' ),
 			'An unknown error occurred. Please try again.' => esc_html__( 'An unknown error occurred. Please try again.', 'lifterlms' ),
+			'Start Over' => esc_html__( 'Start Over', 'lifterlms' ),
 			'Loading Quiz...' => esc_html__( 'Loading Quiz...', 'lifterlms' ),
 			'Save & Exit Quiz' => esc_html__( 'Save & Exit Quiz', 'lifterlms' ),
 			'Time Remaining' => esc_html__( 'Time Remaining', 'lifterlms' ),

@@ -1,6 +1,15 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.42 - 2026-08-28
+---------------------------
+
+##### Fixes
+
++ Prevented duplicate quiz answer/completion requests from racing during final submission.
++ Made completed-attempt responses idempotent by redirecting to the saved result.
++ Added detailed opt-in diagnostics for rejected quiz answers and a translated **Начать заново** recovery button.
+
 VibeLMS 0.0.40 - 2026-08-27
 ---------------------------
 

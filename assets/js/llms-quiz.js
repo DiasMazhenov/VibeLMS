@@ -85,6 +85,21 @@
 		resumable: null,
 
 		/**
+		 * Prevent concurrent answer/save requests.
+		 */
+		submitting: false,
+
+		/**
+		 * Prevent duplicate completion requests from unload/timer events.
+		 */
+		completion_sent: false,
+
+		/**
+		 * URL to use when an attempt must be restarted.
+		 */
+		restart_url: null,
+
+		/**
 		 * Flag if the user is exiting the quiz.
 		 */
 		exiting_quiz: false,
@@ -101,6 +116,7 @@
 		bind: function() {
 
 			var self = this;
+			this.restart_url = window.location.href;
 
 			// Start quiz.
 			$( '#llms_start_quiz' ).on( 'click', function( e ) {
@@ -138,7 +154,7 @@
 
 			// Complete the quiz attempt when user leaves if the quiz is running.
 			$( window ).on( 'unload', function() {
-				if ( self.status && ! self.resumable ) {
+				if ( self.status && ! self.resumable && ! self.submitting && ! self.completion_sent ) {
 					self.complete_quiz();
 				}
 			} );
@@ -161,16 +177,28 @@
 		 * @since    3.16.0
 		 * @version  3.16.0
 		 */
-		add_error: function( msg ) {
+		add_error: function( msg, options ) {
 
 			var self = this;
+			options  = options || {};
 
 			self.$container.find( '#llms-quiz-error-container' ).remove();
 			self.$container.append( '<div id="llms-quiz-error-container" role="alert" aria-atomic="true"></div>' );
 			const $error_container = self.$container.find( '#llms-quiz-error-container' );
 
-			var $err = $( '<p class="llms-error">' + msg + '<a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a></p>' );
+			var $err = $( '<p class="llms-error"></p>' ).text( msg );
+			if ( options.restart ) {
+				$err.append(
+					$( '<a class="button llms-button-action llms-quiz-restart"></a>' )
+						.attr( 'href', self.get_restart_url() )
+						.text( LLMS.l10n.translate( 'Start Over' ) )
+				);
+			}
+			$err.append( '<a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a>' );
 			$err.on( 'click', 'a', function( e ) {
+				if ( $( this ).hasClass( 'llms-quiz-restart' ) ) {
+					return;
+				}
 				e.preventDefault();
 				$err.fadeOut( '200' );
 				setTimeout( function() {
@@ -181,16 +209,34 @@
 
 		},
 
+		/**
+		 * Return the initial quiz URL without an old attempt key.
+		 *
+		 * @return {String}
+		 */
+		get_restart_url: function() {
+			var url = new URL( this.restart_url || window.location.href );
+			url.searchParams.delete( 'attempt_key' );
+			url.hash = '';
+			return url.toString();
+		},
+
 		save_question: function( options ) {
 			var self      = this,
 				$question = this.$container.find( '.llms-question-wrapper' ),
 				type      = $question.attr( 'data-type' ),
 				valid;
 
+			if ( this.submitting || this.completion_sent ) {
+				return;
+			}
+
 			if ( ! this.validators[ type ] ) {
 				console.log( 'No validator registered for question type ' + type );
 				return;
 			}
+
+			this.submitting = true;
 
 			valid = this.validators[ type ]( $question );
 
@@ -213,11 +259,22 @@
 			LLMS.Ajax.call( {
 				data: requestData,
 				success: function( r ) {
-					if (options && typeof options.callback === 'function') {
+					if ( r.message ) {
+						self.add_error( r.message, { restart: true } );
+						return;
+					}
+					if ( options && typeof options.callback === 'function' ) {
 						options.callback();
 					}
 				},
-			});
+				error: function( jqXHR ) {
+					var message = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : LLMS.l10n.translate( 'An unknown error occurred. Please try again.' );
+					self.add_error( message, { restart: true } );
+				},
+				complete: function() {
+					self.submitting = false;
+				},
+			} );
 		},
 
 		/**
@@ -235,6 +292,10 @@
 				type      = $question.attr( 'data-type' ),
 				valid;
 
+			if ( this.submitting || this.completion_sent ) {
+				return;
+			}
+
 			if ( ! this.validators[ type ] ) {
 
 				console.log( 'No validator registered for question type ' + type );
@@ -244,8 +305,10 @@
 
 			valid = this.validators[ type ]( $question );
 			if ( ! valid || true !== valid.valid || ! valid.answer ) {
-				return self.add_error( valid.valid );
+				return self.add_error( valid && valid.valid ? valid.valid : LLMS.l10n.translate( 'An unknown error occurred. Please try again.' ) );
 			}
+
+			self.submitting = true;
 
 			LLMS.Ajax.call( {
 				data: {
@@ -256,6 +319,8 @@
 					question_type: $question.attr( 'data-type' ),
 				},
 				beforeSend: function() {
+
+					self.$buttons.attr( 'disabled', 'disabled' );
 
 					var msg = $btn.hasClass( 'llms-button-quiz-complete' ) ? LLMS.l10n.translate( 'Grading Quiz...' ) : LLMS.l10n.translate( 'Loading Question...' );
 					self.toggle_loader( 'show', msg );
@@ -285,20 +350,24 @@
 
 					} else if ( r.message ) {
 
-						self.$container.append( '<p>' + r.message + '</p>' );
+						self.add_error( r.message, { restart: true } );
 
 					} else {
 
 						var msg = LLMS.l10n.translate( 'An unknown error occurred. Please try again.' );
-						self.$container.append( '<p>' + msg + '</p>' );
+						self.add_error( msg, { restart: true } );
 
 					}
 
 				},
 				error: function ( jqXHR, status, error ) {
-					self.reload_question();
-					self.add_error( LLMS.l10n.translate( 'An unknown error occurred. Please try again.' ) );
+					var message = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : LLMS.l10n.translate( 'An unknown error occurred. Please try again.' );
+					self.add_error( message, { restart: true } );
 					console.log( error );
+				},
+				complete: function() {
+					self.submitting = false;
+					self.$buttons.removeAttr( 'disabled' );
 				}
 
 			} );
@@ -318,6 +387,12 @@
 
 			var self = this;
 
+			if ( self.submitting || self.completion_sent ) {
+				return;
+			}
+			self.submitting      = true;
+			self.completion_sent = true;
+
 			LLMS.Ajax.call( {
 				data: {
 					action: 'quiz_end',
@@ -325,6 +400,7 @@
 				},
 				beforeSend: function() {
 
+					self.$buttons.attr( 'disabled', 'disabled' );
 					self.toggle_loader( 'show', 'Grading Quiz...' );
 
 				},
@@ -338,15 +414,24 @@
 
 					} else if ( r.message ) {
 
-						self.$container.append( '<p>' + r.message + '</p>' );
+						self.add_error( r.message, { restart: true } );
 
 					} else {
 
 						var msg = LLMS.l10n.translate( 'An unknown error occurred. Please try again.' );
-						self.$container.append( '<p>' + msg + '</p>' );
+						self.add_error( msg, { restart: true } );
 
 					}
 
+				},
+				error: function( jqXHR ) {
+					var message = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : LLMS.l10n.translate( 'An unknown error occurred. Please try again.' );
+					self.add_error( message, { restart: true } );
+					self.completion_sent = false;
+				},
+				complete: function() {
+					self.submitting = false;
+					self.$buttons.removeAttr( 'disabled' );
 				}
 
 			} );
