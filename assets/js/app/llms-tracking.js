@@ -196,4 +196,7 @@ LLMS.Tracking = function( settings ) {
 
 };
 
-llms.tracking = new LLMS.Tracking( llms.tracking );
+// Use the explicit global namespace so the frontend bundle also works when
+// Elementor renders the preview in its isolated editor frame.
+window.llms = window.llms || {};
+window.llms.tracking = new LLMS.Tracking( window.llms.tracking );

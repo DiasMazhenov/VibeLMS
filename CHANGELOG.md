@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.39 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Fixed the Elementor editor preview bootstrap by using the explicit browser `window.llms` namespace for tracking initialization.
+
 VibeLMS 0.0.38 - 2026-08-27
 ---------------------------
 
