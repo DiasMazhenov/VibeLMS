@@ -97,7 +97,11 @@ $activity_dates  = $activity_period['dates'];
 				var customDates = document.querySelector('.vibelms-dashboard-custom-dates');
 				if (dashboardRange && customDates) {
 					var toggleCustomDates = function() {
-						customDates.hidden = 'custom' !== dashboardRange.value;
+						var isCustom = 'custom' === dashboardRange.value;
+						customDates.hidden = ! isCustom;
+						Array.prototype.forEach.call(customDates.querySelectorAll('input'), function(input) {
+							input.disabled = ! isCustom;
+						});
 					};
 					dashboardRange.addEventListener('change', toggleCustomDates);
 					toggleCustomDates();

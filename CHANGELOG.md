@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.38 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Prevented hidden custom date fields from being submitted with preset dashboard periods.
+
 VibeLMS 0.0.37 - 2026-08-27
 ---------------------------
 
