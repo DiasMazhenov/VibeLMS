@@ -22,6 +22,15 @@ if ( in_array( $donut_class, array( 'pass', 'fail' ) ) ) {
 
 <h2 class="llms-quiz-results-title"><?php echo esc_html( sprintf( __( 'Attempt #%d Results', 'lifterlms' ), $attempt->get( 'attempt' ) ) ); ?></h2>
 
+<?php $certificate_url = function_exists( 'llms_vibelms_get_certificate_url_for_attempt' ) ? llms_vibelms_get_certificate_url_for_attempt( $attempt ) : ''; ?>
+<?php if ( $certificate_url ) : ?>
+	<p class="llms-quiz-certificate-button llms-button-wrapper">
+		<a class="llms-button-primary wp-element-button" href="<?php echo esc_url( $certificate_url ); ?>">
+			<?php esc_html_e( 'Получить сертификат', 'lifterlms' ); ?>
+		</a>
+	</p>
+<?php endif; ?>
+
 <?php if ( ! $attempt->can_be_resumed() ) : ?>
 	<aside class="llms-quiz-results-aside">
 		<?php if ( $attempt->get_count( 'available_points' ) ) : ?>
@@ -49,4 +58,3 @@ if ( in_array( $donut_class, array( 'pass', 'fail' ) ) ) {
 	?>
 
 </section>
-

@@ -58,7 +58,7 @@ class LLMS_Elementor_Widgets {
 	 * @return string[]
 	 */
 	public static function get_elementor_post_types() {
-		return array( 'course', 'lesson', 'llms_quiz' );
+		return array( 'course', 'lesson', 'llms_quiz', 'llms_membership' );
 	}
 
 	/**
@@ -191,7 +191,7 @@ class LLMS_Elementor_Widgets {
 			return true;
 		}
 
-		return in_array( $screen->base, array( 'post', 'post-new' ), true ) && in_array( $screen->post_type, array( 'course', 'lesson', 'llms_quiz' ), true );
+		return in_array( $screen->base, array( 'post', 'post-new' ), true ) && in_array( $screen->post_type, self::get_elementor_post_types(), true );
 	}
 
 	/**

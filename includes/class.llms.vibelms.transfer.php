@@ -42,6 +42,7 @@ class LLMS_VibeLMS_Transfer {
 		'vibelms_passing_score_percent',
 		'vibelms_require_identity',
 		'vibelms_certificate_template_id',
+		'vibelms_show_certificate_button',
 		'vibelms_support_url',
 		'vibelms_footer_text',
 	);

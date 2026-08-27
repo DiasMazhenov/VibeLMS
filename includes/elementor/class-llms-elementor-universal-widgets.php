@@ -255,6 +255,20 @@ class LLMS_Elementor_Widget_Quiz_Results extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->add_control(
+			'display_mode',
+			array(
+				'label'   => __( 'Вид результатов', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => array(
+					'all'    => __( 'Мои результаты всех тестов', 'lifterlms' ),
+					'single' => __( 'Страница результата выбранного теста', 'lifterlms' ),
+				),
+				'default' => 'all',
+			)
+		);
+		$this->add_course_selector_control();
+		$this->add_quiz_selector_control();
+		$this->add_control(
 			'limit',
 			array(
 				'label'   => __( 'Количество результатов', 'lifterlms' ),
@@ -262,6 +276,15 @@ class LLMS_Elementor_Widget_Quiz_Results extends LLMS_Elementor_Widget_Base {
 				'min'     => 1,
 				'max'     => 100,
 				'default' => 10,
+				'condition' => array( 'display_mode' => 'all' ),
+			)
+		);
+		$this->add_control(
+			'preview_note',
+			array(
+				'label'     => __( 'Для страницы результата выберите тест выше. В предпросмотре отобразится результат текущего пользователя.', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::HEADING,
+				'condition' => array( 'display_mode' => 'single' ),
 			)
 		);
 		$this->end_controls_section();
@@ -269,6 +292,12 @@ class LLMS_Elementor_Widget_Quiz_Results extends LLMS_Elementor_Widget_Base {
 	}
 
 	protected function render() {
+		$settings = $this->get_settings_for_display();
+		if ( 'single' === ( $settings['display_mode'] ?? 'all' ) ) {
+			echo '<div class="vibelms-quiz-result-page">' . $this->render_current_quiz_results() . '</div>';
+			return;
+		}
+
 		if ( ! is_user_logged_in() ) {
 			echo '<p>' . esc_html__( 'Войдите, чтобы увидеть результаты тестов.', 'lifterlms' ) . '</p>';
 			return;
@@ -293,6 +322,43 @@ class LLMS_Elementor_Widget_Quiz_Results extends LLMS_Elementor_Widget_Base {
 			echo '</tbody></table>';
 		}
 		echo '</div>';
+	}
+
+	/**
+	 * Render the standard result page for the selected quiz in Elementor.
+	 *
+	 * @return string
+	 */
+	private function render_current_quiz_results() {
+		$quiz_id = $this->get_context_quiz_id();
+		if ( ! $quiz_id ) {
+			return '<div class="vibelms-elementor-context-notice">' . esc_html__( 'Выберите тест в настройках виджета для предпросмотра результатов.', 'lifterlms' ) . '</div>';
+		}
+
+		if ( ! is_user_logged_in() ) {
+			return '<p>' . esc_html__( 'Войдите, чтобы увидеть результат теста.', 'lifterlms' ) . '</p>';
+		}
+
+		$quiz_post = get_post( $quiz_id );
+		if ( ! $quiz_post || 'llms_quiz' !== $quiz_post->post_type || ! function_exists( 'lifterlms_template_quiz_results' ) ) {
+			return '';
+		}
+
+		global $post;
+		$original_post = $post;
+		$post          = $quiz_post;
+		setup_postdata( $post );
+		ob_start();
+		lifterlms_template_quiz_results();
+		$content = ob_get_clean();
+		wp_reset_postdata();
+		$post = $original_post;
+
+		if ( ! $content && $this->is_elementor_preview() ) {
+			$content = '<div class="vibelms-elementor-context-notice">' . esc_html__( 'Здесь будут показаны результаты выбранного теста после его прохождения.', 'lifterlms' ) . '</div>';
+		}
+
+		return $content;
 	}
 }
 

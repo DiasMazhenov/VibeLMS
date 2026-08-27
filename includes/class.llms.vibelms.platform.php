@@ -25,6 +25,8 @@ class LLMS_VibeLMS_Platform {
 
 	const CERTIFICATE_TEMPLATE_OPTION = 'vibelms_certificate_template_id';
 
+	const CERTIFICATE_BUTTON_OPTION = 'vibelms_show_certificate_button';
+
 	const ADMIN_MODE_OPTION = 'vibelms_admin_mode';
 
 	const DASHBOARD_METRICS_OPTION = 'vibelms_dashboard_metrics';
@@ -392,6 +394,13 @@ class LLMS_VibeLMS_Platform {
 			'type'              => 'select',
 		);
 		$settings[] = array(
+			'desc'    => __( 'Показывать участнику кнопку «Получить сертификат» после успешного прохождения теста.', 'lifterlms' ),
+			'default' => 'yes',
+			'id'      => self::CERTIFICATE_BUTTON_OPTION,
+			'title'   => __( 'Кнопка «Получить сертификат»', 'lifterlms' ),
+			'type'    => 'checkbox',
+		);
+		$settings[] = array(
 			'id'   => 'vibelms_assessment_settings',
 			'type' => 'sectionend',
 		);
@@ -627,6 +636,51 @@ class LLMS_VibeLMS_Platform {
 	}
 
 	/**
+	 * Return the current user's certificate URL for a passed VibeLMS attempt.
+	 *
+	 * @param LLMS_Quiz_Attempt $attempt Quiz attempt.
+	 * @return string
+	 */
+	public function get_certificate_url_for_attempt( $attempt ) {
+		if (
+			! $attempt instanceof LLMS_Quiz_Attempt ||
+			! $this->is_vibelms_pass( $attempt ) ||
+			'yes' !== get_option( self::CERTIFICATE_BUTTON_OPTION, 'yes' ) ||
+			! is_user_logged_in()
+		) {
+			return '';
+		}
+
+		$student_id = absint( $attempt->get( 'student_id' ) );
+		if ( ! $student_id || $student_id !== get_current_user_id() ) {
+			return '';
+		}
+
+		global $wpdb;
+		$certificate_id = absint(
+			$wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT certificate_id FROM {$this->get_table_name()} WHERE attempt_id = %d AND user_id = %d AND status = %s LIMIT 1",
+					absint( $attempt->get_id() ),
+					$student_id,
+					'passed'
+				)
+			)
+		);
+
+		if ( ! $certificate_id && function_exists( 'llms_get_user_postmeta' ) ) {
+			$certificate_id = absint( llms_get_user_postmeta( $student_id, $attempt->get( 'quiz_id' ), '_certificate_earned', true ) );
+		}
+
+		if ( ! $certificate_id || 'llms_my_certificate' !== get_post_type( $certificate_id ) || ! class_exists( 'LLMS_User_Certificate' ) ) {
+			return '';
+		}
+
+		$certificate = new LLMS_User_Certificate( $certificate_id );
+		return $certificate->can_user_view( $student_id ) ? (string) get_permalink( $certificate_id ) : '';
+	}
+
+	/**
 	 * Require identity data when the project enables the option.
 	 *
 	 * @param bool          $is_open Whether the quiz is open.
@@ -780,4 +834,14 @@ function llms_vibelms_platform() {
 		$instance = new LLMS_VibeLMS_Platform();
 	}
 	return $instance;
+}
+
+/**
+ * Return the certificate URL for a passed VibeLMS attempt.
+ *
+ * @param LLMS_Quiz_Attempt $attempt Quiz attempt.
+ * @return string
+ */
+function llms_vibelms_get_certificate_url_for_attempt( $attempt ) {
+	return llms_vibelms_platform()->get_certificate_url_for_attempt( $attempt );
 }

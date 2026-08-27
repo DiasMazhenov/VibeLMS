@@ -1,6 +1,19 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.44 - 2026-08-28
+---------------------------
+
+##### Added
+
++ Added an Elementor mode for rendering a complete result page for a selected quiz.
++ Added an optional **Получить сертификат** button after a passed VibeLMS assessment.
++ Added support for editing access groups through Elementor.
+
+##### Content
+
++ Added the reusable Russian and Kazakh standard-training quiz workflows through the VibeLMS test constructor.
+
 VibeLMS 0.0.43 - 2026-08-28
 ---------------------------
 
