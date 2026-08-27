@@ -49,7 +49,7 @@ class LLMS_Admin_Header {
 		// Show header on our custom post types in admin, but not on the block editor.
 		if (
 			isset( $current_screen->post_type ) &&
-			in_array( $current_screen->post_type, array( 'course', 'lesson', 'llms_quiz', 'llms_membership', 'llms_review', 'llms_engagement', 'llms_order', 'llms_coupon', 'llms_voucher', 'llms_form', 'llms_achievement', 'llms_my_achievement', 'llms_certificate', 'llms_my_certificate', 'llms_email' ), true ) &&
+			in_array( $current_screen->post_type, array( 'course', 'lesson', 'llms_quiz', 'llms_membership', 'vibelms_material', 'llms_review', 'llms_engagement', 'llms_order', 'llms_coupon', 'llms_voucher', 'llms_form', 'llms_achievement', 'llms_my_achievement', 'llms_certificate', 'llms_my_certificate', 'llms_email' ), true ) &&
 			false === $current_screen->is_block_editor
 		) {
 			$show_header = true;
@@ -122,6 +122,12 @@ class LLMS_Admin_Header {
 				'icon'       => 'dashicons-welcome-learn-more',
 				'url'        => admin_url( 'edit.php?post_type=course' ),
 				'capability' => 'edit_courses',
+			),
+			'materials' => array(
+				'label'      => __( 'Материалы', 'lifterlms' ),
+				'icon'       => 'dashicons-media-document',
+				'url'        => admin_url( 'edit.php?post_type=vibelms_material' ),
+				'capability' => 'manage_options',
 			),
 			'quizzes' => array(
 				'label'      => __( 'Тесты', 'lifterlms' ),
@@ -199,6 +205,9 @@ class LLMS_Admin_Header {
 		}
 		if ( 'courses' === $key ) {
 			return in_array( $post_type, array( 'course', 'lesson' ), true ) || 'edit-course' === $screen_id;
+		}
+		if ( 'materials' === $key ) {
+			return 'vibelms_material' === $post_type;
 		}
 		if ( 'quizzes' === $key ) {
 			return 'llms-quiz-builder' === $page || 'llms_quiz' === $post_type;

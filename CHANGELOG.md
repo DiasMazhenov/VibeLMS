@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.30 - 2026-08-27
+---------------------------
+
+##### Fixes
+
++ Added the Materials entry to the shared VibeLMS admin header and active navigation state.
++ Prevented transfer archives from importing WordPress capability and user-level meta that could alter imported roles.
+
 VibeLMS 0.0.29 - 2026-08-27
 ---------------------------
 

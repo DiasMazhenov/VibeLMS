@@ -1520,7 +1520,8 @@ class LLMS_VibeLMS_Transfer {
 				update_user_meta( $user_id, 'vibelms_transfer_needs_password_reset', 1 );
 			}
 			foreach ( isset( $raw['meta'] ) && is_array( $raw['meta'] ) ? $raw['meta'] : array() as $key => $values ) {
-				if ( ! is_string( $key ) || preg_match( '/pass|session|token|secret|activation|application_password|auth_cookie|reset/i', $key ) ) {
+				// Never import authentication or role-bearing meta from an archive.
+				if ( ! is_string( $key ) || preg_match( '/pass|session|token|secret|activation|application_password|auth_cookie|reset|capabilities|user_level/i', $key ) ) {
 					continue;
 				}
 				foreach ( (array) $values as $value ) {
