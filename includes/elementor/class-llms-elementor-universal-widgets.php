@@ -659,7 +659,47 @@ class LLMS_Elementor_Widget_Language_Content extends LLMS_Elementor_Widget_Base 
 			return;
 		}
 
-		echo '<div class="vibelms-language-content" data-vibelms-language="' . esc_attr( $current ) . '">' . do_shortcode( wp_kses_post( $content ) ) . '</div>';
+		echo '<div class="vibelms-language-content" data-vibelms-language="' . esc_attr( $current ) . '">' . do_shortcode( $this->sanitize_content( $content ) ) . '</div>';
+	}
+
+	/**
+	 * Keep normal post HTML and allow only YouTube embeds in localized blocks.
+	 *
+	 * @param string $content Editor content.
+	 * @return string
+	 */
+	private function sanitize_content( $content ) {
+		$content = preg_replace_callback(
+			'/<iframe\b[^>]*>/i',
+			function ( $match ) {
+				if ( ! preg_match( '/\bsrc\s*=\s*(["\'])(.*?)\1/i', $match[0], $src_match ) ) {
+					return '';
+				}
+
+				$src    = esc_url_raw( html_entity_decode( $src_match[2] ) );
+				$scheme = strtolower( (string) wp_parse_url( $src, PHP_URL_SCHEME ) );
+				$host   = strtolower( (string) wp_parse_url( $src, PHP_URL_HOST ) );
+				$hosts  = array( 'youtube.com', 'www.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com' );
+
+				return 'https' === $scheme && in_array( $host, $hosts, true ) ? $match[0] : '';
+			},
+			(string) $content
+		);
+
+		$allowed          = wp_kses_allowed_html( 'post' );
+		$allowed['iframe'] = array(
+			'src'             => true,
+			'title'           => true,
+			'width'           => true,
+			'height'          => true,
+			'allow'           => true,
+			'allowfullscreen' => true,
+			'frameborder'     => true,
+			'loading'         => true,
+			'referrerpolicy'  => true,
+		);
+
+		return wp_kses( (string) $content, $allowed );
 	}
 }
 

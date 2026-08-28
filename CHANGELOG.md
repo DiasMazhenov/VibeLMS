@@ -1,6 +1,11 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.50 - 2026-08-29
+--------------------------------
+
++ Fixed localized Elementor content so sanitized HTTPS YouTube embeds render in RU/KZ blocks.
+
 VibeLMS 0.0.49 - 2026-08-29
 ---------------------------
 
