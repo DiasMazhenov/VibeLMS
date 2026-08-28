@@ -1,6 +1,16 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.54 - 2026-08-29
+--------------------------------
+
++ Localized the native static Elementor homepage copy for the active Kazakh language while keeping the underlying Elementor widgets editable and the Russian surface unchanged.
+
+VibeLMS 0.0.53 - 2026-08-29
+--------------------------------
+
++ Fixed shared Elementor heading color selectors so links inside headings inherit the native color control, and reduced the default course-card title size to a readable 24px with a stable line height.
+
 VibeLMS 0.0.52 - 2026-08-29
 --------------------------------
 

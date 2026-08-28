@@ -1,5 +1,9 @@
 # VibeLMS project context
 
+The 0.0.54 source release localizes the native static homepage Elementor copy on the active Kazakh surface at render time, while leaving the underlying widgets editable and preserving the Russian text. The current page 112 Elementor draft also uses native Icon Box widgets for the three learning-route cards, a certificate icon for confirmation, a play icon for study and a check icon for the final test; the CTA uses the native Button widget with a blue palette, icon, radius and padding. The source and draft still require the normal staging update/Elementor **Обновить** actions before they are public.
+
+The 0.0.53 source release fixes shared Elementor heading color selectors so links inside widget headings inherit the native **Цвет заголовков** control, and gives the course-card title a readable 24px/1.25 default so theme `h3` styles cannot make it oversized. The existing native Elementor language overrides remain configured for the Russian and Kazakh course-card variants on staging; the current Elementor draft still requires the normal **Обновить** action before those live edits become public.
+
 ## Current state
 
 VibeLMS is an independent WordPress LMS fork based on the LifterLMS trunk source snapshot. Public LifterLMS identifiers and the `lifterlms` text domain remain unchanged for compatibility while the fork is being adapted to the project requirements.
@@ -20,7 +24,7 @@ The 0.0.44 source release adds the configurable **Получить сертиф�
 
 On staging, the DOCX-based reusable tests were created through **VibeLMS → Тесты** and are not repository fixtures: published quiz ID 68 is **Тест стандартов «Бифимбилль» — русский язык**, and published quiz ID 86 is **Тест стандартов «Бифимбилль» — казахский язык**. Each contains 15 choice questions with the highlighted DOCX answers entered as correct answers; the Russian quiz is attached to lesson 47 and the Kazakh quiz to lesson 46. A temporary Elementor course page is staging course ID 106, titled **Академия Бифимбилль — стандарты работы (RU)**; it contains the Russian course layout and three YouTube Video widgets, and is used to verify public Elementor output. The test subject may mention Bifimbill, but the plugin remains project-neutral VibeLMS.
 
-The WordPress plugin metadata presents the product as VibeLMS version `0.0.52`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
+The WordPress plugin metadata presents the product as VibeLMS version `0.0.53`, authored by Mazhenov Design with `https://mazhenov.kz` as the plugin site. The internal LifterLMS compatibility version remains `10.2.0` in the core class and is not the public plugin header version. Public VibeLMS updates increment the final numeric segment.
 
 The 0.0.43 maintenance release adds a recovery link when the recording error is already rendered as a server-side paragraph before the interactive quiz UI loads. It also forces the frontend quiz script cache key to the public VibeLMS version, so this recovery code is fetched after deployment. The 0.0.42 idempotent answer-saving and duplicate-completion safeguards remain in place.
 

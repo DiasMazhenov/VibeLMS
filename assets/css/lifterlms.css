@@ -883,6 +883,8 @@ a.llms-button-secondary:not(.wp-element-button) {
 
 .vibelms-course-card__title {
   margin-top: 0;
+  font-size: 24px;
+  line-height: 1.25;
 }
 
 .vibelms-course-card__link {

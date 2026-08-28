@@ -233,7 +233,8 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 	 */
 	protected function add_common_style_controls() {
 		$selector         = '{{WRAPPER}}';
-		$heading_selector = $selector . ' h1, ' . $selector . ' h2, ' . $selector . ' h3, ' . $selector . ' h4, ' . $selector . ' h5, ' . $selector . ' h6';
+		$heading_selector = $selector . ' :is(h1, h2, h3, h4, h5, h6)';
+		$heading_link_selector = $heading_selector . ', ' . $heading_selector . ' a';
 
 		$this->start_controls_section(
 			'vibelms_style_section',
@@ -266,7 +267,7 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 			array(
 				'label'     => __( 'Цвет заголовков', 'lifterlms' ),
 				'type'      => \Elementor\Controls_Manager::COLOR,
-				'selectors' => array( $heading_selector => 'color: {{VALUE}};' ),
+				'selectors' => array( $heading_link_selector => 'color: {{VALUE}};' ),
 			)
 		);
 
