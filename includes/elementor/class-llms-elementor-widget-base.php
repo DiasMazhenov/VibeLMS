@@ -248,7 +248,7 @@ abstract class LLMS_Elementor_Widget_Base extends \Elementor\Widget_Base {
 			array(
 				'name'     => 'vibelms_typography',
 				'label'    => __( 'Типографика', 'lifterlms' ),
-				'selector' => $selector,
+				'selector' => $selector . ', ' . $heading_selector,
 			)
 		);
 

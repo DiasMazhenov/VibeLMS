@@ -1,6 +1,11 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.52 - 2026-08-29
+--------------------------------
+
++ Fixed shared Elementor widget typography so the native **Типографика** control also styles widget headings, including course-card titles.
+
 VibeLMS 0.0.51 - 2026-08-29
 --------------------------------
 
