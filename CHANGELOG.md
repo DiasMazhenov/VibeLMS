@@ -1,6 +1,14 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.47 - 2026-08-28
+---------------------------
+
+##### Added
+
++ Added full Elementor content and style controls for the VibeLMS site header and footer, including logo, links, buttons and destinations.
++ Site-header menu defaults now use the configured VibeLMS account page.
+
 VibeLMS 0.0.46 - 2026-08-28
 ---------------------------
 

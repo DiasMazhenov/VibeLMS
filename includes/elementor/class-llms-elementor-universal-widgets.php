@@ -572,15 +572,480 @@ class LLMS_Elementor_Widget_Materials extends LLMS_Elementor_Widget_Base {
 }
 
 class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
-	public function get_name() { return 'vibelms_site_header'; }
-	public function get_title() { return __( 'Шапка VibeLMS', 'lifterlms' ); }
-	protected function _register_controls() { $this->start_controls_section( 'content_section', array( 'label' => __( 'Шапка VibeLMS', 'lifterlms' ), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT ) ); $this->add_control( 'description', array( 'label' => __( 'Логотип, навигация, язык и профиль пользователя.', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::HEADING ) ); $this->end_controls_section(); $this->add_common_style_controls(); }
-	protected function render() { echo do_shortcode( '[vibelms_header]' ); }
+	public function get_name() {
+		return 'vibelms_site_header';
+	}
+
+	public function get_title() {
+		return __( 'Шапка VibeLMS', 'lifterlms' );
+	}
+
+	protected function _register_controls() {
+		$this->start_controls_section(
+			'content_section',
+			array(
+				'label' => __( 'Шапка VibeLMS', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+			)
+		);
+		$account_id  = absint( get_option( 'lifterlms_myaccount_page_id', 0 ) );
+		$account_url = $account_id ? get_permalink( $account_id ) : home_url( '/' );
+
+		$this->add_control(
+			'logo_mode',
+			array(
+				'label'   => __( 'Логотип', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => array(
+					'site'  => __( 'Логотип сайта', 'lifterlms' ),
+					'image' => __( 'Изображение из медиатеки', 'lifterlms' ),
+					'text'  => __( 'Текстовый бренд', 'lifterlms' ),
+				),
+				'default' => 'site',
+			)
+		);
+
+		$this->add_control(
+			'logo_image',
+			array(
+				'label'     => __( 'Изображение логотипа', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::MEDIA,
+				'dynamic'   => array( 'active' => true ),
+				'condition' => array( 'logo_mode' => 'image' ),
+			)
+		);
+
+		$this->add_control(
+			'brand_text',
+			array(
+				'label'     => __( 'Название бренда', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::TEXT,
+				'default'   => 'VibeLMS',
+				'condition' => array( 'logo_mode' => 'text' ),
+			)
+		);
+
+		$this->add_control(
+			'logo_link',
+			array(
+				'label'       => __( 'Ссылка логотипа', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::URL,
+				'placeholder' => home_url( '/' ),
+				'default'     => array( 'url' => home_url( '/' ) ),
+			)
+		);
+
+		$menu = new \Elementor\Repeater();
+		$menu->add_control(
+			'label',
+			array(
+				'label'       => __( 'Название ссылки', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => __( 'Курсы', 'lifterlms' ),
+				'label_block' => true,
+			)
+		);
+		$menu->add_control(
+			'url',
+			array(
+				'label'       => __( 'Ссылка', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::URL,
+				'placeholder' => 'https://',
+				'label_block' => true,
+			)
+		);
+		$menu->add_control(
+			'new_tab',
+			array(
+				'label'        => __( 'Открывать в новой вкладке', 'lifterlms' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Да', 'lifterlms' ),
+				'label_off'    => __( 'Нет', 'lifterlms' ),
+				'return_value' => 'yes',
+			)
+		);
+		$this->add_control(
+			'menu_items',
+			array(
+				'label'       => __( 'Пункты меню', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'fields'      => $menu->get_controls(),
+				'default'     => array(
+					array( 'label' => __( 'Курсы', 'lifterlms' ), 'url' => array( 'url' => get_post_type_archive_link( 'course' ) ?: home_url( '/' ) ) ),
+					array( 'label' => __( 'Мой кабинет', 'lifterlms' ), 'url' => array( 'url' => $account_url ) ),
+				),
+				'title_field' => '{{{ label }}}',
+			)
+		);
+
+		$this->add_control(
+			'show_language',
+			array(
+				'label'        => __( 'Показывать переключатель языка', 'lifterlms' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Да', 'lifterlms' ),
+				'label_off'    => __( 'Нет', 'lifterlms' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			)
+		);
+
+		$this->add_control(
+			'show_profile',
+			array(
+				'label'        => __( 'Показывать профиль', 'lifterlms' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Да', 'lifterlms' ),
+				'label_off'    => __( 'Нет', 'lifterlms' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+			)
+		);
+
+		$buttons = new \Elementor\Repeater();
+		$buttons->add_control(
+			'label',
+			array(
+				'label'       => __( 'Текст кнопки', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => __( 'Начать обучение', 'lifterlms' ),
+				'label_block' => true,
+			)
+		);
+		$buttons->add_control(
+			'url',
+			array(
+				'label'       => __( 'Ссылка кнопки', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::URL,
+				'placeholder' => 'https://',
+				'label_block' => true,
+			)
+		);
+		$buttons->add_control(
+			'variant',
+			array(
+				'label'   => __( 'Вид кнопки', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => array(
+					'primary' => __( 'Основная', 'lifterlms' ),
+					'outline' => __( 'Контурная', 'lifterlms' ),
+					'link'    => __( 'Ссылка', 'lifterlms' ),
+				),
+				'default' => 'primary',
+			)
+		);
+		$buttons->add_control(
+			'new_tab',
+			array(
+				'label'        => __( 'Открывать в новой вкладке', 'lifterlms' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+			)
+		);
+		$this->add_control(
+			'buttons',
+			array(
+				'label'       => __( 'Кнопки действий', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'fields'      => $buttons->get_controls(),
+				'default'     => array(),
+				'title_field' => '{{{ label }}}',
+			)
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'header_style_section',
+			array(
+				'label' => __( 'Стиль шапки', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			array(
+				'name'     => 'header_background',
+				'label'    => __( 'Фон шапки', 'lifterlms' ),
+				'types'    => array( 'classic', 'gradient' ),
+				'selector' => '{{WRAPPER}} .vibelms-site-header',
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'header_border',
+				'label'    => __( 'Рамка шапки', 'lifterlms' ),
+				'selector' => '{{WRAPPER}} .vibelms-site-header',
+			)
+		);
+		$this->add_responsive_control(
+			'header_padding',
+			array(
+				'label'      => __( 'Отступы шапки', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em', 'rem' ),
+				'selectors'  => array( '{{WRAPPER}} .vibelms-site-header__inner' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+			)
+		);
+		$this->add_responsive_control(
+			'container_width',
+			array(
+				'label'      => __( 'Максимальная ширина', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px', '%' ),
+				'range'      => array( 'px' => array( 'min' => 320, 'max' => 1800 ) ),
+				'selectors'  => array( '{{WRAPPER}} .vibelms-site-header__inner' => 'max-width: {{SIZE}}{{UNIT}};' ),
+			)
+		);
+		$this->add_responsive_control(
+			'logo_width',
+			array(
+				'label'      => __( 'Ширина логотипа', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px', '%' ),
+				'range'      => array( 'px' => array( 'min' => 24, 'max' => 320 ) ),
+				'selectors'  => array( '{{WRAPPER}} .vibelms-site-header__brand img, {{WRAPPER}} .vibelms-site-header__brand .custom-logo' => 'max-width: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}};' ),
+			)
+		);
+		$this->add_responsive_control(
+			'nav_gap',
+			array(
+				'label'      => __( 'Расстояние между ссылками', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'em' ),
+				'range'      => array( 'px' => array( 'min' => 0, 'max' => 64 ) ),
+				'selectors'  => array( '{{WRAPPER}} .vibelms-site-header__nav, {{WRAPPER}} .vibelms-site-header__actions' => 'gap: {{SIZE}}{{UNIT}};' ),
+			)
+		);
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'header_elements_style_section',
+			array(
+				'label' => __( 'Стиль элементов', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'brand_typography',
+				'label'    => __( 'Типографика бренда', 'lifterlms' ),
+				'selector' => '{{WRAPPER}} .vibelms-site-header__brand',
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'nav_typography',
+				'label'    => __( 'Типографика ссылок', 'lifterlms' ),
+				'selector' => '{{WRAPPER}} .vibelms-site-header__nav a, {{WRAPPER}} .vibelms-site-header__actions a',
+			)
+		);
+		$this->add_control(
+			'nav_color',
+			array(
+				'label'     => __( 'Цвет ссылок', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( '{{WRAPPER}} .vibelms-site-header a' => 'color: {{VALUE}};' ),
+			)
+		);
+		$this->add_control(
+			'nav_hover_color',
+			array(
+				'label'     => __( 'Цвет ссылок при наведении', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( '{{WRAPPER}} .vibelms-site-header a:hover' => 'color: {{VALUE}};' ),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'button_typography',
+				'label'    => __( 'Типографика кнопок', 'lifterlms' ),
+				'selector' => '{{WRAPPER}} .vibelms-site-header__button',
+			)
+		);
+		$this->add_control(
+			'button_color',
+			array(
+				'label'     => __( 'Цвет текста кнопок', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( '{{WRAPPER}} .vibelms-site-header__button' => 'color: {{VALUE}};' ),
+			)
+		);
+		$this->add_control(
+			'button_background',
+			array(
+				'label'     => __( 'Фон основных кнопок', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( '{{WRAPPER}} .vibelms-site-header__button--primary' => 'background-color: {{VALUE}}; border-color: {{VALUE}};' ),
+			)
+		);
+		$this->add_control(
+			'button_hover_background',
+			array(
+				'label'     => __( 'Фон кнопок при наведении', 'lifterlms' ),
+				'type'      => \Elementor\Controls_Manager::COLOR,
+				'selectors' => array( '{{WRAPPER}} .vibelms-site-header__button--primary:hover' => 'background-color: {{VALUE}}; border-color: {{VALUE}};' ),
+			)
+		);
+		$this->add_responsive_control(
+			'button_radius',
+			array(
+				'label'      => __( 'Скругление кнопок', 'lifterlms' ),
+				'type'       => \Elementor\Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%', 'em' ),
+				'selectors'  => array( '{{WRAPPER}} .vibelms-site-header__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+			)
+		);
+		$this->end_controls_section();
+
+		$this->add_common_style_controls();
+	}
+
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		$logo     = $this->render_logo( $settings );
+		$items    = isset( $settings['menu_items'] ) && is_array( $settings['menu_items'] ) ? $settings['menu_items'] : array();
+		$buttons  = isset( $settings['buttons'] ) && is_array( $settings['buttons'] ) ? $settings['buttons'] : array();
+
+		echo '<header class="vibelms-site-header vibelms-site-header--custom"><div class="vibelms-site-header__inner">' . $logo;
+		echo '<nav class="vibelms-site-header__nav" aria-label="' . esc_attr__( 'Основная навигация', 'lifterlms' ) . '">';
+		foreach ( $items as $item ) {
+			$url = isset( $item['url']['url'] ) ? $item['url']['url'] : '';
+			if ( ! $url || empty( $item['label'] ) ) {
+				continue;
+			}
+			$target = ! empty( $item['new_tab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+			echo '<a href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( $item['label'] ) . '</a>';
+		}
+		echo '</nav><div class="vibelms-site-header__actions">';
+		if ( 'yes' === ( $settings['show_language'] ?? 'yes' ) ) {
+			echo do_shortcode( '[vibelms_language_switcher]' );
+		}
+		foreach ( $buttons as $button ) {
+			$url = isset( $button['url']['url'] ) ? $button['url']['url'] : '';
+			if ( ! $url || empty( $button['label'] ) ) {
+				continue;
+			}
+			$variant = isset( $button['variant'] ) && in_array( $button['variant'], array( 'primary', 'outline', 'link' ), true ) ? $button['variant'] : 'primary';
+			$target  = ! empty( $button['new_tab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+			echo '<a class="vibelms-site-header__button vibelms-site-header__button--' . esc_attr( $variant ) . '" href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( $button['label'] ) . '</a>';
+		}
+		if ( 'yes' === ( $settings['show_profile'] ?? 'yes' ) ) {
+			$this->render_profile();
+		}
+		echo '</div></div></header>';
+	}
+
+	private function render_logo( $settings ) {
+		$mode = isset( $settings['logo_mode'] ) ? $settings['logo_mode'] : 'site';
+		$url  = isset( $settings['logo_link']['url'] ) && $settings['logo_link']['url'] ? $settings['logo_link']['url'] : home_url( '/' );
+		if ( 'image' === $mode && ! empty( $settings['logo_image']['url'] ) ) {
+			$alt = ! empty( $settings['logo_image']['alt'] ) ? $settings['logo_image']['alt'] : get_bloginfo( 'name' );
+			$body = '<img src="' . esc_url( $settings['logo_image']['url'] ) . '" alt="' . esc_attr( $alt ) . '">';
+		} elseif ( 'text' === $mode ) {
+			$body = '<span class="vibelms-site-header__mark" aria-hidden="true">V</span><span>' . esc_html( $settings['brand_text'] ?? 'VibeLMS' ) . '</span>';
+		} else {
+			$logo_id = absint( get_theme_mod( 'custom_logo' ) );
+			if ( $logo_id ) {
+				$alt  = get_post_meta( $logo_id, '_wp_attachment_image_alt', true ) ?: get_bloginfo( 'name' );
+				$body = wp_get_attachment_image( $logo_id, 'full', false, array( 'alt' => $alt ) );
+			}
+			if ( empty( $body ) ) {
+				$body = '<span class="vibelms-site-header__mark" aria-hidden="true">V</span><span>VibeLMS</span>';
+			}
+		}
+		return '<a class="vibelms-site-header__brand" href="' . esc_url( $url ) . '">' . $body . '</a>';
+	}
+
+	private function render_profile() {
+		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
+			echo '<span class="vibelms-site-header__email">' . esc_html( $user->user_email ) . '</span><a href="' . esc_url( wp_logout_url( home_url( '/' ) ) ) . '">' . esc_html__( 'Выйти', 'lifterlms' ) . '</a>';
+			return;
+		}
+		echo '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">' . esc_html__( 'Войти', 'lifterlms' ) . '</a>';
+	}
 }
 
 class LLMS_Elementor_Widget_Site_Footer extends LLMS_Elementor_Widget_Base {
 	public function get_name() { return 'vibelms_site_footer'; }
 	public function get_title() { return __( 'Подвал VibeLMS', 'lifterlms' ); }
-	protected function _register_controls() { $this->start_controls_section( 'content_section', array( 'label' => __( 'Подвал VibeLMS', 'lifterlms' ), 'tab' => \Elementor\Controls_Manager::TAB_CONTENT ) ); $this->add_control( 'description', array( 'label' => __( 'Копирайт, поддержка и ссылка разработчика.', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::HEADING ) ); $this->end_controls_section(); $this->add_common_style_controls(); }
-	protected function render() { echo do_shortcode( '[vibelms_footer]' ); }
+	protected function _register_controls() {
+		$this->start_controls_section(
+			'content_section',
+			array(
+				'label' => __( 'Подвал VibeLMS', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+			)
+		);
+		$this->add_control(
+			'footer_text',
+			array(
+				'label'       => __( 'Текст копирайта', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => '© {year} ТОО «UNIQ TRADE». Все права защищены',
+				'label_block' => true,
+				'description' => __( 'Можно использовать {year} и {site}.', 'lifterlms' ),
+			)
+		);
+		$this->add_control(
+			'support_url',
+			array(
+				'label'       => __( 'Ссылка поддержки', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::URL,
+				'placeholder' => 'https://',
+				'dynamic'     => array( 'active' => true ),
+			)
+		);
+		$this->add_control(
+			'support_label',
+			array(
+				'label'       => __( 'Название ссылки поддержки', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => __( 'Поддержка', 'lifterlms' ),
+				'label_block' => true,
+			)
+		);
+		$this->add_control(
+			'developer_text',
+			array(
+				'label'       => __( 'Текст ссылки разработчика', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => __( 'Разработано в веб-студии Mazhenov Design', 'lifterlms' ),
+				'label_block' => true,
+			)
+		);
+		$this->add_control(
+			'developer_url',
+			array(
+				'label'       => __( 'Ссылка разработчика', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::URL,
+				'placeholder' => 'https://',
+				'default'     => array( 'url' => 'https://mazhenov.kz' ),
+			)
+		);
+		$this->add_common_style_controls();
+	}
+
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		$text     = isset( $settings['footer_text'] ) ? (string) $settings['footer_text'] : '';
+		$text     = str_replace( array( '{year}', '{site}' ), array( wp_date( 'Y' ), get_bloginfo( 'name' ) ), $text );
+		$support  = isset( $settings['support_url']['url'] ) ? $settings['support_url']['url'] : '';
+		$developer = isset( $settings['developer_url']['url'] ) ? $settings['developer_url']['url'] : 'https://mazhenov.kz';
+
+		echo '<footer class="vibelms-site-footer vibelms-site-footer--custom"><div class="vibelms-site-footer__inner">';
+		echo '<span>' . esc_html( $text ) . '</span>';
+		if ( $support && ! empty( $settings['support_label'] ) ) {
+			echo '<a href="' . esc_url( $support ) . '">' . esc_html( $settings['support_label'] ) . '</a>';
+		}
+		if ( $developer && ! empty( $settings['developer_text'] ) ) {
+			echo '<a href="' . esc_url( $developer ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $settings['developer_text'] ) . '</a>';
+		}
+		echo '</div></footer>';
+	}
 }
