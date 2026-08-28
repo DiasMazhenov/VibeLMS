@@ -13,6 +13,80 @@ defined( 'ABSPATH' ) || exit;
 if ( ! function_exists( 'llms_get_post_content' ) ) {
 
 	/**
+	 * Replace the saved post content with the Elementor document when available.
+	 *
+	 * Course templates render their full description directly and therefore do
+	 * not always pass through the WordPress `the_content` filter. Keeping this
+	 * resolver separate lets both paths use the same protected renderer.
+	 *
+	 * @param string  $content  Fallback post content.
+	 * @param integer $post_id  Optional post ID.
+	 * @return string
+	 */
+	function llms_get_elementor_post_content( $content, $post_id = 0 ) {
+
+		global $post;
+		$post_id = $post_id ? absint( $post_id ) : ( $post instanceof WP_Post ? $post->ID : 0 );
+
+		if ( ! $post_id || ! in_array( get_post_type( $post_id ), array( 'course', 'lesson', 'llms_quiz', 'llms_membership' ), true ) ) {
+			return $content;
+		}
+
+		$restrictions = llms_page_restricted( $post_id );
+		if ( $restrictions['is_restricted'] ||
+			! function_exists( 'llms_is_elementor_post' ) ||
+			! llms_is_elementor_post( $post_id ) ||
+			! class_exists( 'Elementor\\Plugin' ) ) {
+			return $content;
+		}
+
+		$elementor = \Elementor\Plugin::instance();
+		$frontend  = $elementor ? $elementor->frontend : false;
+		static $rendering_elementor_posts = array();
+
+		if ( ! $frontend ||
+			! method_exists( $frontend, 'get_builder_content_for_display' ) ||
+			! empty( $rendering_elementor_posts[ $post_id ] ) ) {
+			return $content;
+		}
+
+		$rendering_elementor_posts[ $post_id ] = true;
+		try {
+			$elementor_content = $frontend->get_builder_content_for_display( $post_id, true );
+			if ( is_string( $elementor_content ) && '' !== trim( $elementor_content ) ) {
+				$content = $elementor_content;
+			}
+		} catch ( Throwable $error ) {
+			if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
+				llms_vibelms_diagnostics_log(
+					'error',
+					'Elementor content rendering failed',
+					array(
+						'post_id' => $post_id,
+						'error'   => $error->getMessage(),
+					)
+				);
+			}
+		} finally {
+			unset( $rendering_elementor_posts[ $post_id ] );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Resolve Elementor content for templates that render full descriptions directly.
+	 *
+	 * @param string $content Fallback full description.
+	 * @return string
+	 */
+	function llms_get_elementor_full_description( $content ) {
+		return llms_get_elementor_post_content( $content );
+	}
+
+	add_filter( 'lifterlms_full_description', 'llms_get_elementor_full_description', 10, 1 );
+
+	/**
 	 * Post Template Include
 	 *
 	 * Adds LifterLMS template content before and after the post's default content.
@@ -36,38 +110,7 @@ if ( ! function_exists( 'llms_get_post_content' ) ) {
 		// Elementor stores the visual content in post meta, not post_content.
 		// Render it through the shared content pipeline so LMS templates keep
 		// their access checks and before/after hooks.
-		if ( ! $restrictions['is_restricted'] &&
-			in_array( $post->post_type, array( 'course', 'lesson', 'llms_quiz' ), true ) &&
-			function_exists( 'llms_is_elementor_post' ) &&
-			llms_is_elementor_post( $post->ID ) &&
-			class_exists( 'Elementor\\Plugin' ) ) {
-			$elementor = \Elementor\Plugin::instance();
-			$frontend   = $elementor ? $elementor->frontend : false;
-			static $rendering_elementor_posts = array();
-
-			if ( $frontend && method_exists( $frontend, 'get_builder_content_for_display' ) && empty( $rendering_elementor_posts[ $post->ID ] ) ) {
-				$rendering_elementor_posts[ $post->ID ] = true;
-				try {
-					$elementor_content = $frontend->get_builder_content_for_display( $post->ID, true );
-					if ( is_string( $elementor_content ) && '' !== trim( $elementor_content ) ) {
-						$content = $elementor_content;
-					}
-				} catch ( Throwable $error ) {
-					if ( function_exists( 'llms_vibelms_diagnostics_log' ) ) {
-						llms_vibelms_diagnostics_log(
-							'error',
-							'Elementor content rendering failed',
-							array(
-								'post_id' => $post->ID,
-								'error'   => $error->getMessage(),
-							)
-						);
-					}
-				} finally {
-					unset( $rendering_elementor_posts[ $post->ID ] );
-				}
-			}
-		}
+		$content = llms_get_elementor_post_content( $content, $post->ID );
 
 		if ( in_array( $post->post_type, array( 'course', 'llms_membership', 'lesson', 'llms_quiz' ), true ) ) {
 

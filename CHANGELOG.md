@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.46 - 2026-08-28
+---------------------------
+
+##### Fixes
+
++ Fixed Elementor rendering in the public course template. Course full descriptions now resolve the saved Elementor document through the same protected content renderer as the main WordPress content path.
+
 VibeLMS 0.0.45 - 2026-08-28
 ---------------------------
 
