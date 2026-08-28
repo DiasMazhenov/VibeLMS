@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.49 - 2026-08-29
+---------------------------
+
+##### Added
+
++ Added the Elementor **Контент по языку** widget with separate, project-defined language blocks and optional fallback content. Static Elementor sections can now switch with the existing VibeLMS language selector.
+
 VibeLMS 0.0.48 - 2026-08-28
 ---------------------------
 

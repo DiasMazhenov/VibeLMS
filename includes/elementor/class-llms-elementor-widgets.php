@@ -277,6 +277,7 @@ class LLMS_Elementor_Widgets {
 			new LLMS_Elementor_Widget_Student_Dashboard(),
 			new LLMS_Elementor_Widget_Access_Groups(),
 			new LLMS_Elementor_Widget_Materials(),
+			new LLMS_Elementor_Widget_Language_Content(),
 			new LLMS_Elementor_Widget_Site_Header(),
 			new LLMS_Elementor_Widget_Site_Footer(),
 		);

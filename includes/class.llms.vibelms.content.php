@@ -353,7 +353,12 @@ class LLMS_VibeLMS_Content {
 		return get_posts( array( 'post_type' => self::POST_TYPE, 'post_status' => 'publish', 'posts_per_page' => $limit ? min( 100, $limit ) : -1, 'meta_key' => self::ORDER_META, 'orderby' => 'meta_value_num', 'order' => 'ASC', 'meta_query' => $meta_query ) );
 	}
 
-	private function get_supported_languages() {
+	/**
+	 * Return languages configured by the current project.
+	 *
+	 * @return array<string,string>
+	 */
+	public function get_supported_languages() {
 		return function_exists( 'llms_vibelms_platform' ) ? llms_vibelms_platform()->get_supported_languages() : array( 'ru' => __( 'Русский', 'lifterlms' ), 'kz' => __( 'Казахский', 'lifterlms' ) );
 	}
 
@@ -362,7 +367,12 @@ class LLMS_VibeLMS_Content {
 		return (string) key( $languages );
 	}
 
-	private function get_current_language() {
+	/**
+	 * Return the language selected for the current request.
+	 *
+	 * @return string
+	 */
+	public function get_current_language() {
 		$languages = $this->get_supported_languages();
 		$candidate = isset( $_GET['vibelms_language'] ) ? sanitize_key( wp_unslash( $_GET['vibelms_language'] ) ) : '';
 		if ( ! $candidate && isset( $_COOKIE[ self::LANGUAGE_COOKIE ] ) ) {

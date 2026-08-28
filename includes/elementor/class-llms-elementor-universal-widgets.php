@@ -571,6 +571,98 @@ class LLMS_Elementor_Widget_Materials extends LLMS_Elementor_Widget_Base {
 	}
 }
 
+class LLMS_Elementor_Widget_Language_Content extends LLMS_Elementor_Widget_Base {
+
+	public function get_name() { return 'vibelms_language_content'; }
+
+	public function get_title() { return __( 'Контент по языку', 'lifterlms' ); }
+
+	protected function _register_controls() {
+		$languages = function_exists( 'llms_vibelms_content' )
+			? llms_vibelms_content()->get_supported_languages()
+			: array( 'ru' => __( 'Русский', 'lifterlms' ), 'kz' => __( 'Казахский', 'lifterlms' ) );
+		$repeater = new \Elementor\Repeater();
+		$repeater->add_control(
+			'language',
+			array(
+				'label'   => __( 'Язык', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => $languages,
+				'default' => (string) key( $languages ),
+			)
+		);
+		$repeater->add_control(
+			'content',
+			array(
+				'label'   => __( 'Содержимое', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::WYSIWYG,
+				'default' => '',
+			)
+		);
+
+		$this->start_controls_section(
+			'content_section',
+			array(
+				'label' => __( 'Контент по языку', 'lifterlms' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+			)
+		);
+		$this->add_control(
+			'language_content',
+			array(
+				'label'       => __( 'Языковые версии', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'fields'      => $repeater->get_controls(),
+				'default'     => array(),
+				'title_field' => '{{{ language }}}',
+				'description' => __( 'Добавьте отдельную версию блока для каждого языка. Текущий язык берётся из переключателя VibeLMS.', 'lifterlms' ),
+			)
+		);
+		$this->add_control(
+			'fallback_language',
+			array(
+				'label'   => __( 'Запасной язык', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => array( '' => __( 'Не показывать', 'lifterlms' ) ) + $languages,
+				'default' => '',
+				'description' => __( 'Используется, если для выбранного языка содержимое не задано.', 'lifterlms' ),
+			)
+		);
+		$this->end_controls_section();
+		$this->add_common_style_controls();
+	}
+
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		$current  = function_exists( 'llms_vibelms_content' ) ? llms_vibelms_content()->get_current_language() : 'ru';
+		$versions = isset( $settings['language_content'] ) && is_array( $settings['language_content'] ) ? $settings['language_content'] : array();
+		$content  = '';
+		foreach ( $versions as $version ) {
+			if ( isset( $version['language'], $version['content'] ) && $current === sanitize_key( $version['language'] ) ) {
+				$content = (string) $version['content'];
+				break;
+			}
+		}
+		if ( ! trim( $content ) && ! empty( $settings['fallback_language'] ) ) {
+			$fallback = sanitize_key( $settings['fallback_language'] );
+			foreach ( $versions as $version ) {
+				if ( isset( $version['language'], $version['content'] ) && $fallback === sanitize_key( $version['language'] ) ) {
+					$content = (string) $version['content'];
+					break;
+				}
+			}
+		}
+		if ( ! trim( $content ) ) {
+			if ( $this->is_elementor_preview() ) {
+				echo '<div class="vibelms-elementor-context-notice">' . esc_html__( 'Добавьте языковые версии содержимого в настройках виджета.', 'lifterlms' ) . '</div>';
+			}
+			return;
+		}
+
+		echo '<div class="vibelms-language-content" data-vibelms-language="' . esc_attr( $current ) . '">' . do_shortcode( wp_kses_post( $content ) ) . '</div>';
+	}
+}
+
 class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
 	public function get_name() {
 		return 'vibelms_site_header';
