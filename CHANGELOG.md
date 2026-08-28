@@ -1,6 +1,13 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.48 - 2026-08-28
+---------------------------
+
+##### Fixes
+
++ Closed the Elementor footer content section so the widget controls register correctly in the editor.
+
 VibeLMS 0.0.47 - 2026-08-28
 ---------------------------
 

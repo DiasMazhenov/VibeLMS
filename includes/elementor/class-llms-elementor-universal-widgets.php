@@ -1028,6 +1028,7 @@ class LLMS_Elementor_Widget_Site_Footer extends LLMS_Elementor_Widget_Base {
 				'default'     => array( 'url' => 'https://mazhenov.kz' ),
 			)
 		);
+		$this->end_controls_section();
 		$this->add_common_style_controls();
 	}
 
