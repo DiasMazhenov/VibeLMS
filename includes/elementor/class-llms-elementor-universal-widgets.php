@@ -25,6 +25,31 @@ class LLMS_Elementor_Widget_Course_Card extends LLMS_Elementor_Widget_Base {
 			)
 		);
 		$this->add_course_selector_control();
+		$languages = function_exists( 'llms_vibelms_content' ) ? llms_vibelms_content()->get_supported_languages() : array( 'ru' => __( 'Русский', 'lifterlms' ), 'kz' => __( 'Казахский', 'lifterlms' ) );
+		$overrides = new \Elementor\Repeater();
+		$overrides->add_control(
+			'language',
+			array(
+				'label'   => __( 'Язык версии', 'lifterlms' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => $languages,
+				'default' => (string) key( $languages ),
+			)
+		);
+		$overrides->add_control( 'title', array( 'label' => __( 'Название курса', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::TEXT, 'label_block' => true ) );
+		$overrides->add_control( 'excerpt', array( 'label' => __( 'Описание курса', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::TEXTAREA, 'label_block' => true ) );
+		$overrides->add_control( 'button', array( 'label' => __( 'Текст кнопки', 'lifterlms' ), 'type' => \Elementor\Controls_Manager::TEXT, 'label_block' => true ) );
+		$this->add_control(
+			'language_overrides',
+			array(
+				'label'       => __( 'Версии карточки по языкам', 'lifterlms' ),
+				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'fields'      => $overrides->get_controls(),
+				'default'     => array(),
+				'title_field' => '{{{ language }}}',
+				'description' => __( 'Добавьте отдельную подпись и описание для каждого языка.', 'lifterlms' ),
+			)
+		);
 		$this->add_control(
 			'show_excerpt',
 			array(
@@ -53,18 +78,35 @@ class LLMS_Elementor_Widget_Course_Card extends LLMS_Elementor_Widget_Base {
 			return;
 		}
 
+		$title   = get_the_title( $course );
+		$excerpt = get_the_excerpt( $course );
+		$button  = __( 'Открыть курс', 'lifterlms' );
+		$current_language = function_exists( 'llms_vibelms_content' ) ? llms_vibelms_content()->get_current_language() : 'ru';
+		foreach ( (array) ( $settings['language_overrides'] ?? array() ) as $override ) {
+			if ( $current_language !== sanitize_key( $override['language'] ?? '' ) ) {
+				continue;
+			}
+			$title   = trim( (string) ( $override['title'] ?? '' ) ) ?: $title;
+			$excerpt = trim( (string) ( $override['excerpt'] ?? '' ) ) ?: $excerpt;
+			$button  = trim( (string) ( $override['button'] ?? '' ) ) ?: $button;
+			break;
+		}
+		if ( function_exists( 'llms_vibelms_localize_frontend_text' ) ) {
+			$button = llms_vibelms_localize_frontend_text( $button );
+		}
+
 		echo '<article class="vibelms-course-card">';
 		if ( has_post_thumbnail( $course ) ) {
 			echo '<a class="vibelms-course-card__image" href="' . esc_url( get_permalink( $course ) ) . '">';
-			echo get_the_post_thumbnail( $course, 'large', array( 'alt' => esc_attr( get_the_title( $course ) ) ) );
+			echo get_the_post_thumbnail( $course, 'large', array( 'alt' => esc_attr( $title ) ) );
 			echo '</a>';
 		}
 		echo '<div class="vibelms-course-card__content">';
-		echo '<h3 class="vibelms-course-card__title"><a href="' . esc_url( get_permalink( $course ) ) . '">' . esc_html( get_the_title( $course ) ) . '</a></h3>';
+		echo '<h3 class="vibelms-course-card__title"><a href="' . esc_url( get_permalink( $course ) ) . '">' . esc_html( $title ) . '</a></h3>';
 		if ( 'yes' === ( isset( $settings['show_excerpt'] ) ? $settings['show_excerpt'] : 'yes' ) ) {
-			echo '<div class="vibelms-course-card__excerpt">' . wp_kses_post( wpautop( get_the_excerpt( $course ) ) ) . '</div>';
+			echo '<div class="vibelms-course-card__excerpt">' . wp_kses_post( wpautop( $excerpt ) ) . '</div>';
 		}
-		echo '<a class="llms-button-primary vibelms-course-card__link" href="' . esc_url( get_permalink( $course ) ) . '">' . esc_html__( 'Открыть курс', 'lifterlms' ) . '</a>';
+		echo '<a class="llms-button-primary vibelms-course-card__link" href="' . esc_url( get_permalink( $course ) ) . '">' . esc_html( $button ) . '</a>';
 		echo '</div></article>';
 	}
 }
@@ -1044,14 +1086,14 @@ class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
 		$buttons  = isset( $settings['buttons'] ) && is_array( $settings['buttons'] ) ? $settings['buttons'] : array();
 
 		echo '<header class="vibelms-site-header vibelms-site-header--custom"><div class="vibelms-site-header__inner">' . $logo;
-		echo '<nav class="vibelms-site-header__nav" aria-label="' . esc_attr__( 'Основная навигация', 'lifterlms' ) . '">';
+		echo '<nav class="vibelms-site-header__nav" aria-label="' . esc_attr( llms_vibelms_localize_frontend_text( __( 'Основная навигация', 'lifterlms' ) ) ) . '">';
 		foreach ( $items as $item ) {
 			$url = isset( $item['url']['url'] ) ? $item['url']['url'] : '';
 			if ( ! $url || empty( $item['label'] ) ) {
 				continue;
 			}
 			$target = ! empty( $item['new_tab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
-			echo '<a href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( $item['label'] ) . '</a>';
+			echo '<a href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( llms_vibelms_localize_frontend_text( $item['label'] ) ) . '</a>';
 		}
 		echo '</nav><div class="vibelms-site-header__actions">';
 		if ( 'yes' === ( $settings['show_language'] ?? 'yes' ) ) {
@@ -1064,7 +1106,7 @@ class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
 			}
 			$variant = isset( $button['variant'] ) && in_array( $button['variant'], array( 'primary', 'outline', 'link' ), true ) ? $button['variant'] : 'primary';
 			$target  = ! empty( $button['new_tab'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
-			echo '<a class="vibelms-site-header__button vibelms-site-header__button--' . esc_attr( $variant ) . '" href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( $button['label'] ) . '</a>';
+			echo '<a class="vibelms-site-header__button vibelms-site-header__button--' . esc_attr( $variant ) . '" href="' . esc_url( $url ) . '"' . $target . '>' . esc_html( llms_vibelms_localize_frontend_text( $button['label'] ) ) . '</a>';
 		}
 		if ( 'yes' === ( $settings['show_profile'] ?? 'yes' ) ) {
 			$this->render_profile();
@@ -1096,10 +1138,10 @@ class LLMS_Elementor_Widget_Site_Header extends LLMS_Elementor_Widget_Base {
 	private function render_profile() {
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
-			echo '<span class="vibelms-site-header__email">' . esc_html( $user->user_email ) . '</span><a href="' . esc_url( wp_logout_url( home_url( '/' ) ) ) . '">' . esc_html__( 'Выйти', 'lifterlms' ) . '</a>';
+			echo '<span class="vibelms-site-header__email">' . esc_html( $user->user_email ) . '</span><a href="' . esc_url( wp_logout_url( home_url( '/' ) ) ) . '">' . esc_html( llms_vibelms_localize_frontend_text( __( 'Выйти', 'lifterlms' ) ) ) . '</a>';
 			return;
 		}
-		echo '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">' . esc_html__( 'Войти', 'lifterlms' ) . '</a>';
+		echo '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">' . esc_html( llms_vibelms_localize_frontend_text( __( 'Войти', 'lifterlms' ) ) ) . '</a>';
 	}
 }
 
@@ -1172,12 +1214,12 @@ class LLMS_Elementor_Widget_Site_Footer extends LLMS_Elementor_Widget_Base {
 		$developer = isset( $settings['developer_url']['url'] ) ? $settings['developer_url']['url'] : 'https://mazhenov.kz';
 
 		echo '<footer class="vibelms-site-footer vibelms-site-footer--custom"><div class="vibelms-site-footer__inner">';
-		echo '<span>' . esc_html( $text ) . '</span>';
+		echo '<span>' . esc_html( llms_vibelms_localize_frontend_text( $text ) ) . '</span>';
 		if ( $support && ! empty( $settings['support_label'] ) ) {
-			echo '<a href="' . esc_url( $support ) . '">' . esc_html( $settings['support_label'] ) . '</a>';
+			echo '<a href="' . esc_url( $support ) . '">' . esc_html( llms_vibelms_localize_frontend_text( $settings['support_label'] ) ) . '</a>';
 		}
 		if ( $developer && ! empty( $settings['developer_text'] ) ) {
-			echo '<a href="' . esc_url( $developer ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $settings['developer_text'] ) . '</a>';
+			echo '<a href="' . esc_url( $developer ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( llms_vibelms_localize_frontend_text( $settings['developer_text'] ) ) . '</a>';
 		}
 		echo '</div></footer>';
 	}

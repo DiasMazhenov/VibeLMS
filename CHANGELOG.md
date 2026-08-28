@@ -1,6 +1,11 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.51 - 2026-08-29
+--------------------------------
+
++ Added active-language labels for the reusable VibeLMS header, footer and course card, with per-language course-card overrides in Elementor.
+
 VibeLMS 0.0.50 - 2026-08-29
 --------------------------------
 

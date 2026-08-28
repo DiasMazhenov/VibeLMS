@@ -309,12 +309,45 @@ class LLMS_VibeLMS_Content {
 	public function shortcode_language_switcher() {
 		$current_url = ( is_singular() && get_permalink() ) ? get_permalink() : home_url( '/' );
 		$current = $this->get_current_language();
-		$output = '<nav class="vibelms-language-switcher" aria-label="' . esc_attr__( 'Язык материалов', 'lifterlms' ) . '">';
+		$output = '<nav class="vibelms-language-switcher" aria-label="' . esc_attr( $this->localize_frontend_text( __( 'Язык материалов', 'lifterlms' ) ) ) . '">';
 		foreach ( $this->get_supported_languages() as $language => $label ) {
 			$url = add_query_arg( 'vibelms_language', $language, $current_url );
-			$output .= '<a href="' . esc_url( $url ) . '" class="' . ( $current === $language ? 'is-active' : '' ) . '"' . ( $current === $language ? ' aria-current="true"' : '' ) . '>' . esc_html( strtoupper( $language ) ) . '<span class="screen-reader-text"> — ' . esc_html( $label ) . '</span></a>';
+			$output .= '<a href="' . esc_url( $url ) . '" class="' . ( $current === $language ? 'is-active' : '' ) . '"' . ( $current === $language ? ' aria-current="true"' : '' ) . '>' . esc_html( strtoupper( $language ) ) . '<span class="screen-reader-text"> — ' . esc_html( $this->localize_frontend_text( $label ) ) . '</span></a>';
 		}
 		return $output . '</nav>';
+	}
+
+	/**
+	 * Translate the built-in front-end labels for the active project language.
+	 * Custom content remains unchanged unless it uses one of the built-in labels.
+	 *
+	 * @param string $text Plain-text front-end label.
+	 * @return string
+	 */
+	public function localize_frontend_text( $text ) {
+		$text = (string) $text;
+		if ( 'kz' !== $this->get_current_language() ) {
+			return $text;
+		}
+
+		return strtr(
+			$text,
+			array(
+				'Язык материалов' => 'Материалдар тілі',
+				'Основная навигация' => 'Негізгі навигация',
+				'Русский' => 'Орыс тілі',
+				'Казахский' => 'Қазақ тілі',
+				'Курсы' => 'Курстар',
+				'Мой кабинет' => 'Жеке кабинет',
+				'Начать обучение' => 'Оқуды бастау',
+				'Открыть курс' => 'Курсты ашу',
+				'Войти' => 'Кіру',
+				'Выйти' => 'Шығу',
+				'Поддержка' => 'Қолдау',
+				'Разработано в веб-студии Mazhenov Design' => 'Mazhenov Design веб-студиясы әзірледі',
+				'Все права защищены' => 'Барлық құқықтар қорғалған',
+			)
+		);
 	}
 
 	public function shortcode_header() {
@@ -323,12 +356,12 @@ class LLMS_VibeLMS_Content {
 		$course_url = post_type_exists( 'course' ) ? get_post_type_archive_link( 'course' ) : home_url( '/' );
 		$logo = get_custom_logo();
 		$brand = $logo ? '<div class="vibelms-site-header__brand">' . $logo . '</div>' : '<a class="vibelms-site-header__brand" href="' . esc_url( home_url( '/' ) ) . '"><span class="vibelms-site-header__mark" aria-hidden="true">V</span><span>VibeLMS</span></a>';
-		$output = '<header class="vibelms-site-header"><div class="vibelms-site-header__inner">' . $brand . '<nav class="vibelms-site-header__nav" aria-label="' . esc_attr__( 'Основная навигация', 'lifterlms' ) . '"><a href="' . esc_url( $course_url ) . '">' . esc_html__( 'Курсы', 'lifterlms' ) . '</a><a href="' . esc_url( $account_url ) . '">' . esc_html__( 'Мой кабинет', 'lifterlms' ) . '</a></nav><div class="vibelms-site-header__actions">' . do_shortcode( '[vibelms_language_switcher]' );
+		$output = '<header class="vibelms-site-header"><div class="vibelms-site-header__inner">' . $brand . '<nav class="vibelms-site-header__nav" aria-label="' . esc_attr( $this->localize_frontend_text( __( 'Основная навигация', 'lifterlms' ) ) ) . '"><a href="' . esc_url( $course_url ) . '">' . esc_html( $this->localize_frontend_text( __( 'Курсы', 'lifterlms' ) ) ) . '</a><a href="' . esc_url( $account_url ) . '">' . esc_html( $this->localize_frontend_text( __( 'Мой кабинет', 'lifterlms' ) ) ) . '</a></nav><div class="vibelms-site-header__actions">' . do_shortcode( '[vibelms_language_switcher]' );
 		if ( is_user_logged_in() ) {
 			$user = wp_get_current_user();
-			$output .= '<span class="vibelms-site-header__email">' . esc_html( $user->user_email ) . '</span><a href="' . esc_url( wp_logout_url( home_url( '/' ) ) ) . '">' . esc_html__( 'Выйти', 'lifterlms' ) . '</a>';
+			$output .= '<span class="vibelms-site-header__email">' . esc_html( $user->user_email ) . '</span><a href="' . esc_url( wp_logout_url( home_url( '/' ) ) ) . '">' . esc_html( $this->localize_frontend_text( __( 'Выйти', 'lifterlms' ) ) ) . '</a>';
 		} else {
-			$output .= '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">' . esc_html__( 'Войти', 'lifterlms' ) . '</a>';
+			$output .= '<a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">' . esc_html( $this->localize_frontend_text( __( 'Войти', 'lifterlms' ) ) ) . '</a>';
 		}
 		return $output . '</div></div></header>';
 	}
@@ -336,12 +369,13 @@ class LLMS_VibeLMS_Content {
 	public function shortcode_footer() {
 		$text = (string) get_option( 'vibelms_footer_text', '' );
 		$text = $text ? str_replace( array( '{year}', '{site}' ), array( wp_date( 'Y' ), get_bloginfo( 'name' ) ), $text ) : sprintf( __( '© %1$s %2$s. Все права защищены.', 'lifterlms' ), wp_date( 'Y' ), get_bloginfo( 'name' ) );
+		$text = $this->localize_frontend_text( $text );
 		$support = esc_url( get_option( 'vibelms_support_url', '' ) );
 		$output = '<footer class="vibelms-site-footer"><div class="vibelms-site-footer__inner"><span>' . esc_html( $text ) . '</span>';
 		if ( $support ) {
-			$output .= '<a href="' . $support . '">' . esc_html__( 'Поддержка', 'lifterlms' ) . '</a>';
+			$output .= '<a href="' . $support . '">' . esc_html( $this->localize_frontend_text( __( 'Поддержка', 'lifterlms' ) ) ) . '</a>';
 		}
-		$output .= '<a href="https://mazhenov.kz" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Разработано в веб-студии Mazhenov Design', 'lifterlms' ) . '</a></div></footer>';
+		$output .= '<a href="https://mazhenov.kz" target="_blank" rel="noopener noreferrer">' . esc_html( $this->localize_frontend_text( __( 'Разработано в веб-студии Mazhenov Design', 'lifterlms' ) ) ) . '</a></div></footer>';
 		return $output;
 	}
 
@@ -404,4 +438,14 @@ function llms_vibelms_content() {
 		$instance = new LLMS_VibeLMS_Content();
 	}
 	return $instance;
+}
+
+/**
+ * Translate a built-in VibeLMS front-end label when the content service is available.
+ *
+ * @param string $text Plain-text label.
+ * @return string
+ */
+function llms_vibelms_localize_frontend_text( $text ) {
+	return function_exists( 'llms_vibelms_content' ) ? llms_vibelms_content()->localize_frontend_text( $text ) : (string) $text;
 }
