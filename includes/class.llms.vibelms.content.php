@@ -42,6 +42,7 @@ class LLMS_VibeLMS_Content {
 		add_shortcode( 'vibelms_header', array( $this, 'shortcode_header' ) );
 		add_shortcode( 'vibelms_footer', array( $this, 'shortcode_footer' ) );
 		add_filter( 'the_content', array( $this, 'localize_elementor_content' ), 99 );
+		add_filter( 'elementor/widget/render_content', array( $this, 'localize_elementor_widget_content' ), 99, 2 );
 	}
 
 	public function register_post_type() {
@@ -367,14 +368,40 @@ class LLMS_VibeLMS_Content {
 			return $content;
 		}
 
-		$replacements = apply_filters(
+		return strtr( $content, $this->get_kazakh_elementor_replacements( $content ) );
+	}
+
+	/**
+	 * Localize one Elementor widget output, including the editor preview.
+	 *
+	 * @param string                  $content Rendered widget HTML.
+	 * @param Elementor\Widget_Base  $widget  Widget instance.
+	 * @return string
+	 */
+	public function localize_elementor_widget_content( $content, $widget ) {
+		unset( $widget );
+		if ( 'kz' !== $this->get_current_language() || ! is_string( $content ) || '' === trim( $content ) ) {
+			return $content;
+		}
+
+		return strtr( $content, $this->get_kazakh_elementor_replacements( $content ) );
+	}
+
+	/**
+	 * Return the project-neutral default copy map for the Kazakh surface.
+	 *
+	 * @param string $content Current rendered content for extension filters.
+	 * @return array<string, string>
+	 */
+	private function get_kazakh_elementor_replacements( $content = '' ) {
+		return apply_filters(
 			'vibelms_kazakh_elementor_replacements',
 			array(
 				'Академия «Бифимбилль»' => 'Бифимбилль академиясы',
 				'Как проходит обучение' => 'Оқу қалай өтеді',
 				'Пройдите программу в удобном темпе: сначала изучите материалы, затем закрепите знания итоговым тестом и получите сертификат после успешной аттестации.' => 'Бағдарламаны өзіңізге ыңғайлы қарқынмен өтіңіз: алдымен материалдарды оқып, кейін қорытынды тест арқылы біліміңізді бекітіңіз және сәтті аттестациядан соң сертификат алыңыз.',
 				'03 · Подтвердите' => '03 · Растаңыз',
-				'При результате 100% получите именной электронный сертификат.' => '100% нәтиже көрсеткенде иминдік электронды сертификат алыңыз.',
+				'При результате 100% получите именной электронный сертификат.' => '100% нәтиже көрсеткенде атаулы электронды сертификат алыңыз.',
 				'Сертификат' => 'Сертификат',
 				'Успешная аттестация' => 'Сәтті аттестация',
 				'01 · Изучите' => '01 · Оқыңыз',
@@ -400,8 +427,6 @@ class LLMS_VibeLMS_Content {
 			),
 			$content
 		);
-
-		return strtr( $content, $replacements );
 	}
 
 	public function shortcode_header() {

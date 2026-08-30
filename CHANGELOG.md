@@ -1,6 +1,11 @@
 LifterLMS Changelog
 ===================
 
+VibeLMS 0.0.55 - 2026-08-30
+--------------------------------
+
++ Localized native Elementor widget output in the editor preview as well as the public page, and corrected the Kazakh certificate wording.
+
 VibeLMS 0.0.54 - 2026-08-29
 --------------------------------
 
